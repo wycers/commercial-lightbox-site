@@ -1339,14 +1339,14 @@ export default function LightboxPreviewTool() {
   }
 
   return (
-    <div className="rounded-lg bg-white p-4 text-stone-950 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_20px_70px_rgba(0,0,0,0.12)] sm:p-6">
-      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[280px_minmax(0,1fr)]">
-        <aside className="order-1 space-y-5 lg:order-1">
+    <div className="overflow-hidden rounded-lg bg-white text-stone-950 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_56px_rgba(0,0,0,0.1)]">
+      <div className="flex flex-col lg:grid lg:grid-cols-[22rem_minmax(0,1fr)] xl:grid-cols-[24rem_minmax(0,1fr)]">
+        <aside className="order-1 space-y-5 bg-stone-50 p-4 shadow-[0_1px_0_rgba(0,0,0,0.06)] sm:p-5 lg:order-1 lg:shadow-[1px_0_0_rgba(0,0,0,0.06)] xl:p-6">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
               Preview tool
             </p>
-            <h2 className="mt-2 text-balance text-2xl font-semibold text-stone-950">
+            <h2 className="mt-2 text-balance text-xl font-semibold text-stone-950">
               Build a quick lightbox mockup.
             </h2>
           </div>
@@ -1428,7 +1428,7 @@ export default function LightboxPreviewTool() {
           </div>
 
           {selectedElement?.type === "text" && (
-            <div className="space-y-3 rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+            <div className="space-y-3 rounded-lg bg-white p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.04)]">
               <div>
                 <FieldLabel htmlFor={selectedTextInputId}>
                   Selected text
@@ -1466,7 +1466,7 @@ export default function LightboxPreviewTool() {
             </div>
           )}
 
-          <details className="group rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+          <details className="group rounded-lg bg-white p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.04)]">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-md text-sm font-bold text-stone-900 marker:hidden [&::-webkit-details-marker]:hidden">
               <span className="inline-flex items-center gap-2">
                 <SlidersHorizontal size={16} />
@@ -1571,10 +1571,10 @@ export default function LightboxPreviewTool() {
           )}
         </aside>
 
-        <div className="order-2 min-w-0 lg:order-2">
+        <div className="order-2 min-w-0 p-4 sm:p-5 lg:order-2 lg:p-6">
           <div
             className={classNames(
-              "rounded-lg p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_12px_32px_rgba(0,0,0,0.08)]",
+              "rounded-lg p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_12px_32px_rgba(0,0,0,0.08)] sm:p-4",
               mode === "face"
                 ? cabinet.lightingMode === "night"
                   ? "bg-stone-950"
@@ -1657,7 +1657,7 @@ export default function LightboxPreviewTool() {
           </div>
 
           <div className="mt-4 grid gap-3 text-sm text-stone-600 sm:grid-cols-3">
-            <div className="rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+            <div className="rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_22px_rgba(0,0,0,0.04)]">
               <span className="font-mono text-xs uppercase tracking-[0.14em] text-stone-500">
                 Size
               </span>
@@ -1665,7 +1665,7 @@ export default function LightboxPreviewTool() {
                 {dimensions.width} x {dimensions.height} mm
               </p>
             </div>
-            <div className="rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+            <div className="rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_22px_rgba(0,0,0,0.04)]">
               <span className="font-mono text-xs uppercase tracking-[0.14em] text-stone-500">
                 Layers
               </span>
@@ -1673,7 +1673,7 @@ export default function LightboxPreviewTool() {
                 {elements.length}
               </p>
             </div>
-            <div className="rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+            <div className="rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_22px_rgba(0,0,0,0.04)]">
               <span className="font-mono text-xs uppercase tracking-[0.14em] text-stone-500">
                 Mode
               </span>

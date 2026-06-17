@@ -17,36 +17,92 @@ const canonicalPath = "/preview";
   openGraphDescription={description}
   openGraphUrl={canonicalPath}
 >
-  <main
-    class="min-h-screen overflow-x-hidden bg-[#f3efe7] px-4 py-6 text-stone-950 sm:py-8"
-  >
-    <header
-      class="mx-auto mb-6 flex max-w-6xl flex-wrap items-center justify-between gap-3"
-    >
-      <a href="/" class="text-sm font-bold tracking-wide text-stone-950">
-        {siteName}
-      </a>
-      <nav
-        class="flex items-center gap-3 text-sm font-semibold text-stone-700"
-        aria-label="Preview page"
+  <main class="bg-stone-50 text-stone-950">
+    <section class="relative isolate overflow-hidden bg-stone-950 px-4 py-24 text-white">
+      <img
+        src="/images/commercial-lightbox-hero.png"
+        alt=""
+        width="1672"
+        height="941"
+        fetchpriority="high"
+        decoding="async"
+        class="absolute inset-0 h-full w-full object-cover object-[58%_center] opacity-44 outline outline-1 -outline-offset-1 outline-white/10"
+      />
+      <div
+        class="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,10,9,0.96)_0%,rgba(12,10,9,0.78)_52%,rgba(12,10,9,0.28)_100%)]"
       >
-        <a
-          href="/"
-          class="inline-flex min-h-11 items-center transition-[color] hover:text-stone-950"
-        >
-          Home
-        </a>
-        <a
-          href="/#quote"
-          class="inline-flex min-h-11 items-center rounded-lg bg-stone-950 px-4 py-2 text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
-        >
-          Request quote
-        </a>
-      </nav>
-    </header>
+      </div>
+      <div
+        class="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,10,9,0.1)_0%,rgba(12,10,9,0.03)_50%,rgba(12,10,9,0.64)_100%)]"
+      >
+      </div>
 
-    <section class="mx-auto min-w-0 max-w-6xl">
-      <LightboxPreviewTool client:only="react" />
+      <header class="relative z-10 mx-auto mb-16 flex max-w-6xl flex-wrap items-center justify-between gap-4">
+        <a href="/" class="text-sm font-bold tracking-wide text-white">
+          {siteName}
+        </a>
+        <nav
+          class="flex flex-wrap items-center gap-4 text-sm font-semibold text-white/78"
+          aria-label="Preview page"
+        >
+          <a
+            href="/"
+            class="inline-flex min-h-10 items-center transition-[color] hover:text-white"
+          >
+            Home
+          </a>
+          <a
+            href="/#services"
+            class="hidden min-h-10 items-center transition-[color] hover:text-white sm:inline-flex"
+          >
+            Services
+          </a>
+          <a
+            href="/#quote"
+            class="inline-flex min-h-10 items-center rounded-lg bg-white px-4 py-2 text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-[background-color,scale] hover:bg-amber-100 active:scale-[0.96]"
+          >
+            Request quote
+          </a>
+        </nav>
+      </header>
+
+      <div class="relative z-10 mx-auto max-w-6xl">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-200">
+          Lightbox preview
+        </p>
+        <h1
+          class="mt-5 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] tracking-normal text-white sm:text-5xl lg:text-6xl"
+        >
+          Mock up your sign face before requesting a quote.
+        </h1>
+        <p class="mt-6 max-w-2xl text-pretty text-lg leading-8 text-white/82">
+          Add text, upload artwork, test day or night lighting, and download a
+          quick concept for shopfront and sign face conversations.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href="#preview-tool"
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.28)] transition-[background-color,scale,box-shadow] hover:bg-amber-400 active:scale-[0.96]"
+          >
+            Open preview tool
+          </a>
+          <a
+            href="/#quote"
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
+          >
+            Request a quote
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="preview-tool"
+      class="scroll-mt-8 bg-stone-50 px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+    >
+      <div class="mx-auto min-w-0 max-w-6xl">
+        <LightboxPreviewTool client:only="react" />
+      </div>
     </section>
   </main>
 </BaseLayout>

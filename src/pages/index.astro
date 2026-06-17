@@ -2,17 +2,57 @@
 import SectionHeader from "../components/SectionHeader.astro";
 import QuoteForm from "../components/QuoteForm";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { companyName, fuelPriceBoardUrl, siteName, siteUrl } from "../lib/site";
+import {
+  businessAbn,
+  businessName,
+  companyName,
+  contactEmail,
+  contactPhone,
+  emailHref,
+  fuelPriceBoardUrl,
+  phoneHref,
+  serviceArea,
+  siteName,
+  siteUrl,
+} from "../lib/site";
 
 const title = "Custom Commercial Lightbox Signs for WA Businesses";
 const description =
   "Custom commercial lightbox signs for WA businesses, with site survey, design coordination, fabrication, installation, testing, and aftercare.";
 
 const heroHighlights = [
-  ["WA focus", "Perth + regional WA site scoping"],
+  ["WA focus", `${serviceArea} site scoping`],
   ["Project path", "Survey, design, fabricate, install"],
   ["Sign types", "Indoor, shopfront, fascia, wall-mounted"],
-  ["Proof policy", "Verified details only when approved"],
+  [
+    "Response",
+    contactPhone || contactEmail
+      ? "Quote form, phone, or email"
+      : "Quote form with 1 business day reply",
+  ],
+];
+
+const contactLinks = [
+  contactPhone
+    ? {
+        label: "Call",
+        value: contactPhone,
+        href: phoneHref(contactPhone),
+      }
+    : null,
+  contactEmail
+    ? {
+        label: "Email",
+        value: contactEmail,
+        href: emailHref(contactEmail),
+      }
+    : null,
+].filter(Boolean) as Array<{ label: string; value: string; href: string }>;
+
+const identityRows = [
+  ["Business", businessName],
+  ["Coverage", serviceArea],
+  ...(businessAbn ? [["ABN", businessAbn]] : []),
 ];
 
 const applications = [
@@ -69,9 +109,9 @@ const trustAnchors = [
     copy: "Face material, cabinet finish, LED layout, service access, and installation assumptions are documented before production starts.",
   },
   {
-    label: "Verified proof",
-    title: "No fake credibility signals.",
-    copy: "ABN, certifications, customer names, project photos, reviews, phone numbers, and email addresses should only be shown after they are verified and approved.",
+    label: "Business details",
+    title: "Practical ways to verify the scope.",
+    copy: "Contact details, business identity, approved project notes, and quote terms can be published from configuration as soon as they are confirmed.",
   },
   {
     label: "Handover",
@@ -152,7 +192,7 @@ const aftercarePoints = [
 
 const caseCards = [
   {
-    badge: "Example scope card",
+    badge: "Scope example",
     setting: "Indoor retail tenancy",
     title: "Food court counter lightbox",
     challenge:
@@ -165,11 +205,10 @@ const caseCards = [
       "Cabinet fabrication",
       "Install and light test",
     ],
-    proofNote:
-      "Replace with an approved client name, suburb, and owned project image only when those assets are verified.",
+    note: "Useful for food venues comparing cabinet depth, glare control, cleaning needs, and menu legibility.",
   },
   {
-    badge: "Example scope card",
+    badge: "Scope example",
     setting: "Outdoor shopfront",
     title: "Weather-aware fascia sign",
     challenge:
@@ -182,11 +221,10 @@ const caseCards = [
       "Outdoor cabinet",
       "Handover checks",
     ],
-    proofNote:
-      "Replace placeholder details with approved project data rather than inventing customer proof.",
+    note: "Useful for street-facing sites where wall condition, weather exposure, and night readability affect the quote.",
   },
   {
-    badge: "Example scope card",
+    badge: "Scope example",
     setting: "Commercial interior",
     title: "Reception brand wall lightbox",
     challenge:
@@ -199,8 +237,7 @@ const caseCards = [
       "Fabrication",
       "Aftercare notes",
     ],
-    proofNote:
-      "Use this structure for a real case study once the client, images, and permissions are confirmed.",
+    note: "Useful for reception and showroom projects where daylight finish and after-hours illumination both matter.",
   },
 ];
 
@@ -237,9 +274,9 @@ const faqs = [
       "Warranty terms should be stated in the final quote because they depend on the cabinet, LED components, installation environment, and supplier terms. Aftercare can include handover notes, service guidance, and support for face or LED servicing.",
   },
   {
-    question: "Do you show customer names, ABN details, or project photos?",
+    question: "How do you handle business details and project proof?",
     answer:
-      "Only after verification and approval. This homepage uses safe example scope cards and does not invent ABNs, customer names, credentials, phone numbers, email addresses, or real project photography.",
+      "The site is set up to publish confirmed business details, approved contact channels, and real project proof when those assets are available. Until then, the quote process focuses on the site information needed to scope the job accurately.",
   },
   {
     question: "What if I also need a fuel price board?",
@@ -261,9 +298,12 @@ const serviceJsonLd = {
   },
   provider: {
     "@type": "LocalBusiness",
-    name: companyName,
+    name: businessName || companyName,
     url: siteUrl,
-    areaServed: "Western Australia",
+    areaServed: serviceArea,
+    ...(contactPhone ? { telephone: contactPhone } : {}),
+    ...(contactEmail ? { email: contactEmail } : {}),
+    ...(businessAbn ? { identifier: businessAbn } : {}),
   },
   url: siteUrl,
 };
@@ -363,6 +403,16 @@ const serviceJsonLd = {
             >
               Preview
             </a>
+            {
+              contactPhone && (
+                <a
+                  href={phoneHref(contactPhone)}
+                  class="hidden min-h-10 items-center rounded-lg bg-white/10 px-3 py-2 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.14)] transition-[background-color,scale] hover:bg-white/15 active:scale-[0.96] lg:inline-flex"
+                >
+                  Call {contactPhone}
+                </a>
+              )
+            }
             <a
               href="#quote"
               class="inline-flex min-h-10 items-center rounded-lg bg-white px-4 py-2 text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-[background-color,scale] hover:bg-amber-100 active:scale-[0.96]"
@@ -402,6 +452,20 @@ const serviceJsonLd = {
               Preview your sign
             </a>
           </div>
+          {
+            contactLinks.length > 0 && (
+              <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold text-white/82">
+                {contactLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    class="inline-flex min-h-10 items-center rounded-lg bg-white/[0.08] px-3 py-2 shadow-[0_0_0_1px_rgba(255,255,255,0.14)] transition-[background-color,scale] hover:bg-white/[0.13] hover:text-white active:scale-[0.96]"
+                  >
+                    {link.label}: {link.value}
+                  </a>
+                ))}
+              </div>
+            )
+          }
         </div>
         <dl class="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {
@@ -483,9 +547,23 @@ const serviceJsonLd = {
       <div class="mx-auto max-w-6xl">
         <SectionHeader
           kicker="Trust anchors"
-          title="Credibility comes from clear scope, not invented proof."
-          copy="Use verified business details, approved project assets, and written quote terms when they are available. Until then, the homepage stays honest about what can be confirmed."
+          title="Credibility starts with a quote you can check."
+          copy="The useful signals are practical: business identity, responsive contact paths, written assumptions, material choices, installation notes, and handover checks."
         />
+        <dl class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            identityRows.map(([label, value]) => (
+              <div class="rounded-lg bg-white p-4 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_10px_28px_rgba(0,0,0,0.05)]">
+                <dt class="text-xs font-bold uppercase tracking-[0.16em] text-teal-800">
+                  {label}
+                </dt>
+                <dd class="mt-2 text-sm font-semibold text-stone-950">
+                  {value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
         <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {
             trustAnchors.map((anchor) => (
@@ -513,7 +591,19 @@ const serviceJsonLd = {
           title="The quote should make the build understandable."
           copy="A commercial lightbox is not just a lit face. The useful spec names the format, face material, cabinet, LED layout, artwork state, installation assumptions, and handover checks."
         />
-        <div class="overflow-hidden rounded-lg bg-stone-50 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_48px_rgba(0,0,0,0.08)]">
+        <div class="grid gap-3 md:hidden">
+          {
+            specRows.map(([label, value]) => (
+              <article class="rounded-lg bg-stone-50 p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <h3 class="text-sm font-semibold text-stone-950">{label}</h3>
+                <p class="mt-2 text-pretty text-sm leading-7 text-stone-600">
+                  {value}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+        <div class="hidden overflow-hidden rounded-lg bg-stone-50 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_48px_rgba(0,0,0,0.08)] md:block">
           <table class="w-full border-collapse text-left text-sm">
             <tbody>
               {
@@ -606,9 +696,9 @@ const serviceJsonLd = {
     >
       <div class="mx-auto max-w-6xl">
         <SectionHeader
-          kicker="Case cards"
-          title="A stronger case-study structure without fake customer proof."
-          copy="These cards show the kind of detail a real case study should include. Replace them with approved names, suburbs, measurements, outcomes, and owned images when those are available."
+          kicker="Scope examples"
+          title="Common lightbox jobs, framed around quote decisions."
+          copy="These examples show the details that usually change price, timing, and installation planning before a commercial sign is built."
         />
         <div class="mt-12 grid gap-5 lg:grid-cols-3">
           {
@@ -649,7 +739,7 @@ const serviceJsonLd = {
                   </ul>
                 </div>
                 <p class="mt-6 border-t border-stone-200 pt-4 text-pretty text-xs leading-6 text-stone-500">
-                  {card.proofNote}
+                  {card.note}
                 </p>
               </article>
             ))
@@ -669,6 +759,35 @@ const serviceJsonLd = {
           >
             Bright at night, clean in daylight, serviceable after deployment.
           </h2>
+          <picture class="mt-8 block overflow-hidden rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_18px_48px_rgba(0,0,0,0.12)]">
+            <source
+              media="(max-width: 767px)"
+              srcset="/images/commercial-lightbox-hero-mobile.avif"
+              type="image/avif"
+            />
+            <source
+              media="(max-width: 767px)"
+              srcset="/images/commercial-lightbox-hero-mobile.webp"
+              type="image/webp"
+            />
+            <source
+              srcset="/images/commercial-lightbox-hero-desktop.avif"
+              type="image/avif"
+            />
+            <source
+              srcset="/images/commercial-lightbox-hero-desktop.webp"
+              type="image/webp"
+            />
+            <img
+              src="/images/commercial-lightbox-hero.png"
+              alt="Illuminated commercial lightbox concept showing cabinet depth, lit sign face, and shopfront context"
+              loading="lazy"
+              decoding="async"
+              width="1672"
+              height="941"
+              class="aspect-[16/10] w-full object-cover object-[58%_center] outline outline-1 -outline-offset-1 outline-black/10"
+            />
+          </picture>
         </div>
         <ul class="grid gap-4">
           {
@@ -778,7 +897,7 @@ const serviceJsonLd = {
             {
               [
                 ["Response", "1 business day"],
-                ["Coverage", "Perth + regional WA"],
+                ["Coverage", serviceArea],
                 ["Path", "Survey, design, fabricate, install"],
               ].map(([label, value]) => (
                 <div class="border-l border-amber-400 pl-4">
@@ -790,6 +909,27 @@ const serviceJsonLd = {
               ))
             }
           </dl>
+          {
+            contactLinks.length > 0 && (
+              <div class="mt-8 grid gap-3 text-sm font-semibold text-white/82 sm:grid-cols-2">
+                {contactLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    class="inline-flex min-h-11 items-center rounded-lg bg-white/[0.08] px-4 py-3 shadow-[0_0_0_1px_rgba(255,255,255,0.14)] transition-[background-color,scale] hover:bg-white/[0.13] hover:text-white active:scale-[0.96]"
+                  >
+                    {link.label}: {link.value}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+          <div class="mt-8 rounded-lg bg-white/[0.06] p-4 text-sm leading-6 text-white/72 shadow-[0_0_0_1px_rgba(255,255,255,0.1)]">
+            <p class="font-semibold text-white">What happens next</p>
+            <p class="mt-2 text-pretty">
+              Your details are used to respond to this quote request, clarify
+              the site scope, and prepare next-step pricing notes.
+            </p>
+          </div>
         </div>
         <div
           class="rounded-lg bg-white p-6 text-stone-950 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_24px_70px_rgba(0,0,0,0.35)] sm:p-8"

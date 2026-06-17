@@ -93,6 +93,7 @@ type SignTransform = {
 const LOGICAL_SIGN_WIDTH = 1000;
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 const MAX_EXPORT_EDGE = 1800;
+const MAX_QUOTE_PREVIEW_EDGE = 720;
 const TRANSFORMER_ANCHOR_SIZE = 14;
 const QUOTE_DRAFT_STORAGE_KEY = "lightboxPreviewQuoteDraft";
 const IMAGE_MIME_TYPES = new Set([
@@ -304,6 +305,25 @@ function useElementSize<T extends HTMLElement>() {
   }, []);
 
   return { ref, width };
+}
+
+function useCoarsePointer() {
+  const [isCoarse, setIsCoarse] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(pointer: coarse)");
+    setIsCoarse(query.matches);
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsCoarse(event.matches);
+    };
+
+    query.addEventListener("change", handleChange);
+
+    return () => query.removeEventListener("change", handleChange);
+  }, []);
+
+  return isCoarse;
 }
 
 function useCanvasImage(src?: string) {
@@ -518,6 +538,7 @@ function UploadButton({
 }
 
 function SignGraphic({
+  anchorSize,
   cabinet,
   elements,
   interactive,
@@ -526,6 +547,7 @@ function SignGraphic({
   onSelect,
   selectedId,
 }: {
+  anchorSize: number;
   cabinet: Cabinet;
   elements: DesignElement[];
   interactive: boolean;
@@ -644,6 +666,7 @@ function SignGraphic({
             <EditableTextElement
               key={element.id}
               element={element}
+              anchorSize={anchorSize}
               interactive={interactive}
               isSelected={selectedId === element.id}
               onChange={onChangeElement}
@@ -653,6 +676,7 @@ function SignGraphic({
             <EditableImageElement
               key={element.id}
               element={element}
+              anchorSize={anchorSize}
               interactive={interactive}
               isSelected={selectedId === element.id}
               onChange={onChangeElement}
@@ -666,12 +690,14 @@ function SignGraphic({
 }
 
 function EditableTextElement({
+  anchorSize,
   element,
   interactive,
   isSelected,
   onChange,
   onSelect,
 }: {
+  anchorSize: number;
   element: TextDesignElement;
   interactive: boolean;
   isSelected: boolean;
@@ -751,7 +777,7 @@ function EditableTextElement({
           borderStroke="#f59e0b"
           anchorFill="#ffffff"
           anchorStroke="#f59e0b"
-          anchorSize={TRANSFORMER_ANCHOR_SIZE}
+          anchorSize={anchorSize}
           boundBoxFunc={(_, newBox) =>
             newBox.width < 72 || newBox.height < 40 ? _ : newBox
           }
@@ -762,12 +788,14 @@ function EditableTextElement({
 }
 
 function EditableImageElement({
+  anchorSize,
   element,
   interactive,
   isSelected,
   onChange,
   onSelect,
 }: {
+  anchorSize: number;
   element: ImageDesignElement;
   interactive: boolean;
   isSelected: boolean;
@@ -853,7 +881,7 @@ function EditableImageElement({
           borderStroke="#f59e0b"
           anchorFill="#ffffff"
           anchorStroke="#f59e0b"
-          anchorSize={TRANSFORMER_ANCHOR_SIZE}
+          anchorSize={anchorSize}
           boundBoxFunc={(_, newBox) =>
             newBox.width < 32 || newBox.height < 32 ? _ : newBox
           }
@@ -943,12 +971,14 @@ function ShopfrontBackground({
 }
 
 function ShopfrontSign({
+  anchorSize,
   cabinet,
   elements,
   logicalHeight,
   onChange,
   signTransform,
 }: {
+  anchorSize: number;
   cabinet: Cabinet;
   elements: DesignElement[];
   logicalHeight: number;
@@ -1004,6 +1034,7 @@ function ShopfrontSign({
         }}
       >
         <SignGraphic
+          anchorSize={anchorSize}
           cabinet={cabinet}
           elements={elements}
           interactive={false}
@@ -1019,7 +1050,7 @@ function ShopfrontSign({
           borderStroke="#f59e0b"
           anchorFill="#ffffff"
           anchorStroke="#f59e0b"
-          anchorSize={TRANSFORMER_ANCHOR_SIZE}
+          anchorSize={anchorSize}
           boundBoxFunc={(_, newBox) =>
             newBox.width < 120 || newBox.height < 40 ? _ : newBox
           }
@@ -1049,8 +1080,10 @@ export default function LightboxPreviewTool() {
   const mockupStageRef = useRef<Konva.Stage | null>(null);
   const signWrap = useElementSize<HTMLDivElement>();
   const mockupWrap = useElementSize<HTMLDivElement>();
+  const isCoarsePointer = useCoarsePointer();
   const signRatio = getSignRatio(dimensions);
   const logicalHeight = getLogicalSignHeight(dimensions);
+  const transformerAnchorSize = isCoarsePointer ? 24 : TRANSFORMER_ANCHOR_SIZE;
   const signStageWidth = signWrap.width > 0 ? Math.min(860, signWrap.width) : 1;
   const signStageHeight = Math.max(1, Math.round(signStageWidth / signRatio));
   const signScale = signStageWidth / LOGICAL_SIGN_WIDTH;
@@ -1066,6 +1099,7 @@ export default function LightboxPreviewTool() {
     [mockupStageHeight, mockupStageWidth, signRatio, signTransform],
   );
   const selectedElement = elements.find((element) => element.id === selectedId);
+  const previewDescription = `Lightbox preview, ${dimensions.width} by ${dimensions.height} millimetres, ${elements.length} design layer${elements.length === 1 ? "" : "s"}, ${cabinet.lightingMode} lighting.`;
 
   function updateCabinet(nextCabinet: Partial<Cabinet>) {
     setCabinet((current) => ({ ...current, ...nextCabinet }));
@@ -1196,12 +1230,20 @@ export default function LightboxPreviewTool() {
       : mockupStageRef.current;
   }
 
-  function exportStageDataUrl(activeMode: PreviewMode) {
+  function exportStageDataUrl(
+    activeMode: PreviewMode,
+    options: {
+      maxEdge?: number;
+      mimeType?: "image/jpeg" | "image/png";
+      quality?: number;
+    } = {},
+  ) {
     const stage = getActiveStage(activeMode);
     if (!stage) throw new Error("The preview is still loading.");
 
     const edge = Math.max(stage.width(), stage.height());
-    const pixelRatio = Math.max(1, Math.min(3, MAX_EXPORT_EDGE / edge));
+    const maxEdge = options.maxEdge ?? MAX_EXPORT_EDGE;
+    const pixelRatio = Math.max(0.35, Math.min(3, maxEdge / edge));
     const selectionNodes = stage.find(".preview-selection");
     const previousVisibility = selectionNodes.map((node) => node.visible());
 
@@ -1212,8 +1254,9 @@ export default function LightboxPreviewTool() {
 
     try {
       return stage.toDataURL({
-        mimeType: "image/png",
+        mimeType: options.mimeType ?? "image/png",
         pixelRatio,
+        quality: options.quality,
       });
     } finally {
       selectionNodes.forEach((node, index) => {
@@ -1251,8 +1294,13 @@ export default function LightboxPreviewTool() {
 
     try {
       const dimensionsLabel = `${dimensions.width} x ${dimensions.height} mm`;
+      const previewImageDataUrl = exportStageDataUrl(mode, {
+        maxEdge: MAX_QUOTE_PREVIEW_EDGE,
+        mimeType: "image/jpeg",
+        quality: 0.78,
+      });
       const summary = [
-        "Preview tool design summary:",
+        "Preview tool design notes:",
         `Size: ${dimensionsLabel}`,
         `Mode: ${mode === "face" ? "Sign face" : "Shopfront mockup"}`,
         `Lighting: ${cabinet.lightingMode}`,
@@ -1266,6 +1314,8 @@ export default function LightboxPreviewTool() {
         QUOTE_DRAFT_STORAGE_KEY,
         JSON.stringify({
           dimensions: dimensionsLabel,
+          previewImageDataUrl,
+          previewSummary: summary,
           designSummary: summary,
           dimensionsMm: {
             width: dimensions.width,
@@ -1291,7 +1341,7 @@ export default function LightboxPreviewTool() {
   return (
     <div className="rounded-lg bg-white p-4 text-stone-950 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_20px_70px_rgba(0,0,0,0.12)] sm:p-6">
       <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[280px_minmax(0,1fr)]">
-        <aside className="order-2 space-y-5 lg:order-1">
+        <aside className="order-1 space-y-5 lg:order-1">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
               Preview tool
@@ -1507,18 +1557,21 @@ export default function LightboxPreviewTool() {
             </ToolbarButton>
             <ToolbarButton onClick={requestQuoteWithDesign} variant="primary">
               <Send size={16} />
-              Request quote with this design
+              Add design notes to quote
             </ToolbarButton>
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-800 shadow-[0_0_0_1px_rgba(185,28,28,0.14)]">
+            <p
+              role="alert"
+              className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-800 shadow-[0_0_0_1px_rgba(185,28,28,0.14)]"
+            >
               {error}
             </p>
           )}
         </aside>
 
-        <div className="order-1 min-w-0 lg:order-2">
+        <div className="order-2 min-w-0 lg:order-2">
           <div
             className={classNames(
               "rounded-lg p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_12px_32px_rgba(0,0,0,0.08)]",
@@ -1532,6 +1585,8 @@ export default function LightboxPreviewTool() {
             <div className={mode === "face" ? "block" : "hidden"}>
               <div
                 ref={signWrap.ref}
+                role="img"
+                aria-label={previewDescription}
                 className="flex w-full justify-center overflow-hidden rounded-md"
               >
                 <Stage
@@ -1549,6 +1604,7 @@ export default function LightboxPreviewTool() {
                     />
                     <Group scaleX={signScale} scaleY={signScale}>
                       <SignGraphic
+                        anchorSize={transformerAnchorSize}
                         cabinet={cabinet}
                         elements={elements}
                         interactive
@@ -1566,6 +1622,8 @@ export default function LightboxPreviewTool() {
             <div className={mode === "shopfront" ? "block" : "hidden"}>
               <div
                 ref={mockupWrap.ref}
+                role="img"
+                aria-label={`${previewDescription} Shown as a shopfront mockup.`}
                 className="flex w-full justify-center overflow-hidden rounded-md"
               >
                 <Stage
@@ -1585,6 +1643,7 @@ export default function LightboxPreviewTool() {
                       stageWidth={mockupStageWidth}
                     />
                     <ShopfrontSign
+                      anchorSize={transformerAnchorSize}
                       cabinet={cabinet}
                       elements={elements}
                       logicalHeight={logicalHeight}

@@ -13,6 +13,7 @@ type QuoteFields = {
   signType: string;
   dimensions: string;
   message: string;
+  previewSummary: string;
   pageUrl: string;
   _gotcha: string;
 };
@@ -51,6 +52,7 @@ function readQuoteFields(payload: Record<string, unknown>): QuoteFields {
     signType: readString(payload, "signType"),
     dimensions: readString(payload, "dimensions"),
     message: readString(payload, "message"),
+    previewSummary: readString(payload, "previewSummary"),
     pageUrl: readString(payload, "pageUrl"),
     _gotcha: readString(payload, "_gotcha"),
   };
@@ -101,6 +103,13 @@ function formatTelegramMessage(fields: QuoteFields) {
 
   if (fields.message) {
     lines.push("", "Message:", fields.message);
+  }
+
+  if (
+    fields.previewSummary &&
+    (!fields.message || !fields.message.includes(fields.previewSummary))
+  ) {
+    lines.push("", "Preview summary:", fields.previewSummary);
   }
 
   const message = lines.join("\n");

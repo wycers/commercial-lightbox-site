@@ -1,5 +1,6 @@
 import type { ChangeEvent } from "react";
 import { useEffect, useRef, useState } from "react";
+import { contactEmail, contactPhone, emailHref, phoneHref } from "../lib/site";
 
 type FormFields = {
   fullName: string;
@@ -18,6 +19,11 @@ type FormErrors = Partial<Record<keyof FormFields, string>>;
 type QuoteSubmitResult = {
   ok: boolean;
   error?: string;
+};
+
+type PreviewQuoteDraft = Partial<Pick<FormFields, "dimensions" | "message">> & {
+  previewImageDataUrl?: string;
+  previewSummary?: string;
 };
 
 const initialFields: FormFields = {
@@ -47,6 +53,25 @@ const CONTACT_REQUIRED_ERROR = "Enter an email or phone number.";
 const SUBMIT_FAILURE_MESSAGE =
   "We could not send your quote request just now. Please try again in a moment, or use another contact option on the website.";
 const PREVIEW_QUOTE_DRAFT_KEY = "lightboxPreviewQuoteDraft";
+const PREVIEW_IMAGE_DATA_URL_REGEX =
+  /^data:image\/(?:jpeg|jpg|png|webp);base64,/i;
+
+const contactLinks = [
+  contactPhone
+    ? {
+        label: "Call",
+        value: contactPhone,
+        href: phoneHref(contactPhone),
+      }
+    : null,
+  contactEmail
+    ? {
+        label: "Email",
+        value: contactEmail,
+        href: emailHref(contactEmail),
+      }
+    : null,
+].filter(Boolean) as Array<{ label: string; value: string; href: string }>;
 
 const focusableErrorFields: Array<keyof FormFields> = [
   "fullName",
@@ -115,9 +140,17 @@ function formatDraftDimensions(payload: Record<string, unknown>) {
   return `${width} x ${height}${unit ? ` ${unit}` : ""}`;
 }
 
-function readPreviewQuoteDraft(): Partial<
-  Pick<FormFields, "dimensions" | "message">
-> {
+function readPreviewImageDataUrl(payload: Record<string, unknown>) {
+  const dataUrl =
+    readDraftString(payload, "previewImageDataUrl") ||
+    readDraftString(payload, "previewThumbnail");
+
+  if (!PREVIEW_IMAGE_DATA_URL_REGEX.test(dataUrl)) return "";
+
+  return dataUrl.length <= 650_000 ? dataUrl : "";
+}
+
+function readPreviewQuoteDraft(): PreviewQuoteDraft {
   if (typeof window === "undefined") return {};
 
   try {
@@ -141,10 +174,18 @@ function readPreviewQuoteDraft(): Partial<
       readDraftString(parsed, "message") ||
       readDraftString(parsed, "designSummary") ||
       readDraftString(parsed, "summary");
+    const previewSummary =
+      readDraftString(parsed, "previewSummary") ||
+      readDraftString(parsed, "designSummary") ||
+      readDraftString(parsed, "summary") ||
+      message;
+    const previewImageDataUrl = readPreviewImageDataUrl(parsed);
 
     return {
       ...(dimensions ? { dimensions } : {}),
       ...(message ? { message } : {}),
+      ...(previewSummary ? { previewSummary } : {}),
+      ...(previewImageDataUrl ? { previewImageDataUrl } : {}),
     };
   } catch {
     try {
@@ -217,6 +258,7 @@ function getErrorSummaryItems(errors: FormErrors) {
 export default function QuoteForm() {
   const [fields, setFields] = useState<FormFields>(initialFields);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [previewDraft, setPreviewDraft] = useState<PreviewQuoteDraft>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -227,13 +269,16 @@ export default function QuoteForm() {
 
   useEffect(() => {
     const draft = readPreviewQuoteDraft();
-    if (!draft.dimensions && !draft.message) return;
+    if (!draft.dimensions && !draft.message && !draft.previewImageDataUrl) {
+      return;
+    }
 
     setFields((prev) => ({
       ...prev,
       dimensions: prev.dimensions || draft.dimensions || "",
       message: prev.message || draft.message || "",
     }));
+    setPreviewDraft(draft);
   }, []);
 
   function registerField(field: keyof FormFields) {
@@ -321,6 +366,7 @@ export default function QuoteForm() {
         body: JSON.stringify({
           ...fields,
           pageUrl: window.location.href,
+          previewSummary: previewDraft.previewSummary || "",
           _gotcha: honeypot,
         }),
       });
@@ -354,8 +400,12 @@ export default function QuoteForm() {
         aria-live="polite"
         className="rounded-lg bg-teal-50 p-6 text-center shadow-[0_0_0_1px_rgba(15,118,110,0.18),0_12px_32px_rgba(15,118,110,0.12)]"
       >
-        <span className="text-lg font-semibold text-teal-900">
+        <span className="block text-lg font-semibold text-teal-900">
           Thank you. We will be in touch within one business day.
+        </span>
+        <span className="mt-2 block text-sm leading-6 text-teal-800">
+          We will use your details only to respond to this quote request and
+          clarify the site scope.
         </span>
       </output>
     );
@@ -371,6 +421,59 @@ export default function QuoteForm() {
         value={honeypot}
         onChange={(event) => setHoneypot(event.target.value)}
       />
+
+      <div className="rounded-lg bg-stone-50 p-4 text-sm leading-6 text-stone-600 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+        <p className="font-semibold text-stone-950">What happens next</p>
+        <p className="mt-1 text-pretty">
+          Share what you know now. We will reply within one business day with
+          the next scope questions, pricing assumptions, or survey steps.
+        </p>
+        {contactLinks.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {contactLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="inline-flex min-h-10 items-center rounded-lg bg-white px-3 py-2 text-sm font-bold text-teal-800 shadow-[0_0_0_1px_rgba(15,118,110,0.16)] transition-[background-color,scale] hover:bg-teal-50 active:scale-[0.96]"
+              >
+                {link.label}: {link.value}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {(previewDraft.previewSummary || previewDraft.previewImageDataUrl) && (
+        <section
+          aria-label="Preview design notes"
+          className={`grid gap-4 rounded-lg bg-amber-50 p-4 shadow-[0_0_0_1px_rgba(180,83,9,0.16)] ${
+            previewDraft.previewImageDataUrl ? "sm:grid-cols-[9rem_1fr]" : ""
+          }`}
+        >
+          {previewDraft.previewImageDataUrl && (
+            <img
+              src={previewDraft.previewImageDataUrl}
+              alt="Lightbox preview generated in the preview tool"
+              className="aspect-[4/3] w-full rounded-md object-cover outline outline-1 -outline-offset-1 outline-black/10"
+            />
+          )}
+          <div>
+            <p className="text-sm font-semibold text-stone-950">
+              Preview notes added
+            </p>
+            {previewDraft.dimensions && (
+              <p className="mt-1 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-amber-800">
+                {previewDraft.dimensions}
+              </p>
+            )}
+            {previewDraft.previewSummary && (
+              <p className="mt-2 whitespace-pre-line text-pretty text-xs leading-6 text-stone-600">
+                {previewDraft.previewSummary}
+              </p>
+            )}
+          </div>
+        </section>
+      )}
 
       {errorSummaryItems.length > 0 && (
         <div
@@ -576,9 +679,22 @@ export default function QuoteForm() {
       </div>
 
       {submitError && (
-        <p role="alert" className="text-sm text-red-700">
-          {submitError}
-        </p>
+        <div role="alert" className="space-y-3 text-sm text-red-700">
+          <p>{submitError}</p>
+          {contactLinks.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {contactLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="inline-flex min-h-10 items-center rounded-lg bg-red-50 px-3 py-2 font-bold text-red-800 shadow-[0_0_0_1px_rgba(185,28,28,0.16)] transition-[background-color,scale] hover:bg-red-100 active:scale-[0.96]"
+                >
+                  {link.label}: {link.value}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       <button

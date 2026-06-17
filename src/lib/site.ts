@@ -21,6 +21,17 @@ function readEnv(...keys: string[]) {
 
 export const siteName = "Commercial Lightbox";
 export const companyName = "Commercial Lightbox";
+export const businessName =
+  readEnv("PUBLIC_BUSINESS_NAME", "NEXT_PUBLIC_BUSINESS_NAME") || companyName;
+export const serviceArea =
+  readEnv("PUBLIC_SERVICE_AREA", "NEXT_PUBLIC_SERVICE_AREA") ||
+  "Perth + regional WA";
+export const contactPhone =
+  readEnv("PUBLIC_CONTACT_PHONE", "NEXT_PUBLIC_CONTACT_PHONE") || "";
+export const contactEmail =
+  readEnv("PUBLIC_CONTACT_EMAIL", "NEXT_PUBLIC_CONTACT_EMAIL") || "";
+export const businessAbn =
+  readEnv("PUBLIC_BUSINESS_ABN", "NEXT_PUBLIC_BUSINESS_ABN") || "";
 
 export const siteUrl = trimTrailingSlash(
   readEnv("PUBLIC_SITE_URL", "NEXT_PUBLIC_SITE_URL") || DEFAULT_SITE_URL,
@@ -34,4 +45,13 @@ export function absoluteUrl(path = "/") {
   if (/^https?:\/\//.test(path)) return trimTrailingSlash(path);
   if (!path.startsWith("/")) return `${siteUrl}/${path}`;
   return `${siteUrl}${path}`;
+}
+
+export function phoneHref(phone = contactPhone) {
+  const normalized = phone.replace(/[^\d+]/g, "");
+  return normalized ? `tel:${normalized}` : "";
+}
+
+export function emailHref(email = contactEmail) {
+  return email ? `mailto:${email}` : "";
 }

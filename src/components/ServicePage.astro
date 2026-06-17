@@ -1,0 +1,319 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  businessAbn,
+  businessName,
+  companyName,
+  contactEmail,
+  contactPhone,
+  serviceArea,
+  siteName,
+  siteUrl,
+} from "../lib/site";
+import type { ServicePageData } from "../lib/servicePages";
+
+type Props = {
+  page: ServicePageData;
+};
+
+const { page } = Astro.props;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: page.h1,
+  description: page.description,
+  serviceType: page.serviceType,
+  areaServed: {
+    "@type": "AdministrativeArea",
+    name: "Western Australia",
+  },
+  provider: {
+    "@type": "LocalBusiness",
+    name: businessName || companyName,
+    url: siteUrl,
+    areaServed: serviceArea,
+    ...(contactPhone ? { telephone: contactPhone } : {}),
+    ...(contactEmail ? { email: contactEmail } : {}),
+    ...(businessAbn ? { identifier: businessAbn } : {}),
+  },
+  url: `${siteUrl}${page.canonicalPath}`,
+};
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  canonicalPath={page.canonicalPath}
+  openGraphTitle={page.h1}
+  openGraphDescription={page.description}
+  openGraphUrl={page.canonicalPath}
+  openGraphImages={[
+    {
+      url: page.image.src,
+      width: 1536,
+      height: 1024,
+      alt: page.image.alt,
+    },
+  ]}
+>
+  <main class="bg-stone-50 text-stone-950">
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
+
+    <section class="relative isolate overflow-hidden bg-stone-950 px-4 py-24 text-white">
+      <img
+        src={page.image.src}
+        alt=""
+        width="1536"
+        height="1024"
+        fetchpriority="high"
+        decoding="async"
+        class="absolute inset-0 h-full w-full object-cover opacity-42"
+      />
+      <div
+        class="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,10,9,0.96)_0%,rgba(12,10,9,0.74)_56%,rgba(12,10,9,0.34)_100%)]"
+      >
+      </div>
+
+      <header class="relative z-10 mx-auto mb-16 flex max-w-6xl flex-wrap items-center justify-between gap-4">
+        <a href="/" class="text-sm font-bold tracking-wide text-white">
+          {siteName}
+        </a>
+        <nav
+          class="flex flex-wrap items-center gap-4 text-sm font-semibold text-white/78"
+          aria-label="Service page"
+        >
+          <a
+            href="/"
+            class="inline-flex min-h-10 items-center transition-[color] hover:text-white"
+          >
+            Home
+          </a>
+          <a
+            href="/preview"
+            class="hidden min-h-10 items-center transition-[color] hover:text-white sm:inline-flex"
+          >
+            Preview
+          </a>
+          <a
+            href="/#quote"
+            class="inline-flex min-h-10 items-center rounded-lg bg-white px-4 py-2 text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-[background-color,scale] hover:bg-amber-100 active:scale-[0.96]"
+          >
+            Request quote
+          </a>
+        </nav>
+      </header>
+
+      <div class="relative z-10 mx-auto max-w-6xl">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-200">
+          {page.eyebrow}
+        </p>
+        <h1
+          class="mt-5 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] tracking-normal text-white sm:text-5xl lg:text-6xl"
+        >
+          {page.h1}
+        </h1>
+        <p class="mt-6 max-w-2xl text-pretty text-lg leading-8 text-white/82">
+          {page.intro}
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a
+            href="/#quote"
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.28)] transition-[background-color,scale,box-shadow] hover:bg-amber-400 active:scale-[0.96]"
+          >
+            Request a quote
+          </a>
+          <a
+            href="#quote-factors"
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
+          >
+            See quote factors
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Best fit
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            {page.fitTitle}
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            {page.fitIntro}
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            page.applications.map((item) => (
+              <article class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <h3 class="text-lg font-semibold text-stone-950">
+                  {item.title}
+                </h3>
+                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                  {item.copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="quote-factors" class="bg-white px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Quote factors
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            What usually changes price and timing.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            These are the details to confirm before fabrication, so the quote
+            reflects the actual site rather than a generic sign size.
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            page.quoteFactors.map((factor) => (
+              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <h3 class="text-lg font-semibold text-stone-950">
+                  {factor.title}
+                </h3>
+                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                  {factor.copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-stone-950 px-4 py-20 text-white">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+            Project path
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            A simple route from first enquiry to installed sign.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
+            The path stays practical even when materials, approvals, travel, or
+            install access change the final scope.
+          </p>
+        </div>
+        <div class="grid gap-4">
+          {
+            page.processSteps.map((step, index) => (
+              <article class="grid gap-4 rounded-lg bg-white/[0.06] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] sm:grid-cols-[8rem_1fr] sm:items-start">
+                <p class="font-mono text-sm font-semibold tabular-nums text-amber-300">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <div>
+                  <h3 class="text-xl font-semibold">{step.title}</h3>
+                  <p class="mt-2 text-pretty text-sm leading-7 text-white/72">
+                    {step.copy}
+                  </p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Questions
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            Details customers usually ask before quoting.
+          </h2>
+        </div>
+        <div class="mt-12 grid gap-5 md:grid-cols-2">
+          {
+            page.faqs.map((faq) => (
+              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <h3 class="text-lg font-semibold text-stone-950">
+                  {faq.question}
+                </h3>
+                <p class="mt-3 text-pretty leading-7 text-stone-600">
+                  {faq.answer}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#f3efe7] px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Next step
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            Ready to scope this sign?
+          </h2>
+          <p class="mt-5 max-w-2xl text-pretty text-lg leading-8 text-stone-600">
+            Send rough dimensions, site photos, location, artwork, and timing
+            needs. If the sign type is not final, start with the closest match.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="/#quote"
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.24)] transition-[background-color,scale] hover:bg-amber-400 active:scale-[0.96]"
+            >
+              Request a quote
+            </a>
+            <a
+              href="/preview"
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-stone-950 px-6 py-3 text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
+            >
+              Preview your sign
+            </a>
+          </div>
+        </div>
+        <nav
+          class="border-t border-stone-300 pt-6 lg:border-t-0 lg:border-l lg:pl-8"
+          aria-label="Related services"
+        >
+          <p class="text-sm font-bold uppercase tracking-[0.16em] text-teal-800">
+            Related services
+          </p>
+          <div class="mt-5 grid gap-3">
+            {
+              page.relatedLinks.map((link) => (
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-10 items-center text-sm font-bold text-stone-800 underline decoration-stone-400/45 underline-offset-4 transition-[color,text-decoration-color] hover:text-teal-900 hover:decoration-teal-700"
+                >
+                  {link.label}
+                </a>
+              ))
+            }
+            <a
+              href="/"
+              class="inline-flex min-h-10 items-center text-sm font-bold text-stone-950 underline decoration-stone-500/50 underline-offset-4 transition-[color,text-decoration-color] hover:text-teal-900 hover:decoration-teal-700"
+            >
+              Back to Commercial Lightbox
+            </a>
+          </div>
+        </nav>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

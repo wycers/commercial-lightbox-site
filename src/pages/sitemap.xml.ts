@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { servicePages } from "../lib/servicePages";
 import { absoluteUrl } from "../lib/site";
 
 const routes = [
@@ -7,6 +8,11 @@ const routes = [
     changeFrequency: "monthly",
     priority: "1.0",
   },
+  ...servicePages.map((page) => ({
+    path: page.canonicalPath,
+    changeFrequency: "monthly",
+    priority: "0.8",
+  })),
   {
     path: "/case-studies/fuel-price-boards",
     changeFrequency: "monthly",

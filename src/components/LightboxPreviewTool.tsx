@@ -128,24 +128,6 @@ const initialCabinet: Cabinet = {
   lightingMode: "night",
 };
 
-const initialElements: DesignElement[] = [
-  {
-    id: "sample-text",
-    type: "text",
-    text: "YOUR SIGN",
-    x: 310,
-    y: 210,
-    width: 380,
-    height: 96,
-    rotation: 0,
-    opacity: 1,
-    fill: "#151515",
-    fontSize: 66,
-    fontFamily: "Inter, Arial, sans-serif",
-    fontStyle: "bold",
-  },
-];
-
 function classNames(...tokens: Array<string | false | undefined>) {
   return tokens.filter(Boolean).join(" ");
 }
@@ -172,6 +154,33 @@ function getLogicalSignHeight(dimensions: DimensionsMm) {
 
 function getFrameInset(logicalHeight: number) {
   return Math.round(Math.max(24, Math.min(52, logicalHeight * 0.095)));
+}
+
+function createInitialElements(dimensions: DimensionsMm): DesignElement[] {
+  const logicalHeight = getLogicalSignHeight(dimensions);
+  const frameInset = getFrameInset(logicalHeight);
+  const faceWidth = LOGICAL_SIGN_WIDTH - frameInset * 2;
+  const faceHeight = logicalHeight - frameInset * 2;
+  const width = Math.min(420, faceWidth * 0.58);
+  const height = Math.min(96, faceHeight * 0.5);
+
+  return [
+    {
+      id: "sample-text",
+      type: "text",
+      text: "YOUR SIGN",
+      x: frameInset + (faceWidth - width) / 2,
+      y: frameInset + (faceHeight - height) / 2,
+      width,
+      height,
+      rotation: 0,
+      opacity: 1,
+      fill: "#151515",
+      fontSize: Math.max(28, Math.min(66, faceHeight * 0.36)),
+      fontFamily: "Inter, Arial, sans-serif",
+      fontStyle: "bold",
+    },
+  ];
 }
 
 function estimateDataUrlBytes(dataUrl: string) {
@@ -1004,8 +1013,10 @@ export default function LightboxPreviewTool() {
   const [mode, setMode] = useState<PreviewMode>("face");
   const [dimensions, setDimensions] = useState<DimensionsMm>(initialDimensions);
   const [cabinet, setCabinet] = useState<Cabinet>(initialCabinet);
-  const [elements, setElements] = useState<DesignElement[]>(initialElements);
-  const [selectedId, setSelectedId] = useState(initialElements[0]?.id || "");
+  const [elements, setElements] = useState<DesignElement[]>(() =>
+    createInitialElements(initialDimensions),
+  );
+  const [selectedId, setSelectedId] = useState("sample-text");
   const [shopfrontImage, setShopfrontImage] = useState<ShopfrontImage>();
   const [signTransform, setSignTransform] = useState<SignTransform | null>(
     null,
@@ -1156,10 +1167,12 @@ export default function LightboxPreviewTool() {
   }
 
   function resetDesign() {
+    const resetElements = createInitialElements(initialDimensions);
+
     setDimensions(initialDimensions);
     setCabinet(initialCabinet);
-    setElements(initialElements);
-    setSelectedId(initialElements[0]?.id || "");
+    setElements(resetElements);
+    setSelectedId(resetElements[0]?.id || "");
     setShopfrontImage(undefined);
     setSignTransform(null);
     setError("");

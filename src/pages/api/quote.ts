@@ -1,6 +1,7 @@
-"use server";
+import type { APIRoute } from "astro";
+import { siteUrl } from "../../lib/site";
 
-import { siteUrl } from "@/lib/site";
+export const prerender = false;
 
 type QuoteFields = {
   fullName: string;
@@ -13,12 +14,12 @@ type QuoteFields = {
   dimensions: string;
   message: string;
   pageUrl: string;
-  honeypot: string;
+  _gotcha: string;
 };
 
 type RequiredField = keyof Omit<
   QuoteFields,
-  "dimensions" | "message" | "pageUrl" | "honeypot"
+  "dimensions" | "message" | "pageUrl" | "_gotcha"
 >;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,6 +34,15 @@ const REQUIRED_FIELDS: Array<[RequiredField, string]> = [
   ["phone", "Phone"],
   ["signType", "Sign type"],
 ];
+
+function jsonResponse(body: { ok: boolean; error?: string }, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+  });
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -55,7 +65,7 @@ function readQuoteFields(payload: Record<string, unknown>): QuoteFields {
     dimensions: readString(payload, "dimensions"),
     message: readString(payload, "message"),
     pageUrl: readString(payload, "pageUrl"),
-    honeypot: readString(payload, "_gotcha"),
+    _gotcha: readString(payload, "_gotcha"),
   };
 }
 
@@ -71,6 +81,15 @@ function validate(fields: QuoteFields) {
   if (!EMAIL_REGEX.test(fields.email)) {
     return "Please enter a valid email address.";
   }
+}
+
+function readServerEnv(key: string) {
+  const astroEnv = import.meta.env as Record<string, string | undefined>;
+  const value =
+    (typeof process !== "undefined" ? process.env[key] : undefined) ??
+    astroEnv[key];
+
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function formatTelegramMessage(fields: QuoteFields) {
@@ -102,27 +121,38 @@ function formatTelegramMessage(fields: QuoteFields) {
   return `${message.slice(0, TELEGRAM_MESSAGE_LIMIT - 16)}\n...[truncated]`;
 }
 
-export async function submitCommercialQuoteRequest(payload: unknown) {
+export const POST: APIRoute = async ({ request }) => {
+  let payload: unknown;
+
+  try {
+    payload = await request.json();
+  } catch {
+    return jsonResponse({ ok: false, error: "Invalid request body." }, 400);
+  }
+
   if (!isRecord(payload)) {
-    return { ok: false, error: "Invalid request body." };
+    return jsonResponse({ ok: false, error: "Invalid request body." }, 400);
   }
 
   const fields = readQuoteFields(payload);
 
-  if (fields.honeypot) {
-    return { ok: true };
+  if (fields._gotcha) {
+    return jsonResponse({ ok: true });
   }
 
   const validationError = validate(fields);
   if (validationError) {
-    return { ok: false, error: validationError };
+    return jsonResponse({ ok: false, error: validationError }, 400);
   }
 
-  const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
-  const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
+  const botToken = readServerEnv("TELEGRAM_BOT_TOKEN");
+  const chatId = readServerEnv("TELEGRAM_CHAT_ID");
 
   if (!botToken || !chatId) {
-    return { ok: false, error: "Telegram is not configured." };
+    return jsonResponse(
+      { ok: false, error: "Telegram is not configured." },
+      503,
+    );
   }
 
   try {
@@ -145,13 +175,19 @@ export async function submitCommercialQuoteRequest(payload: unknown) {
         telegramResponse.status,
       );
 
-      return { ok: false, error: "Failed to send quote request." };
+      return jsonResponse(
+        { ok: false, error: "Failed to send quote request." },
+        502,
+      );
     }
   } catch (error) {
     console.error("Telegram quote notification error", error);
 
-    return { ok: false, error: "Failed to send quote request." };
+    return jsonResponse(
+      { ok: false, error: "Failed to send quote request." },
+      502,
+    );
   }
 
-  return { ok: true };
-}
+  return jsonResponse({ ok: true });
+};

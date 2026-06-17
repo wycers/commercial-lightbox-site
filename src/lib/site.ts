@@ -5,18 +5,33 @@ function trimTrailingSlash(url: string) {
   return url.replace(/\/+$/, "");
 }
 
+function readEnv(...keys: string[]) {
+  const astroEnv = import.meta.env as Record<string, string | undefined>;
+
+  for (const key of keys) {
+    const value =
+      astroEnv[key] ??
+      (typeof process !== "undefined" ? process.env[key] : undefined);
+
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+}
+
 export const siteName = "Commercial Lightbox";
 export const companyName = "Commercial Lightbox";
 
 export const siteUrl = trimTrailingSlash(
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL,
+  readEnv("PUBLIC_SITE_URL", "NEXT_PUBLIC_SITE_URL") || DEFAULT_SITE_URL,
 );
 
 export const fuelPriceBoardUrl = trimTrailingSlash(
-  process.env.NEXT_PUBLIC_B_SITE_URL?.trim() || DEFAULT_B_SITE_URL,
+  readEnv("PUBLIC_B_SITE_URL", "NEXT_PUBLIC_B_SITE_URL") || DEFAULT_B_SITE_URL,
 );
 
 export function absoluteUrl(path = "/") {
+  if (/^https?:\/\//.test(path)) return trimTrailingSlash(path);
   if (!path.startsWith("/")) return `${siteUrl}/${path}`;
   return `${siteUrl}${path}`;
 }

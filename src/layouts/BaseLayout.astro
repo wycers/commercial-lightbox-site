@@ -1,0 +1,85 @@
+---
+import { absoluteUrl, siteName } from "../lib/site";
+import "../styles/global.css";
+
+type OpenGraphImage = {
+  url: string;
+  width?: number;
+  height?: number;
+  alt?: string;
+};
+
+type Props = {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  openGraphTitle?: string;
+  openGraphDescription?: string;
+  openGraphUrl?: string;
+  openGraphImages?: OpenGraphImage[];
+};
+
+const defaultImage: OpenGraphImage = {
+  url: "/images/commercial-lightbox-hero.png",
+  width: 1680,
+  height: 960,
+  alt: "Illuminated custom commercial lightbox sign on a modern shopfront",
+};
+
+const {
+  title,
+  description,
+  canonicalPath = "/",
+  openGraphTitle = title,
+  openGraphDescription = description,
+  openGraphUrl = canonicalPath,
+  openGraphImages = [defaultImage],
+} = Astro.props;
+
+const canonicalUrl = absoluteUrl(canonicalPath);
+const openGraphAbsoluteUrl = absoluteUrl(openGraphUrl);
+const normalizedImages = openGraphImages.map((image) => ({
+  ...image,
+  url: absoluteUrl(image.url),
+}));
+---
+
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:title" content={openGraphTitle} />
+    <meta property="og:description" content={openGraphDescription} />
+    <meta property="og:url" content={openGraphAbsoluteUrl} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:type" content="website" />
+    {
+      normalizedImages.map((image) => (
+        <>
+          <meta property="og:image" content={image.url} />
+          {image.width && (
+            <meta property="og:image:width" content={String(image.width)} />
+          )}
+          {image.height && (
+            <meta property="og:image:height" content={String(image.height)} />
+          )}
+          {image.alt && <meta property="og:image:alt" content={image.alt} />}
+        </>
+      ))
+    }
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={openGraphTitle} />
+    <meta name="twitter:description" content={openGraphDescription} />
+    {normalizedImages[0] && <meta name="twitter:image" content={normalizedImages[0].url} />}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

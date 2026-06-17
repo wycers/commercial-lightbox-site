@@ -1,7 +1,5 @@
-"use client";
-
+import type { ChangeEvent } from "react";
 import { useState } from "react";
-import { submitCommercialQuoteRequest } from "@/app/actions/quote";
 
 type FormFields = {
   fullName: string;
@@ -16,6 +14,11 @@ type FormFields = {
 };
 
 type FormErrors = Partial<Record<keyof FormFields, string>>;
+
+type QuoteSubmitResult = {
+  ok: boolean;
+  error?: string;
+};
 
 const initialFields: FormFields = {
   fullName: "",
@@ -67,7 +70,7 @@ export default function QuoteForm() {
   const [honeypot, setHoneypot] = useState("");
 
   function handleChange(
-    event: React.ChangeEvent<
+    event: ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) {
@@ -78,7 +81,7 @@ export default function QuoteForm() {
     }
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
     const validationErrors = validate(fields);
     if (Object.keys(validationErrors).length > 0) {
@@ -90,18 +93,30 @@ export default function QuoteForm() {
     setSubmitError("");
 
     try {
-      const result = await submitCommercialQuoteRequest({
-        ...fields,
-        pageUrl: window.location.href,
-        _gotcha: honeypot,
+      const response = await fetch("/api/quote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...fields,
+          pageUrl: window.location.href,
+          _gotcha: honeypot,
+        }),
       });
+      const result = (await response.json()) as QuoteSubmitResult;
 
       if (result.ok) {
         setSubmitted(true);
         setFields(initialFields);
         setErrors({});
       } else {
-        setSubmitError(result.error || "Failed to send quote request.");
+        setSubmitError(
+          result.error ||
+            (response.ok
+              ? "Failed to send quote request."
+              : "Something went wrong. Please try again."),
+        );
       }
     } catch {
       setSubmitError("Something went wrong. Please try again.");

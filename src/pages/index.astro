@@ -1,0 +1,381 @@
+---
+import SectionHeader from "../components/SectionHeader.astro";
+import QuoteForm from "../components/QuoteForm";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { companyName, fuelPriceBoardUrl, siteName, siteUrl } from "../lib/site";
+
+const title = "Commercial Lightbox | Custom Lightbox Signs in WA";
+const description =
+  "Custom commercial lightbox signs for WA shopfronts, hospitality venues, service sites, and petrol station signage projects.";
+
+const applications = [
+  {
+    title: "Retail shopfronts",
+    copy: "Illuminated fascia signs and wall-mounted lightboxes that keep storefronts readable after dark.",
+  },
+  {
+    title: "Hospitality venues",
+    copy: "Warm, durable lightboxes for cafes, restaurants, bars, and takeaway counters that need clean night visibility.",
+  },
+  {
+    title: "Clinics and service sites",
+    copy: "Professional signage for medical, automotive, and service businesses where clarity matters more than clutter.",
+  },
+  {
+    title: "Petrol station forecourts",
+    copy: "Custom illuminated signage for forecourts, canopy areas, and roadside identification.",
+  },
+];
+
+const processSteps = [
+  [
+    "1",
+    "Survey",
+    "Confirm dimensions, mounting, exposure, power, and permit needs.",
+  ],
+  [
+    "2",
+    "Design",
+    "Resolve light spread, acrylic face, frame depth, and service access.",
+  ],
+  [
+    "3",
+    "Build",
+    "Fabricate the frame, LED system, diffuser, and branded sign face.",
+  ],
+  ["4", "Install", "Fit, test, clean up, and hand over maintenance guidance."],
+];
+
+const materialNotes = [
+  "Acrylic or polycarbonate faces selected for impact, UV exposure, and light diffusion.",
+  "Powder-coated aluminium cabinets with serviceable LED modules and tidy cable routing.",
+  "Weather-aware mounting details for WA shopfronts, coastal strips, and exposed roadsides.",
+];
+
+const faqs = [
+  {
+    question: "Can you work from an existing logo file?",
+    answer:
+      "Yes. Vector artwork is ideal, but we can also advise what needs to be redrawn before manufacturing a clean illuminated sign face.",
+  },
+  {
+    question: "Do you handle installation?",
+    answer:
+      "Yes. The quote can include survey, fabrication, installation, testing, and handover for Perth and regional WA sites.",
+  },
+  {
+    question: "Can the lightbox be outdoor rated?",
+    answer:
+      "Yes. Cabinet depth, seals, drainage, face material, and LED access are selected around the installation position.",
+  },
+  {
+    question: "What if I also need a fuel price board?",
+    answer:
+      "Fuel price boards are handled as a specialist roadside LED display path, with FuelWatch-ready options for WA service stations.",
+  },
+];
+
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Custom commercial lightbox signage",
+  description,
+  serviceType: "Commercial lightbox sign design, fabrication, and installation",
+  areaServed: {
+    "@type": "AdministrativeArea",
+    name: "Western Australia",
+  },
+  provider: {
+    "@type": "LocalBusiness",
+    name: companyName,
+    url: siteUrl,
+    areaServed: "Western Australia",
+  },
+  url: siteUrl,
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/"
+  openGraphTitle={title}
+  openGraphDescription={description}
+  openGraphUrl="/"
+>
+  <main>
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(serviceJsonLd)}
+    />
+    <section
+      class="relative isolate flex min-h-[88svh] items-center overflow-hidden bg-stone-950 px-4 py-24 text-white"
+    >
+      <img
+        src="/images/commercial-lightbox-hero.png"
+        alt="Illuminated custom commercial lightbox sign on a modern shopfront"
+        fetchpriority="high"
+        decoding="async"
+        class="absolute inset-0 h-full w-full object-cover object-[58%_center]"
+      />
+      <div
+        class="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,10,9,0.96)_0%,rgba(12,10,9,0.82)_36%,rgba(12,10,9,0.35)_68%,rgba(12,10,9,0.08)_100%)]"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,10,9,0.14)_0%,rgba(12,10,9,0.03)_48%,rgba(12,10,9,0.74)_100%)]"
+      >
+      </div>
+
+      <header class="absolute top-0 right-0 left-0 z-20 px-4 py-5">
+        <nav
+          class="mx-auto flex max-w-6xl items-center justify-between"
+          aria-label="Primary"
+        >
+          <a href="/" class="text-sm font-bold tracking-wide text-white">
+            {siteName}
+          </a>
+          <div class="flex items-center gap-4 text-sm font-semibold text-white/78">
+            <a
+              href="#applications"
+              class="hidden transition-[color] hover:text-white sm:inline"
+            >
+              Applications
+            </a>
+            <a
+              href="#quote"
+              class="inline-flex min-h-10 items-center rounded-lg bg-white px-4 py-2 text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-[background-color,scale] hover:bg-amber-100 active:scale-[0.96]"
+            >
+              Request quote
+            </a>
+          </div>
+        </nav>
+      </header>
+
+      <div class="relative z-10 mx-auto w-full max-w-6xl pt-12">
+        <div class="max-w-2xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-200">
+            Custom illuminated signage in WA
+          </p>
+          <h1
+            class="mt-5 text-balance text-5xl font-semibold leading-[1.02] tracking-normal text-white sm:text-6xl lg:text-7xl"
+          >
+            Commercial Lightbox
+          </h1>
+          <p class="mt-6 max-w-xl text-pretty text-lg leading-8 text-white/82">
+            Design, fabrication, and installation for shopfront lightboxes,
+            hospitality signs, service-site signage, and custom illuminated
+            commercial displays.
+          </p>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a
+              href="#quote"
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.28)] transition-[background-color,scale,box-shadow] hover:bg-amber-400 active:scale-[0.96]"
+            >
+              Get a custom quote
+            </a>
+            <a
+              href="/case-studies/fuel-price-boards"
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
+            >
+              View signage case study
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="applications"
+      class="bg-stone-50 px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+    >
+      <div class="mx-auto max-w-6xl">
+        <SectionHeader
+          kicker="Applications"
+          title="Built around the site, not a fixed catalogue."
+          copy="Every lightbox starts with the place it needs to work: traffic angle, wall structure, brand artwork, power, weather, and maintenance access."
+        />
+        <div class="mt-12 grid gap-5 md:grid-cols-4">
+          {
+            applications.map((item) => (
+              <article class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_42px_rgba(0,0,0,0.07)]">
+                <h3 class="text-lg font-semibold text-stone-950">
+                  {item.title}
+                </h3>
+                <p class="mt-4 text-pretty text-sm leading-7 text-stone-600">
+                  {item.copy}
+                </p>
+                {item.title === "Petrol station forecourts" && (
+                  <a
+                    href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
+                    class="mt-5 inline-flex min-h-10 items-center text-sm font-bold text-teal-800 underline decoration-teal-700/35 underline-offset-4 transition-[color,text-decoration-color] hover:text-stone-950 hover:decoration-stone-950"
+                  >
+                    FuelWatch-ready LED fuel price boards
+                  </a>
+                )}
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <SectionHeader
+          kicker="Process"
+          title="A practical route from artwork to installed sign."
+          copy="The job stays grounded in the details that affect the finished result: legibility, brightness, cabinet depth, weather exposure, and access for future service."
+        />
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            processSteps.map(([number, stepTitle, copy]) => (
+              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <p class="font-mono text-sm font-semibold tabular-nums text-amber-700">
+                  {number}
+                </p>
+                <h3 class="mt-4 text-xl font-semibold text-stone-950">
+                  {stepTitle}
+                </h3>
+                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                  {copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-stone-950 px-4 py-20 text-white">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+            Materials
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            Bright at night, clean in daylight, serviceable later.
+          </h2>
+        </div>
+        <ul class="grid gap-4">
+          {
+            materialNotes.map((note) => (
+              <li class="rounded-lg bg-white/[0.06] p-5 text-pretty leading-7 text-white/78 shadow-[0_0_0_1px_rgba(255,255,255,0.1)]">
+                {note}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-[#f3efe7] px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Case study
+          </p>
+          <h2
+            class="mt-3 text-balance text-3xl font-semibold text-stone-950 md:text-4xl"
+          >
+            From custom lightboxes to specialist fuel price displays.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            Fuel price signage is a focused branch of illuminated roadside
+            display work. For service stations, the dedicated FuelWatch-ready
+            product path gives owners a clearer way to compare board formats.
+          </p>
+        </div>
+        <div
+          class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_48px_rgba(0,0,0,0.1)]"
+        >
+          <h3 class="text-2xl font-semibold text-stone-950">
+            Fuel price board customer path
+          </h3>
+          <p class="mt-4 text-pretty leading-7 text-stone-600">
+            See how the signage capability narrows into weather-rated,
+            high-brightness roadside LED displays for petrol station pricing.
+          </p>
+          <a
+            href="/case-studies/fuel-price-boards"
+            class="mt-6 inline-flex min-h-11 items-center rounded-lg bg-stone-950 px-5 py-3 text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
+          >
+            Read the case study
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <SectionHeader
+          kicker="Questions"
+          title="Useful answers before you request pricing."
+          copy="Quotes vary with size, mounting, access, face material, installation travel, and any permit or artwork preparation needed."
+        />
+        <div class="mt-12 grid gap-5 md:grid-cols-2">
+          {
+            faqs.map((faq) => (
+              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <h3 class="text-lg font-semibold text-stone-950">
+                  {faq.question}
+                </h3>
+                <p class="mt-3 text-pretty leading-7 text-stone-600">
+                  {faq.answer}
+                </p>
+                {faq.question === "What if I also need a fuel price board?" && (
+                  <a
+                    href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
+                    class="mt-5 inline-flex min-h-10 items-center text-sm font-bold text-teal-800 underline decoration-teal-700/35 underline-offset-4 transition-[color,text-decoration-color] hover:text-stone-950 hover:decoration-stone-950"
+                  >
+                    View the fuel price board range
+                  </a>
+                )}
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="quote" class="bg-stone-950 px-4 py-20 text-white">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+            Quote
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            Share the site details and we will scope the sign.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
+            Send the rough size, location, sign type, and any timing needs. If
+            you are not sure about dimensions yet, we can start from the
+            shopfront or wall position.
+          </p>
+          <dl class="mt-9 grid gap-4 text-sm text-white/75">
+            {
+              [
+                ["Response", "1 business day"],
+                ["Coverage", "Perth + regional WA"],
+                ["Path", "Survey, build, install"],
+              ].map(([label, value]) => (
+                <div class="border-l border-amber-400 pl-4">
+                  <dt class="font-mono text-xs uppercase tracking-[0.16em] text-amber-300">
+                    {label}
+                  </dt>
+                  <dd class="mt-1 text-white">{value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div
+          class="rounded-lg bg-white p-6 text-stone-950 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_24px_70px_rgba(0,0,0,0.35)] sm:p-8"
+        >
+          <QuoteForm client:load />
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

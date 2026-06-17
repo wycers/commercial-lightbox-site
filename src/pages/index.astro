@@ -6,24 +6,64 @@ import { companyName, fuelPriceBoardUrl, siteName, siteUrl } from "../lib/site";
 
 const title = "Commercial Lightbox | Custom Lightbox Signs in WA";
 const description =
-  "Custom commercial lightbox signs for WA shopfronts, hospitality venues, service sites, and petrol station signage projects.";
+  "Indoor and outdoor advertising lightboxes in WA, with survey, design, fabrication, installation, and testing for commercial signage projects.";
 
 const applications = [
   {
-    title: "Retail shopfronts",
-    copy: "Illuminated fascia signs and wall-mounted lightboxes that keep storefronts readable after dark.",
+    title: "Indoor food courts",
+    copy: "Menu, counter, and tenancy lightboxes with comfortable brightness, tidy indoor mounting, and easy-clean sign faces.",
   },
   {
-    title: "Hospitality venues",
-    copy: "Warm, durable lightboxes for cafes, restaurants, bars, and takeaway counters that need clean night visibility.",
+    title: "Retail interiors",
+    copy: "Reception, wall, and product-area lightboxes that make brand signage clear without overpowering the space.",
   },
   {
-    title: "Clinics and service sites",
-    copy: "Professional signage for medical, automotive, and service businesses where clarity matters more than clutter.",
+    title: "Outdoor shopfronts",
+    copy: "Illuminated fascia signs and wall-mounted lightboxes built around weather exposure, access, structure, and night visibility.",
   },
   {
-    title: "Petrol station forecourts",
-    copy: "Custom illuminated signage for forecourts, canopy areas, and roadside identification.",
+    title: "Service stations",
+    copy: "Outdoor illuminated signage and fuel price display deployment for forecourts, roadside visibility, and site testing.",
+  },
+];
+
+const capabilityGroups = [
+  {
+    label: "Indoor",
+    title: "Food courts, counters, menus, and reception lightboxes.",
+    copy: "Indoor advertising lightboxes need controlled brightness, clean face materials, low-heat LED systems, and mounting that works with ceilings, counters, tenancy walls, and shopfit-out details.",
+    points: [
+      "Comfortable light levels for close viewing",
+      "Easy-clean acrylic or polycarbonate sign faces",
+      "Tidy indoor mounting and cable paths",
+    ],
+  },
+  {
+    label: "Outdoor",
+    title: "Shopfronts, service stations, and fuel retail displays.",
+    copy: "Outdoor projects need weather-aware cabinets, structural fixing, readable viewing distance, power/control coordination, and final testing on site before handover.",
+    points: [
+      "Weather-aware construction and service access",
+      "Visibility planned around road and pedestrian angles",
+      "Deployment, power coordination, and site testing",
+    ],
+  },
+];
+
+const siteExamples = [
+  {
+    location: "Maddington",
+    title: "Indoor food court advertising lightbox",
+    type: "Indoor",
+    copy: "A food court signage project where the lightbox needed to sit cleanly within the indoor retail environment and remain readable at close range.",
+    scope: "Site check, design coordination, fabrication, installation",
+  },
+  {
+    location: "Maddington",
+    title: "Service station fuel price display",
+    type: "Outdoor",
+    copy: "A fuel retail display project focused on roadside readability, outdoor deployment, and testing for the service station environment.",
+    scope: "Site survey, display specification, deployment, testing",
   },
 ];
 
@@ -31,28 +71,37 @@ const processSteps = [
   [
     "1",
     "Survey",
-    "Confirm dimensions, mounting, exposure, power, and permit needs.",
+    "Measure the site and confirm mounting, exposure, power, access, and permit needs.",
   ],
   [
     "2",
     "Design",
-    "Resolve light spread, acrylic face, frame depth, and service access.",
+    "Resolve artwork, light spread, face material, cabinet depth, and service access.",
   ],
   [
     "3",
     "Build",
-    "Fabricate the frame, LED system, diffuser, and branded sign face.",
+    "Fabricate the frame, LED system, diffuser, display hardware, and branded sign face.",
   ],
-  ["4", "Install", "Fit, test, clean up, and hand over maintenance guidance."],
+  [
+    "4",
+    "Deploy & test",
+    "Install on site, coordinate power, test visibility and operation, then hand over.",
+  ],
 ];
 
 const materialNotes = [
-  "Acrylic or polycarbonate faces selected for impact, UV exposure, and light diffusion.",
-  "Powder-coated aluminium cabinets with serviceable LED modules and tidy cable routing.",
-  "Weather-aware mounting details for WA shopfronts, coastal strips, and exposed roadsides.",
+  "Acrylic or polycarbonate faces selected for indoor cleaning, outdoor impact, UV exposure, and light diffusion.",
+  "Powder-coated aluminium cabinets with serviceable LED modules, tidy cable routing, and low-heat operation.",
+  "Weather-aware mounting details for WA shopfronts, service stations, coastal strips, and exposed roadsides.",
 ];
 
 const faqs = [
+  {
+    question: "Do you make both indoor and outdoor advertising lightboxes?",
+    answer:
+      "Yes. Indoor projects include food courts, counters, menus, reception areas, and retail interiors. Outdoor projects include shopfronts, wall-mounted lightboxes, service station signage, and fuel price displays.",
+  },
   {
     question: "Can you work from an existing logo file?",
     answer:
@@ -61,7 +110,7 @@ const faqs = [
   {
     question: "Do you handle installation?",
     answer:
-      "Yes. The quote can include survey, fabrication, installation, testing, and handover for Perth and regional WA sites.",
+      "Yes. The quote can include site survey, design coordination, fabrication, installation, power coordination, testing, and handover for Perth and regional WA sites.",
   },
   {
     question: "Can the lightbox be outdoor rated?",
@@ -80,7 +129,8 @@ const serviceJsonLd = {
   "@type": "Service",
   name: "Custom commercial lightbox signage",
   description,
-  serviceType: "Commercial lightbox sign design, fabrication, and installation",
+  serviceType:
+    "Indoor and outdoor advertising lightbox design, fabrication, installation, and testing",
   areaServed: {
     "@type": "AdministrativeArea",
     name: "Western Australia",
@@ -144,6 +194,12 @@ const serviceJsonLd = {
               Applications
             </a>
             <a
+              href="#site-examples"
+              class="hidden transition-[color] hover:text-white sm:inline"
+            >
+              Examples
+            </a>
+            <a
               href="/preview"
               class="hidden transition-[color] hover:text-white sm:inline"
             >
@@ -170,9 +226,9 @@ const serviceJsonLd = {
             Commercial Lightbox
           </h1>
           <p class="mt-6 max-w-xl text-pretty text-lg leading-8 text-white/82">
-            Design, fabrication, and installation for shopfront lightboxes,
-            hospitality signs, service-site signage, and custom illuminated
-            commercial displays.
+            Indoor and outdoor advertising lightboxes with survey, design,
+            fabrication, installation, and testing for food courts, shopfronts,
+            service stations, and commercial sites.
           </p>
           <div class="mt-9 flex flex-wrap gap-3">
             <a
@@ -205,8 +261,8 @@ const serviceJsonLd = {
       <div class="mx-auto max-w-6xl">
         <SectionHeader
           kicker="Applications"
-          title="Built around the site, not a fixed catalogue."
-          copy="Every lightbox starts with the place it needs to work: traffic angle, wall structure, brand artwork, power, weather, and maintenance access."
+          title="Indoor comfort and outdoor visibility need different details."
+          copy="Every lightbox starts with the place it needs to work: viewing distance, brightness, wall structure, brand artwork, power, weather, and maintenance access."
         />
         <div class="mt-12 grid gap-5 md:grid-cols-4">
           {
@@ -218,7 +274,7 @@ const serviceJsonLd = {
                 <p class="mt-4 text-pretty text-sm leading-7 text-stone-600">
                   {item.copy}
                 </p>
-                {item.title === "Petrol station forecourts" && (
+                {item.title === "Service stations" && (
                   <a
                     href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
                     class="mt-5 inline-flex min-h-10 items-center text-sm font-bold text-teal-800 underline decoration-teal-700/35 underline-offset-4 transition-[color,text-decoration-color] hover:text-stone-950 hover:decoration-stone-950"
@@ -234,11 +290,93 @@ const serviceJsonLd = {
     </section>
 
     <section class="bg-white px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <SectionHeader
+          kicker="Indoor + outdoor"
+          title="Advertising lightboxes for controlled interiors and exposed sites."
+          copy="The same one-stop service adapts to the environment: indoor projects need clean finishes and comfortable illumination, while outdoor projects need structure, weather detail, distance visibility, and site testing."
+        />
+        <div class="mt-12 grid gap-5 lg:grid-cols-2">
+          {
+            capabilityGroups.map((group) => (
+              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_38px_rgba(0,0,0,0.06)] sm:p-7">
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+                  {group.label}
+                </p>
+                <h3 class="mt-3 text-balance text-2xl font-semibold text-stone-950">
+                  {group.title}
+                </h3>
+                <p class="mt-4 text-pretty leading-7 text-stone-600">
+                  {group.copy}
+                </p>
+                <ul class="mt-6 grid gap-3">
+                  {group.points.map((point) => (
+                    <li class="rounded-lg bg-white px-4 py-3 text-sm font-semibold text-stone-700 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="site-examples"
+      class="bg-[#f3efe7] px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+    >
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Site examples
+          </p>
+          <h2
+            class="mt-3 text-balance text-3xl font-semibold text-stone-950 md:text-4xl"
+          >
+            Maddington projects show both sides of the capability.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            These examples are shared at suburb and project-type level only.
+            They show the range from indoor food court advertising lightboxes to
+            outdoor fuel retail display deployment.
+          </p>
+        </div>
+        <div class="grid gap-5">
+          {
+            siteExamples.map((example) => (
+              <article class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_16px_42px_rgba(0,0,0,0.08)]">
+                <div class="flex flex-wrap items-center gap-3">
+                  <p class="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
+                    {example.location}
+                  </p>
+                  <p class="rounded-md bg-stone-100 px-3 py-1 text-xs font-bold text-stone-700">
+                    {example.type}
+                  </p>
+                </div>
+                <h3 class="mt-4 text-xl font-semibold text-stone-950">
+                  {example.title}
+                </h3>
+                <p class="mt-3 text-pretty leading-7 text-stone-600">
+                  {example.copy}
+                </p>
+                <p class="mt-5 rounded-lg bg-stone-50 px-4 py-3 text-sm font-semibold leading-6 text-stone-700 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                  Scope: {example.scope}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-4 py-20">
       <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <SectionHeader
           kicker="Process"
-          title="A practical route from artwork to installed sign."
-          copy="The job stays grounded in the details that affect the finished result: legibility, brightness, cabinet depth, weather exposure, and access for future service."
+          title="A practical route from artwork to deployed signage."
+          copy="The job stays grounded in the details that affect the finished result: site measurement, legibility, brightness, cabinet depth, weather exposure, power coordination, and final testing."
         />
         <div class="grid gap-4 sm:grid-cols-2">
           {
@@ -267,7 +405,7 @@ const serviceJsonLd = {
             Materials
           </p>
           <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
-            Bright at night, clean in daylight, serviceable later.
+            Bright at night, clean in daylight, serviceable after deployment.
           </h2>
         </div>
         <ul class="grid gap-4">
@@ -361,16 +499,16 @@ const serviceJsonLd = {
             Share the site details and we will scope the sign.
           </h2>
           <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
-            Send the rough size, location, sign type, and any timing needs. If
-            you are not sure about dimensions yet, we can start from the
-            shopfront or wall position.
+            Send the rough size, location, indoor or outdoor sign type, and any
+            timing needs. If you are not sure about dimensions yet, we can start
+            from the site position and installation conditions.
           </p>
           <dl class="mt-9 grid gap-4 text-sm text-white/75">
             {
               [
                 ["Response", "1 business day"],
                 ["Coverage", "Perth + regional WA"],
-                ["Path", "Survey, build, install"],
+                ["Path", "Survey, design, deploy"],
               ].map(([label, value]) => (
                 <div class="border-l border-amber-400 pl-4">
                   <dt class="font-mono text-xs uppercase tracking-[0.16em] text-amber-300">

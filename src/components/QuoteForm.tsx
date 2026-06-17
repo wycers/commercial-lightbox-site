@@ -35,10 +35,10 @@ const initialFields: FormFields = {
 const states = ["WA", "NSW", "VIC", "QLD", "SA", "TAS", "NT", "ACT"];
 
 const signTypes = [
+  "Indoor advertising lightbox",
+  "Outdoor advertising lightbox",
+  "Service station fuel price display",
   "Shopfront lightbox",
-  "Pylon or freestanding sign",
-  "Hospitality or menu lightbox",
-  "Petrol station signage",
   "Not sure yet",
 ];
 

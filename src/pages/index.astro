@@ -1,5 +1,6 @@
 ---
 import SectionHeader from "../components/SectionHeader.astro";
+import LightboxPreviewTool from "../components/LightboxPreviewTool";
 import QuoteForm from "../components/QuoteForm";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { companyName, fuelPriceBoardUrl, siteName, siteUrl } from "../lib/site";
@@ -142,6 +143,12 @@ const serviceJsonLd = {
               class="hidden transition-[color] hover:text-white sm:inline"
             >
               Applications
+            </a>
+            <a
+              href="#preview"
+              class="hidden transition-[color] hover:text-white sm:inline"
+            >
+              Preview
             </a>
             <a
               href="#quote"
@@ -336,6 +343,12 @@ const serviceJsonLd = {
             ))
           }
         </div>
+      </div>
+    </section>
+
+    <section id="preview" class="bg-[#f3efe7] px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <LightboxPreviewTool client:only="react" />
       </div>
     </section>
 

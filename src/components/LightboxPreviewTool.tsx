@@ -4,7 +4,6 @@ import {
   ImageIcon,
   Moon,
   RotateCcw,
-  Send,
   Sun,
   Trash2,
   Type,
@@ -87,20 +86,8 @@ type SignTransform = {
   rotation: number;
 };
 
-type PreviewAttachment = {
-  previewImageDataUrl: string;
-  previewDesignJson: string;
-  previewMode: PreviewMode;
-  attachedAt: string;
-};
-
-const PREVIEW_UPDATED_EVENT = "lightbox-preview:updated";
-const PREVIEW_CLEARED_EVENT = "lightbox-preview:cleared";
-const PREVIEW_STORAGE_KEY = "commercial-lightbox-preview";
-
 const LOGICAL_SIGN_WIDTH = 1000;
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
-const MAX_ATTACHMENT_BYTES = 2.5 * 1024 * 1024;
 const MAX_EXPORT_EDGE = 1800;
 const IMAGE_MIME_TYPES = new Set([
   "image/jpeg",
@@ -181,20 +168,6 @@ function createInitialElements(dimensions: DimensionsMm): DesignElement[] {
       fontStyle: "bold",
     },
   ];
-}
-
-function estimateDataUrlBytes(dataUrl: string) {
-  const base64 = dataUrl.split(",")[1] || "";
-  return Math.ceil((base64.length * 3) / 4);
-}
-
-function stripRuntimeImageData(elements: DesignElement[]) {
-  return elements.map((element) => {
-    if (element.type === "text") return element;
-
-    const { src: _src, ...serializableElement } = element;
-    return serializableElement;
-  });
 }
 
 function getDefaultSignTransform(
@@ -1021,7 +994,6 @@ export default function LightboxPreviewTool() {
   const [signTransform, setSignTransform] = useState<SignTransform | null>(
     null,
   );
-  const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const signStageRef = useRef<Konva.Stage | null>(null);
   const mockupStageRef = useRef<Konva.Stage | null>(null);
@@ -1046,12 +1018,6 @@ export default function LightboxPreviewTool() {
     [mockupStageHeight, mockupStageWidth, signRatio, signTransform],
   );
   const selectedElement = elements.find((element) => element.id === selectedId);
-
-  useEffect(() => {
-    const clearStatus = () => setStatus("");
-    window.addEventListener(PREVIEW_CLEARED_EVENT, clearStatus);
-    return () => window.removeEventListener(PREVIEW_CLEARED_EVENT, clearStatus);
-  }, []);
 
   function updateCabinet(nextCabinet: Partial<Cabinet>) {
     setCabinet((current) => ({ ...current, ...nextCabinet }));
@@ -1092,7 +1058,6 @@ export default function LightboxPreviewTool() {
     if (!file) return;
 
     setError("");
-    setStatus("");
 
     try {
       const image = await fileToImageData(file);
@@ -1136,7 +1101,6 @@ export default function LightboxPreviewTool() {
     if (!file) return;
 
     setError("");
-    setStatus("");
 
     try {
       const image = await fileToImageData(file);
@@ -1176,29 +1140,6 @@ export default function LightboxPreviewTool() {
     setShopfrontImage(undefined);
     setSignTransform(null);
     setError("");
-    setStatus("");
-  }
-
-  function buildDesignJson(activeMode: PreviewMode) {
-    return JSON.stringify({
-      version: 1,
-      dimensionsMm: dimensions,
-      cabinet,
-      elements: stripRuntimeImageData(elements),
-      shopfront:
-        activeMode === "shopfront"
-          ? {
-              image: shopfrontImage
-                ? {
-                    fileName: shopfrontImage.fileName,
-                    width: shopfrontImage.width,
-                    height: shopfrontImage.height,
-                  }
-                : null,
-              signTransform: activeSignTransform,
-            }
-          : undefined,
-    });
   }
 
   function getActiveStage(activeMode = mode) {
@@ -1207,7 +1148,7 @@ export default function LightboxPreviewTool() {
       : mockupStageRef.current;
   }
 
-  function exportStageDataUrl(activeMode: PreviewMode, forAttachment: boolean) {
+  function exportStageDataUrl(activeMode: PreviewMode) {
     const stage = getActiveStage(activeMode);
     if (!stage) throw new Error("The preview is still loading.");
 
@@ -1222,32 +1163,9 @@ export default function LightboxPreviewTool() {
     stage.batchDraw();
 
     try {
-      const pngDataUrl = stage.toDataURL({
+      return stage.toDataURL({
         mimeType: "image/png",
         pixelRatio,
-      });
-
-      if (
-        !forAttachment ||
-        estimateDataUrlBytes(pngDataUrl) <= MAX_ATTACHMENT_BYTES
-      ) {
-        return pngDataUrl;
-      }
-
-      const jpegDataUrl = stage.toDataURL({
-        mimeType: "image/jpeg",
-        quality: 0.86,
-        pixelRatio: Math.max(1, Math.min(pixelRatio, 2)),
-      });
-
-      if (estimateDataUrlBytes(jpegDataUrl) <= MAX_ATTACHMENT_BYTES) {
-        return jpegDataUrl;
-      }
-
-      return stage.toDataURL({
-        mimeType: "image/jpeg",
-        quality: 0.78,
-        pixelRatio: 1,
       });
     } finally {
       selectionNodes.forEach((node, index) => {
@@ -1257,47 +1175,11 @@ export default function LightboxPreviewTool() {
     }
   }
 
-  function attachToQuote() {
-    setError("");
-    setStatus("");
-
-    try {
-      const previewImageDataUrl = exportStageDataUrl(mode, true);
-      const bytes = estimateDataUrlBytes(previewImageDataUrl);
-
-      if (bytes > MAX_ATTACHMENT_BYTES) {
-        throw new Error("The preview image is still too large to attach.");
-      }
-
-      const attachment: PreviewAttachment = {
-        previewImageDataUrl,
-        previewDesignJson: buildDesignJson(mode),
-        previewMode: mode,
-        attachedAt: new Date().toISOString(),
-      };
-
-      localStorage.setItem(PREVIEW_STORAGE_KEY, JSON.stringify(attachment));
-      window.dispatchEvent(
-        new CustomEvent<PreviewAttachment>(PREVIEW_UPDATED_EVENT, {
-          detail: attachment,
-        }),
-      );
-      setStatus("Preview attached to the quote form.");
-    } catch (nextError) {
-      setError(
-        nextError instanceof Error
-          ? nextError.message
-          : "Could not attach this preview.",
-      );
-    }
-  }
-
   function downloadPreview() {
     setError("");
-    setStatus("");
 
     try {
-      const dataUrl = exportStageDataUrl(mode, false);
+      const dataUrl = exportStageDataUrl(mode);
       const link = document.createElement("a");
       link.download =
         mode === "face"
@@ -1502,17 +1384,8 @@ export default function LightboxPreviewTool() {
               <Download size={16} />
               Download
             </ToolbarButton>
-            <ToolbarButton onClick={attachToQuote} isActive>
-              <Send size={16} />
-              Attach
-            </ToolbarButton>
           </div>
 
-          {status && (
-            <p className="rounded-lg bg-teal-50 px-3 py-2 text-sm font-semibold text-teal-900 shadow-[0_0_0_1px_rgba(15,118,110,0.16)]">
-              {status}
-            </p>
-          )}
           {error && (
             <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-800 shadow-[0_0_0_1px_rgba(185,28,28,0.14)]">
               {error}

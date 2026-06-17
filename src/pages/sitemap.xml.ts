@@ -12,6 +12,11 @@ const routes = [
     changeFrequency: "monthly",
     priority: "0.8",
   },
+  {
+    path: "/preview",
+    changeFrequency: "monthly",
+    priority: "0.7",
+  },
 ];
 
 function renderSitemap() {

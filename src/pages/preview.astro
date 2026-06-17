@@ -1,0 +1,50 @@
+---
+import LightboxPreviewTool from "../components/LightboxPreviewTool";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteName } from "../lib/site";
+
+const title = `Lightbox Preview Tool | ${siteName}`;
+const description =
+  "Build and download a quick commercial lightbox mockup for sign face and shopfront concepts.";
+const canonicalPath = "/preview";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  openGraphTitle="Lightbox Preview Tool"
+  openGraphDescription={description}
+  openGraphUrl={canonicalPath}
+>
+  <main class="min-h-screen bg-[#f3efe7] px-4 py-6 text-stone-950 sm:py-8">
+    <header
+      class="mx-auto mb-6 flex max-w-6xl flex-wrap items-center justify-between gap-3"
+    >
+      <a href="/" class="text-sm font-bold tracking-wide text-stone-950">
+        {siteName}
+      </a>
+      <nav
+        class="flex items-center gap-3 text-sm font-semibold text-stone-700"
+        aria-label="Preview page"
+      >
+        <a
+          href="/"
+          class="transition-[color] hover:text-stone-950"
+        >
+          Home
+        </a>
+        <a
+          href="/#quote"
+          class="inline-flex min-h-10 items-center rounded-lg bg-stone-950 px-4 py-2 text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
+        >
+          Request quote
+        </a>
+      </nav>
+    </header>
+
+    <section class="mx-auto max-w-6xl">
+      <LightboxPreviewTool client:only="react" />
+    </section>
+  </main>
+</BaseLayout>

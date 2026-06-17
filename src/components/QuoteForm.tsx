@@ -1,6 +1,5 @@
-import { X } from "lucide-react";
 import type { ChangeEvent } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type FormFields = {
   fullName: string;
@@ -19,15 +18,6 @@ type FormErrors = Partial<Record<keyof FormFields, string>>;
 type QuoteSubmitResult = {
   ok: boolean;
   error?: string;
-};
-
-type PreviewMode = "face" | "shopfront";
-
-type PreviewAttachment = {
-  previewImageDataUrl: string;
-  previewDesignJson: string;
-  previewMode: PreviewMode;
-  attachedAt: string;
 };
 
 const initialFields: FormFields = {
@@ -53,37 +43,6 @@ const signTypes = [
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PREVIEW_UPDATED_EVENT = "lightbox-preview:updated";
-const PREVIEW_CLEARED_EVENT = "lightbox-preview:cleared";
-const PREVIEW_STORAGE_KEY = "commercial-lightbox-preview";
-
-function isPreviewAttachment(value: unknown): value is PreviewAttachment {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    return false;
-  }
-
-  const attachment = value as Record<string, unknown>;
-
-  return (
-    typeof attachment.previewImageDataUrl === "string" &&
-    typeof attachment.previewDesignJson === "string" &&
-    (attachment.previewMode === "face" ||
-      attachment.previewMode === "shopfront") &&
-    typeof attachment.attachedAt === "string"
-  );
-}
-
-function readStoredPreviewAttachment() {
-  try {
-    const value = localStorage.getItem(PREVIEW_STORAGE_KEY);
-    if (!value) return;
-
-    const parsedValue: unknown = JSON.parse(value);
-    return isPreviewAttachment(parsedValue) ? parsedValue : undefined;
-  } catch {
-    return;
-  }
-}
 
 function validate(fields: FormFields): FormErrors {
   const errors: FormErrors = {};
@@ -109,31 +68,6 @@ export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [honeypot, setHoneypot] = useState("");
-  const [previewAttachment, setPreviewAttachment] =
-    useState<PreviewAttachment>();
-
-  useEffect(() => {
-    setPreviewAttachment(readStoredPreviewAttachment());
-
-    function handlePreviewUpdated(event: Event) {
-      const detail = (event as CustomEvent<unknown>).detail;
-      if (isPreviewAttachment(detail)) {
-        setPreviewAttachment(detail);
-      }
-    }
-
-    window.addEventListener(PREVIEW_UPDATED_EVENT, handlePreviewUpdated);
-
-    return () => {
-      window.removeEventListener(PREVIEW_UPDATED_EVENT, handlePreviewUpdated);
-    };
-  }, []);
-
-  function clearPreviewAttachment() {
-    setPreviewAttachment(undefined);
-    localStorage.removeItem(PREVIEW_STORAGE_KEY);
-    window.dispatchEvent(new CustomEvent(PREVIEW_CLEARED_EVENT));
-  }
 
   function handleChange(
     event: ChangeEvent<
@@ -168,9 +102,6 @@ export default function QuoteForm() {
           ...fields,
           pageUrl: window.location.href,
           _gotcha: honeypot,
-          previewImageDataUrl: previewAttachment?.previewImageDataUrl || "",
-          previewDesignJson: previewAttachment?.previewDesignJson || "",
-          previewMode: previewAttachment?.previewMode || "",
         }),
       });
       const result = (await response.json()) as QuoteSubmitResult;
@@ -179,7 +110,6 @@ export default function QuoteForm() {
         setSubmitted(true);
         setFields(initialFields);
         setErrors({});
-        clearPreviewAttachment();
       } else {
         setSubmitError(
           result.error ||
@@ -361,36 +291,6 @@ export default function QuoteForm() {
           />
         </div>
       </div>
-
-      {previewAttachment && (
-        <div className="rounded-lg bg-amber-50 p-3 shadow-[0_0_0_1px_rgba(217,119,6,0.16),0_8px_22px_rgba(217,119,6,0.08)]">
-          <div className="flex items-start gap-3">
-            <img
-              src={previewAttachment.previewImageDataUrl}
-              alt="Attached lightbox preview"
-              className="h-20 w-28 rounded-md object-cover outline outline-1 -outline-offset-1 outline-black/10"
-            />
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-stone-950">
-                Preview attached
-              </p>
-              <p className="mt-1 text-sm text-stone-600">
-                {previewAttachment.previewMode === "face"
-                  ? "Sign face preview"
-                  : "Shopfront mockup"}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={clearPreviewAttachment}
-              className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-stone-700 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] transition-[background-color,color,scale] hover:bg-stone-950 hover:text-white active:scale-[0.96]"
-              aria-label="Remove attached preview"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-      )}
 
       <div>
         <label htmlFor="message" className={labelClass}>

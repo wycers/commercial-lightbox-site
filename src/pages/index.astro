@@ -1,6 +1,5 @@
 ---
 import SectionHeader from "../components/SectionHeader.astro";
-import LightboxPreviewTool from "../components/LightboxPreviewTool";
 import QuoteForm from "../components/QuoteForm";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { companyName, fuelPriceBoardUrl, siteName, siteUrl } from "../lib/site";
@@ -145,7 +144,7 @@ const serviceJsonLd = {
               Applications
             </a>
             <a
-              href="#preview"
+              href="/preview"
               class="hidden transition-[color] hover:text-white sm:inline"
             >
               Preview
@@ -187,6 +186,12 @@ const serviceJsonLd = {
               class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
             >
               View signage case study
+            </a>
+            <a
+              href="/preview"
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
+            >
+              Try preview tool
             </a>
           </div>
         </div>
@@ -343,12 +348,6 @@ const serviceJsonLd = {
             ))
           }
         </div>
-      </div>
-    </section>
-
-    <section id="preview" class="bg-[#f3efe7] px-4 py-20">
-      <div class="mx-auto max-w-6xl">
-        <LightboxPreviewTool client:only="react" />
       </div>
     </section>
 

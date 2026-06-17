@@ -17,23 +17,10 @@ type QuoteFields = {
   _gotcha: string;
 };
 
-type RequiredField = keyof Omit<
-  QuoteFields,
-  "dimensions" | "message" | "pageUrl" | "_gotcha"
->;
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TELEGRAM_MESSAGE_LIMIT = 4096;
-
-const REQUIRED_FIELDS: Array<[RequiredField, string]> = [
-  ["fullName", "Full name"],
-  ["businessName", "Business name"],
-  ["suburb", "Suburb"],
-  ["state", "State"],
-  ["email", "Email"],
-  ["phone", "Phone"],
-  ["signType", "Sign type"],
-];
+const CONTACT_REQUIRED_ERROR = "Enter an email or phone number.";
+const QUOTE_FAILURE_MESSAGE = "Unable to send quote request right now.";
 
 function jsonResponse(body: { ok: boolean; error?: string }, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -70,15 +57,15 @@ function readQuoteFields(payload: Record<string, unknown>): QuoteFields {
 }
 
 function validate(fields: QuoteFields) {
-  const missingFields = REQUIRED_FIELDS.filter(([key]) => !fields[key]).map(
-    ([, label]) => label,
-  );
+  if (!fields.fullName) return "Full name is required.";
+  if (!fields.signType) return "Sign type is required.";
 
-  if (missingFields.length > 0) {
-    return `${missingFields.join(", ")} required.`;
-  }
+  const hasEmail = Boolean(fields.email);
+  const hasPhone = Boolean(fields.phone);
 
-  if (!EMAIL_REGEX.test(fields.email)) {
+  if (!hasEmail && !hasPhone) return CONTACT_REQUIRED_ERROR;
+
+  if (hasEmail && !EMAIL_REGEX.test(fields.email)) {
     return "Please enter a valid email address.";
   }
 }
@@ -93,6 +80,7 @@ function readServerEnv(key: string) {
 }
 
 function formatTelegramMessage(fields: QuoteFields) {
+  const location = [fields.suburb, fields.state].filter(Boolean).join(", ");
   const lines = [
     "New commercial lightbox quote request",
     "",
@@ -100,10 +88,10 @@ function formatTelegramMessage(fields: QuoteFields) {
     `Page URL: ${fields.pageUrl || siteUrl}`,
     "",
     `Full name: ${fields.fullName}`,
-    `Business: ${fields.businessName}`,
-    `Location: ${fields.suburb}, ${fields.state}`,
-    `Email: ${fields.email}`,
-    `Phone: ${fields.phone}`,
+    `Business: ${fields.businessName || "Not supplied"}`,
+    `Location: ${location || "Not supplied"}`,
+    `Email: ${fields.email || "Not supplied"}`,
+    `Phone: ${fields.phone || "Not supplied"}`,
     `Sign type: ${fields.signType}`,
   ];
 
@@ -149,10 +137,9 @@ export const POST: APIRoute = async ({ request }) => {
   const chatId = readServerEnv("TELEGRAM_CHAT_ID");
 
   if (!botToken || !chatId) {
-    return jsonResponse(
-      { ok: false, error: "Telegram is not configured." },
-      503,
-    );
+    console.error("Telegram quote notification is not configured");
+
+    return jsonResponse({ ok: false, error: QUOTE_FAILURE_MESSAGE }, 503);
   }
 
   try {
@@ -175,18 +162,12 @@ export const POST: APIRoute = async ({ request }) => {
         telegramResponse.status,
       );
 
-      return jsonResponse(
-        { ok: false, error: "Failed to send quote request." },
-        502,
-      );
+      return jsonResponse({ ok: false, error: QUOTE_FAILURE_MESSAGE }, 502);
     }
   } catch (error) {
     console.error("Telegram quote notification error", error);
 
-    return jsonResponse(
-      { ok: false, error: "Failed to send quote request." },
-      502,
-    );
+    return jsonResponse({ ok: false, error: QUOTE_FAILURE_MESSAGE }, 502);
   }
 
   return jsonResponse({ ok: true });

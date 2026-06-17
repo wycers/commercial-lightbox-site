@@ -65,13 +65,35 @@ const capabilities = [
       set:html={JSON.stringify(caseJsonLd)}
     />
     <section class="relative isolate overflow-hidden bg-stone-950 px-4 py-24 text-white">
-      <img
-        src="/images/commercial-lightbox-hero.png"
-        alt="Illuminated commercial sign used as a placeholder for signage capability"
-        fetchpriority="high"
-        decoding="async"
-        class="absolute inset-0 h-full w-full object-cover object-[62%_center] opacity-40"
-      />
+      <picture class="absolute inset-0 block h-full w-full opacity-40">
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/commercial-lightbox-hero-mobile.avif"
+          type="image/avif"
+        />
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/commercial-lightbox-hero-mobile.webp"
+          type="image/webp"
+        />
+        <source
+          srcset="/images/commercial-lightbox-hero-desktop.avif"
+          type="image/avif"
+        />
+        <source
+          srcset="/images/commercial-lightbox-hero-desktop.webp"
+          type="image/webp"
+        />
+        <img
+          src="/images/commercial-lightbox-hero.png"
+          alt=""
+          width="1672"
+          height="941"
+          fetchpriority="high"
+          decoding="async"
+          class="h-full w-full object-cover object-[62%_center]"
+        />
+      </picture>
       <div
         class="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,10,9,0.96)_0%,rgba(12,10,9,0.76)_56%,rgba(12,10,9,0.44)_100%)]"
       >

@@ -17,7 +17,9 @@ const canonicalPath = "/preview";
   openGraphDescription={description}
   openGraphUrl={canonicalPath}
 >
-  <main class="min-h-screen bg-[#f3efe7] px-4 py-6 text-stone-950 sm:py-8">
+  <main
+    class="min-h-screen overflow-x-hidden bg-[#f3efe7] px-4 py-6 text-stone-950 sm:py-8"
+  >
     <header
       class="mx-auto mb-6 flex max-w-6xl flex-wrap items-center justify-between gap-3"
     >
@@ -30,20 +32,20 @@ const canonicalPath = "/preview";
       >
         <a
           href="/"
-          class="transition-[color] hover:text-stone-950"
+          class="inline-flex min-h-11 items-center transition-[color] hover:text-stone-950"
         >
           Home
         </a>
         <a
           href="/#quote"
-          class="inline-flex min-h-10 items-center rounded-lg bg-stone-950 px-4 py-2 text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
+          class="inline-flex min-h-11 items-center rounded-lg bg-stone-950 px-4 py-2 text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
         >
           Request quote
         </a>
       </nav>
     </header>
 
-    <section class="mx-auto max-w-6xl">
+    <section class="mx-auto min-w-0 max-w-6xl">
       <LightboxPreviewTool client:only="react" />
     </section>
   </main>

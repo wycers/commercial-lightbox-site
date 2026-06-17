@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type FormFields = {
   fullName: string;
@@ -24,7 +24,7 @@ const initialFields: FormFields = {
   fullName: "",
   businessName: "",
   suburb: "",
-  state: "WA",
+  state: "",
   email: "",
   phone: "",
   signType: "",
@@ -43,22 +43,175 @@ const signTypes = [
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTACT_REQUIRED_ERROR = "Enter an email or phone number.";
+const SUBMIT_FAILURE_MESSAGE =
+  "We could not send your quote request just now. Please try again in a moment, or use another contact option on the website.";
+const PREVIEW_QUOTE_DRAFT_KEY = "lightboxPreviewQuoteDraft";
+
+const focusableErrorFields: Array<keyof FormFields> = [
+  "fullName",
+  "email",
+  "phone",
+  "signType",
+];
+
+const fieldLabels: Record<keyof FormFields, string> = {
+  fullName: "Full name",
+  businessName: "Business name",
+  suburb: "Suburb",
+  state: "State",
+  email: "Email",
+  phone: "Phone",
+  signType: "Sign type",
+  dimensions: "Approx. dimensions",
+  message: "Message",
+};
 
 function validate(fields: FormFields): FormErrors {
   const errors: FormErrors = {};
   if (!fields.fullName.trim()) errors.fullName = "Full name is required.";
-  if (!fields.businessName.trim())
-    errors.businessName = "Business name is required.";
-  if (!fields.suburb.trim()) errors.suburb = "Suburb is required.";
-  if (!fields.state) errors.state = "State is required.";
-  if (!fields.email.trim()) {
-    errors.email = "Email is required.";
-  } else if (!EMAIL_REGEX.test(fields.email)) {
+  if (!fields.signType) errors.signType = "Sign type is required.";
+
+  const hasEmail = Boolean(fields.email.trim());
+  const hasPhone = Boolean(fields.phone.trim());
+
+  if (!hasEmail && !hasPhone) {
+    errors.email = CONTACT_REQUIRED_ERROR;
+    errors.phone = CONTACT_REQUIRED_ERROR;
+  } else if (hasEmail && !EMAIL_REGEX.test(fields.email.trim())) {
     errors.email = "Please enter a valid email address.";
   }
-  if (!fields.phone.trim()) errors.phone = "Phone number is required.";
-  if (!fields.signType) errors.signType = "Sign type is required.";
+
   return errors;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function readDraftString(payload: Record<string, unknown>, key: string) {
+  const value = payload[key];
+  if (typeof value === "string") return value.trim();
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+
+  return "";
+}
+
+function formatDraftDimensions(payload: Record<string, unknown>) {
+  const width =
+    readDraftString(payload, "width") || readDraftString(payload, "widthMm");
+  const height =
+    readDraftString(payload, "height") || readDraftString(payload, "heightMm");
+  const unit =
+    readDraftString(payload, "unit") ||
+    (readDraftString(payload, "widthMm") || readDraftString(payload, "heightMm")
+      ? "mm"
+      : "");
+
+  if (!width || !height) return "";
+
+  return `${width} x ${height}${unit ? ` ${unit}` : ""}`;
+}
+
+function readPreviewQuoteDraft(): Partial<
+  Pick<FormFields, "dimensions" | "message">
+> {
+  if (typeof window === "undefined") return {};
+
+  try {
+    const raw = window.sessionStorage.getItem(PREVIEW_QUOTE_DRAFT_KEY);
+    const trimmed = raw?.trim();
+    if (!trimmed) return {};
+
+    const parsed: unknown = JSON.parse(trimmed);
+
+    if (typeof parsed === "string") {
+      return parsed.trim() ? { message: parsed.trim() } : {};
+    }
+
+    if (!isRecord(parsed)) return {};
+
+    const dimensions =
+      readDraftString(parsed, "dimensions") ||
+      readDraftString(parsed, "size") ||
+      formatDraftDimensions(parsed);
+    const message =
+      readDraftString(parsed, "message") ||
+      readDraftString(parsed, "designSummary") ||
+      readDraftString(parsed, "summary");
+
+    return {
+      ...(dimensions ? { dimensions } : {}),
+      ...(message ? { message } : {}),
+    };
+  } catch {
+    try {
+      const raw = window.sessionStorage.getItem(PREVIEW_QUOTE_DRAFT_KEY);
+      const message = raw?.trim();
+      return message ? { message } : {};
+    } catch {
+      return {};
+    }
+  }
+}
+
+function getErrorId(field: keyof FormFields) {
+  return `${field}-error`;
+}
+
+function getErrorSummaryItems(errors: FormErrors) {
+  const items: Array<{
+    field: keyof FormFields;
+    label: string;
+    message: string;
+  }> = [];
+
+  if (errors.fullName) {
+    items.push({
+      field: "fullName",
+      label: fieldLabels.fullName,
+      message: errors.fullName,
+    });
+  }
+
+  if (
+    errors.email === CONTACT_REQUIRED_ERROR &&
+    errors.phone === CONTACT_REQUIRED_ERROR
+  ) {
+    items.push({
+      field: "email",
+      label: "Email or phone",
+      message: CONTACT_REQUIRED_ERROR,
+    });
+  } else {
+    if (errors.email) {
+      items.push({
+        field: "email",
+        label: fieldLabels.email,
+        message: errors.email,
+      });
+    }
+
+    if (errors.phone) {
+      items.push({
+        field: "phone",
+        label: fieldLabels.phone,
+        message: errors.phone,
+      });
+    }
+  }
+
+  if (errors.signType) {
+    items.push({
+      field: "signType",
+      label: fieldLabels.signType,
+      message: errors.signType,
+    });
+  }
+
+  return items;
 }
 
 export default function QuoteForm() {
@@ -68,6 +221,56 @@ export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [honeypot, setHoneypot] = useState("");
+  const fieldRefs = useRef<
+    Partial<Record<keyof FormFields, HTMLElement | null>>
+  >({});
+
+  useEffect(() => {
+    const draft = readPreviewQuoteDraft();
+    if (!draft.dimensions && !draft.message) return;
+
+    setFields((prev) => ({
+      ...prev,
+      dimensions: prev.dimensions || draft.dimensions || "",
+      message: prev.message || draft.message || "",
+    }));
+  }, []);
+
+  function registerField(field: keyof FormFields) {
+    return (element: HTMLElement | null) => {
+      fieldRefs.current[field] = element;
+    };
+  }
+
+  function focusFirstError(validationErrors: FormErrors) {
+    const firstField = focusableErrorFields.find(
+      (field) => validationErrors[field],
+    );
+
+    if (!firstField) return;
+
+    requestAnimationFrame(() => {
+      fieldRefs.current[firstField]?.focus();
+    });
+  }
+
+  function describedBy(field: keyof FormFields, extraIds: string[] = []) {
+    const ids = [...extraIds];
+    if (errors[field]) ids.push(getErrorId(field));
+
+    return ids.length > 0 ? ids.join(" ") : undefined;
+  }
+
+  function renderError(field: keyof FormFields) {
+    const error = errors[field];
+    if (!error) return null;
+
+    return (
+      <p id={getErrorId(field)} className={errorClass}>
+        {error}
+      </p>
+    );
+  }
 
   function handleChange(
     event: ChangeEvent<
@@ -76,8 +279,24 @@ export default function QuoteForm() {
   ) {
     const { name, value } = event.target;
     setFields((prev) => ({ ...prev, [name]: value }));
-    if (errors[name as keyof FormFields]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    if (submitError) setSubmitError("");
+
+    const fieldName = name as keyof FormFields;
+    if (errors[fieldName]) {
+      setErrors((prev) => {
+        const next = { ...prev, [fieldName]: undefined };
+
+        if (
+          (fieldName === "email" || fieldName === "phone") &&
+          (prev.email === CONTACT_REQUIRED_ERROR ||
+            prev.phone === CONTACT_REQUIRED_ERROR)
+        ) {
+          next.email = undefined;
+          next.phone = undefined;
+        }
+
+        return next;
+      });
     }
   }
 
@@ -86,6 +305,7 @@ export default function QuoteForm() {
     const validationErrors = validate(fields);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      focusFirstError(validationErrors);
       return;
     }
 
@@ -110,16 +330,12 @@ export default function QuoteForm() {
         setSubmitted(true);
         setFields(initialFields);
         setErrors({});
+        setHoneypot("");
       } else {
-        setSubmitError(
-          result.error ||
-            (response.ok
-              ? "Failed to send quote request."
-              : "Something went wrong. Please try again."),
-        );
+        setSubmitError(SUBMIT_FAILURE_MESSAGE);
       }
     } catch {
-      setSubmitError("Something went wrong. Please try again.");
+      setSubmitError(SUBMIT_FAILURE_MESSAGE);
     } finally {
       setSubmitting(false);
     }
@@ -129,14 +345,19 @@ export default function QuoteForm() {
     "w-full rounded-lg border border-black/10 bg-white px-4 py-3 text-sm text-stone-950 shadow-[0_1px_1px_rgba(0,0,0,0.04)_inset] transition-[border-color,box-shadow] placeholder:text-stone-400 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-500/15";
   const labelClass = "mb-2 block text-sm font-semibold text-stone-800";
   const errorClass = "mt-1 text-sm text-red-700";
+  const optionalLabelClass = "font-normal text-stone-500";
+  const errorSummaryItems = getErrorSummaryItems(errors);
 
   if (submitted) {
     return (
-      <div className="rounded-lg bg-teal-50 p-6 text-center shadow-[0_0_0_1px_rgba(15,118,110,0.18),0_12px_32px_rgba(15,118,110,0.12)]">
-        <p className="text-lg font-semibold text-teal-900">
+      <output
+        aria-live="polite"
+        className="rounded-lg bg-teal-50 p-6 text-center shadow-[0_0_0_1px_rgba(15,118,110,0.18),0_12px_32px_rgba(15,118,110,0.12)]"
+      >
+        <span className="text-lg font-semibold text-teal-900">
           Thank you. We will be in touch within one business day.
-        </p>
-      </div>
+        </span>
+      </output>
     );
   }
 
@@ -151,6 +372,35 @@ export default function QuoteForm() {
         onChange={(event) => setHoneypot(event.target.value)}
       />
 
+      {errorSummaryItems.length > 0 && (
+        <div
+          role="alert"
+          aria-labelledby="quote-error-summary-title"
+          className="rounded-lg bg-red-50 p-4 text-sm text-red-800 shadow-[0_0_0_1px_rgba(185,28,28,0.14)]"
+        >
+          <p id="quote-error-summary-title" className="font-semibold">
+            Please fix the highlighted fields.
+          </p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {errorSummaryItems.map((item) => (
+              <li key={item.field}>
+                <a
+                  href={`#${item.field}`}
+                  className="font-semibold underline decoration-red-500/60 underline-offset-2"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    fieldRefs.current[item.field]?.focus();
+                  }}
+                >
+                  {item.label}
+                </a>
+                : {item.message}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="fullName" className={labelClass}>
@@ -164,12 +414,16 @@ export default function QuoteForm() {
             onChange={handleChange}
             className={inputClass}
             autoComplete="name"
+            ref={registerField("fullName")}
+            aria-invalid={Boolean(errors.fullName)}
+            aria-describedby={describedBy("fullName")}
           />
-          {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
+          {renderError("fullName")}
         </div>
         <div>
           <label htmlFor="businessName" className={labelClass}>
-            Business name <span className="text-red-700">*</span>
+            Business name{" "}
+            <span className={optionalLabelClass}>(recommended)</span>
           </label>
           <input
             id="businessName"
@@ -180,16 +434,13 @@ export default function QuoteForm() {
             className={inputClass}
             autoComplete="organization"
           />
-          {errors.businessName && (
-            <p className={errorClass}>{errors.businessName}</p>
-          )}
         </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="suburb" className={labelClass}>
-            Suburb <span className="text-red-700">*</span>
+            Suburb <span className={optionalLabelClass}>(recommended)</span>
           </label>
           <input
             id="suburb"
@@ -199,11 +450,10 @@ export default function QuoteForm() {
             onChange={handleChange}
             className={inputClass}
           />
-          {errors.suburb && <p className={errorClass}>{errors.suburb}</p>}
         </div>
         <div>
           <label htmlFor="state" className={labelClass}>
-            State <span className="text-red-700">*</span>
+            State <span className={optionalLabelClass}>(recommended)</span>
           </label>
           <select
             id="state"
@@ -212,48 +462,62 @@ export default function QuoteForm() {
             onChange={handleChange}
             className={inputClass}
           >
+            <option value="">Select state</option>
             {states.map((state) => (
               <option key={state} value={state}>
                 {state}
               </option>
             ))}
           </select>
-          {errors.state && <p className={errorClass}>{errors.state}</p>}
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label htmlFor="email" className={labelClass}>
-            Email <span className="text-red-700">*</span>
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={fields.email}
-            onChange={handleChange}
-            className={inputClass}
-            autoComplete="email"
-          />
-          {errors.email && <p className={errorClass}>{errors.email}</p>}
+      <fieldset className="space-y-3">
+        <legend className="text-sm font-semibold text-stone-800">
+          Contact details <span className="text-red-700">*</span>
+        </legend>
+        <p id="contact-help" className="text-sm text-stone-600">
+          Provide an email address or a phone number. Both are welcome.
+        </p>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="email" className={labelClass}>
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={fields.email}
+              onChange={handleChange}
+              className={inputClass}
+              autoComplete="email"
+              ref={registerField("email")}
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={describedBy("email", ["contact-help"])}
+            />
+            {renderError("email")}
+          </div>
+          <div>
+            <label htmlFor="phone" className={labelClass}>
+              Phone
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={fields.phone}
+              onChange={handleChange}
+              className={inputClass}
+              autoComplete="tel"
+              ref={registerField("phone")}
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={describedBy("phone", ["contact-help"])}
+            />
+            {renderError("phone")}
+          </div>
         </div>
-        <div>
-          <label htmlFor="phone" className={labelClass}>
-            Phone <span className="text-red-700">*</span>
-          </label>
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            value={fields.phone}
-            onChange={handleChange}
-            className={inputClass}
-            autoComplete="tel"
-          />
-          {errors.phone && <p className={errorClass}>{errors.phone}</p>}
-        </div>
-      </div>
+      </fieldset>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
@@ -266,6 +530,9 @@ export default function QuoteForm() {
             value={fields.signType}
             onChange={handleChange}
             className={inputClass}
+            ref={registerField("signType")}
+            aria-invalid={Boolean(errors.signType)}
+            aria-describedby={describedBy("signType")}
           >
             <option value="">Select sign type</option>
             {signTypes.map((signType) => (
@@ -274,11 +541,12 @@ export default function QuoteForm() {
               </option>
             ))}
           </select>
-          {errors.signType && <p className={errorClass}>{errors.signType}</p>}
+          {renderError("signType")}
         </div>
         <div>
           <label htmlFor="dimensions" className={labelClass}>
-            Approx. dimensions
+            Approx. dimensions{" "}
+            <span className={optionalLabelClass}>(recommended)</span>
           </label>
           <input
             id="dimensions"
@@ -294,7 +562,7 @@ export default function QuoteForm() {
 
       <div>
         <label htmlFor="message" className={labelClass}>
-          Message
+          Message <span className={optionalLabelClass}>(optional)</span>
         </label>
         <textarea
           id="message"
@@ -307,7 +575,11 @@ export default function QuoteForm() {
         />
       </div>
 
-      {submitError && <p className="text-sm text-red-700">{submitError}</p>}
+      {submitError && (
+        <p role="alert" className="text-sm text-red-700">
+          {submitError}
+        </p>
+      )}
 
       <button
         type="submit"

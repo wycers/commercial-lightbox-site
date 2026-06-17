@@ -1,9 +1,12 @@
 import type Konva from "konva";
 import {
+  ChevronDown,
   Download,
   ImageIcon,
   Moon,
   RotateCcw,
+  Send,
+  SlidersHorizontal,
   Sun,
   Trash2,
   Type,
@@ -13,6 +16,7 @@ import {
   type ChangeEvent,
   type ReactNode,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -89,6 +93,8 @@ type SignTransform = {
 const LOGICAL_SIGN_WIDTH = 1000;
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 const MAX_EXPORT_EDGE = 1800;
+const TRANSFORMER_ANCHOR_SIZE = 14;
+const QUOTE_DRAFT_STORAGE_KEY = "lightboxPreviewQuoteDraft";
 const IMAGE_MIME_TYPES = new Set([
   "image/jpeg",
   "image/png",
@@ -329,12 +335,14 @@ function ToolbarButton({
   onClick,
   title,
   type = "button",
+  variant = "default",
 }: {
   children: ReactNode;
   isActive?: boolean;
   onClick?: () => void;
   title?: string;
   type?: "button" | "submit";
+  variant?: "default" | "primary";
 }) {
   return (
     <button
@@ -342,10 +350,12 @@ function ToolbarButton({
       title={title}
       onClick={onClick}
       className={classNames(
-        "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-bold shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] transition-[background-color,color,scale,box-shadow] duration-150 ease-out active:scale-[0.96]",
+        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-bold shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] transition-[background-color,color,scale,box-shadow] duration-150 ease-out active:scale-[0.96]",
         isActive
           ? "bg-stone-950 text-white shadow-[0_0_0_1px_rgba(0,0,0,0.16),0_10px_26px_rgba(0,0,0,0.16)]"
-          : "bg-white text-stone-800 hover:bg-amber-50",
+          : variant === "primary"
+            ? "bg-stone-950 text-white hover:bg-teal-800"
+            : "bg-white text-stone-800 hover:bg-amber-50",
       )}
     >
       {children}
@@ -353,11 +363,37 @@ function ToolbarButton({
   );
 }
 
-function FieldLabel({ children }: { children: ReactNode }) {
-  return (
-    <span className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-stone-500">
+function FieldLabel({
+  children,
+  htmlFor,
+  id,
+}: {
+  children: ReactNode;
+  htmlFor?: string;
+  id?: string;
+}) {
+  const className =
+    "mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-stone-500";
+
+  return htmlFor ? (
+    <label htmlFor={htmlFor} className={className}>
+      {children}
+    </label>
+  ) : (
+    <span id={id} className={className}>
       {children}
     </span>
+  );
+}
+
+function FieldLegend({ children, id }: { children: ReactNode; id?: string }) {
+  return (
+    <legend
+      id={id}
+      className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-stone-500"
+    >
+      {children}
+    </legend>
   );
 }
 
@@ -372,10 +408,13 @@ function NumberField({
   onChange: (value: number) => void;
   value: number;
 }) {
+  const inputId = useId();
+
   return (
     <div>
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
       <input
+        id={inputId}
         type="number"
         min={min}
         value={value}
@@ -395,16 +434,18 @@ function ColorField({
   onChange: (value: string) => void;
   value: string;
 }) {
+  const inputId = useId();
+
   return (
     <div>
-      <FieldLabel>{label}</FieldLabel>
-      <div className="flex h-11 items-center gap-2 rounded-lg bg-white px-2 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)]">
+      <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
+      <div className="flex min-h-12 items-center gap-2 rounded-lg bg-white px-2 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)]">
         <input
+          id={inputId}
           type="color"
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className="size-8 rounded-md border-0 bg-transparent p-0"
-          aria-label={label}
+          className="size-11 rounded-md border-0 bg-transparent p-0"
         />
         <span className="font-mono text-xs font-semibold uppercase tabular-nums text-stone-600">
           {value}
@@ -425,10 +466,13 @@ function SelectField({
   options: Array<{ label: string; value: FrameStyle }>;
   value: FrameStyle;
 }) {
+  const selectId = useId();
+
   return (
     <div>
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel htmlFor={selectId}>{label}</FieldLabel>
       <select
+        id={selectId}
         value={value}
         onChange={(event) => onChange(event.target.value as FrameStyle)}
         className="h-11 w-full rounded-lg border border-black/10 bg-white px-3 text-sm font-semibold text-stone-950 shadow-[0_1px_1px_rgba(0,0,0,0.04)_inset] transition-[border-color,box-shadow] focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-500/15"
@@ -446,10 +490,12 @@ function SelectField({
 function UploadButton({
   accept,
   children,
+  inputLabel,
   onChange,
 }: {
   accept: string;
   children: ReactNode;
+  inputLabel: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -460,6 +506,7 @@ function UploadButton({
         ref={inputRef}
         type="file"
         accept={accept}
+        aria-label={inputLabel}
         onChange={onChange}
         className="hidden"
       />
@@ -704,7 +751,7 @@ function EditableTextElement({
           borderStroke="#f59e0b"
           anchorFill="#ffffff"
           anchorStroke="#f59e0b"
-          anchorSize={9}
+          anchorSize={TRANSFORMER_ANCHOR_SIZE}
           boundBoxFunc={(_, newBox) =>
             newBox.width < 72 || newBox.height < 40 ? _ : newBox
           }
@@ -806,7 +853,7 @@ function EditableImageElement({
           borderStroke="#f59e0b"
           anchorFill="#ffffff"
           anchorStroke="#f59e0b"
-          anchorSize={9}
+          anchorSize={TRANSFORMER_ANCHOR_SIZE}
           boundBoxFunc={(_, newBox) =>
             newBox.width < 32 || newBox.height < 32 ? _ : newBox
           }
@@ -972,7 +1019,7 @@ function ShopfrontSign({
           borderStroke="#f59e0b"
           anchorFill="#ffffff"
           anchorStroke="#f59e0b"
-          anchorSize={9}
+          anchorSize={TRANSFORMER_ANCHOR_SIZE}
           boundBoxFunc={(_, newBox) =>
             newBox.width < 120 || newBox.height < 40 ? _ : newBox
           }
@@ -995,19 +1042,20 @@ export default function LightboxPreviewTool() {
     null,
   );
   const [error, setError] = useState("");
+  const previewModeLabelId = useId();
+  const lightingModeLabelId = useId();
+  const selectedTextInputId = useId();
   const signStageRef = useRef<Konva.Stage | null>(null);
   const mockupStageRef = useRef<Konva.Stage | null>(null);
   const signWrap = useElementSize<HTMLDivElement>();
   const mockupWrap = useElementSize<HTMLDivElement>();
   const signRatio = getSignRatio(dimensions);
   const logicalHeight = getLogicalSignHeight(dimensions);
-  const signStageWidth = Math.max(320, Math.min(860, signWrap.width || 760));
-  const signStageHeight = Math.round(signStageWidth / signRatio);
+  const signStageWidth = signWrap.width > 0 ? Math.min(860, signWrap.width) : 1;
+  const signStageHeight = Math.max(1, Math.round(signStageWidth / signRatio));
   const signScale = signStageWidth / LOGICAL_SIGN_WIDTH;
-  const mockupStageWidth = Math.max(
-    320,
-    Math.min(900, mockupWrap.width || 760),
-  );
+  const mockupStageWidth =
+    mockupWrap.width > 0 ? Math.min(900, mockupWrap.width) : 1;
   const mockupStageHeight = Math.round(
     Math.min(560, Math.max(260, mockupStageWidth * 0.62)),
   );
@@ -1198,10 +1246,52 @@ export default function LightboxPreviewTool() {
     }
   }
 
+  function requestQuoteWithDesign() {
+    setError("");
+
+    try {
+      const dimensionsLabel = `${dimensions.width} x ${dimensions.height} mm`;
+      const summary = [
+        "Preview tool design summary:",
+        `Size: ${dimensionsLabel}`,
+        `Mode: ${mode === "face" ? "Sign face" : "Shopfront mockup"}`,
+        `Lighting: ${cabinet.lightingMode}`,
+        `Frame style: ${cabinet.frameStyle}`,
+        `Face color: ${cabinet.faceColor}`,
+        `Frame color: ${cabinet.frameColor}`,
+        `Layers: ${elements.length}`,
+      ].join("\n");
+
+      window.sessionStorage.setItem(
+        QUOTE_DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          dimensions: dimensionsLabel,
+          designSummary: summary,
+          dimensionsMm: {
+            width: dimensions.width,
+            height: dimensions.height,
+          },
+          colors: {
+            face: cabinet.faceColor,
+            frame: cabinet.frameColor,
+          },
+          frameStyle: cabinet.frameStyle,
+          lightingMode: cabinet.lightingMode,
+          previewMode: mode,
+          layerCount: elements.length,
+        }),
+      );
+
+      window.location.assign("/#quote");
+    } catch {
+      setError("Could not prepare this design for the quote form.");
+    }
+  }
+
   return (
     <div className="rounded-lg bg-white p-4 text-stone-950 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_20px_70px_rgba(0,0,0,0.12)] sm:p-6">
-      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[280px_1fr]">
-        <aside className="space-y-5">
+      <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[280px_minmax(0,1fr)]">
+        <aside className="order-2 space-y-5 lg:order-1">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
               Preview tool
@@ -1211,34 +1301,39 @@ export default function LightboxPreviewTool() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 rounded-lg bg-stone-100 p-1">
-            <button
-              type="button"
-              onClick={() => setMode("face")}
-              className={classNames(
-                "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
-                mode === "face"
-                  ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
-                  : "text-stone-600 hover:text-stone-950",
-              )}
-            >
-              <ImageIcon size={16} />
-              Sign face
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("shopfront")}
-              className={classNames(
-                "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
-                mode === "shopfront"
-                  ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
-                  : "text-stone-600 hover:text-stone-950",
-              )}
-            >
-              <Upload size={16} />
-              Shopfront
-            </button>
-          </div>
+          <fieldset className="min-w-0" aria-labelledby={previewModeLabelId}>
+            <FieldLegend id={previewModeLabelId}>Preview</FieldLegend>
+            <div className="grid grid-cols-2 gap-2 rounded-lg bg-stone-100 p-1">
+              <button
+                type="button"
+                aria-pressed={mode === "face"}
+                onClick={() => setMode("face")}
+                className={classNames(
+                  "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
+                  mode === "face"
+                    ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
+                    : "text-stone-600 hover:text-stone-950",
+                )}
+              >
+                <ImageIcon size={16} />
+                Sign face
+              </button>
+              <button
+                type="button"
+                aria-pressed={mode === "shopfront"}
+                onClick={() => setMode("shopfront")}
+                className={classNames(
+                  "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
+                  mode === "shopfront"
+                    ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
+                    : "text-stone-600 hover:text-stone-950",
+                )}
+              >
+                <Upload size={16} />
+                Shopfront
+              </button>
+            </div>
+          </fieldset>
 
           <div className="grid grid-cols-2 gap-3">
             <NumberField
@@ -1259,58 +1354,6 @@ export default function LightboxPreviewTool() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <ColorField
-              label="Face"
-              value={cabinet.faceColor}
-              onChange={(faceColor) => updateCabinet({ faceColor })}
-            />
-            <ColorField
-              label="Frame"
-              value={cabinet.frameColor}
-              onChange={(frameColor) => updateCabinet({ frameColor })}
-            />
-          </div>
-
-          <SelectField
-            label="Frame style"
-            options={frameStyles}
-            value={cabinet.frameStyle}
-            onChange={(frameStyle) => updateCabinet({ frameStyle })}
-          />
-
-          <div>
-            <FieldLabel>Lighting</FieldLabel>
-            <div className="grid grid-cols-2 gap-2 rounded-lg bg-stone-100 p-1">
-              <button
-                type="button"
-                onClick={() => updateCabinet({ lightingMode: "day" })}
-                className={classNames(
-                  "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
-                  cabinet.lightingMode === "day"
-                    ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
-                    : "text-stone-600 hover:text-stone-950",
-                )}
-              >
-                <Sun size={16} />
-                Day
-              </button>
-              <button
-                type="button"
-                onClick={() => updateCabinet({ lightingMode: "night" })}
-                className={classNames(
-                  "inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
-                  cabinet.lightingMode === "night"
-                    ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
-                    : "text-stone-600 hover:text-stone-950",
-                )}
-              >
-                <Moon size={16} />
-                Night
-              </button>
-            </div>
-          </div>
-
           <div className="flex flex-wrap gap-2">
             <ToolbarButton onClick={addTextElement}>
               <Type size={16} />
@@ -1318,6 +1361,7 @@ export default function LightboxPreviewTool() {
             </ToolbarButton>
             <UploadButton
               accept="image/png,image/jpeg,image/webp,image/svg+xml"
+              inputLabel="Upload artwork"
               onChange={addArtwork}
             >
               <Upload size={16} />
@@ -1325,6 +1369,7 @@ export default function LightboxPreviewTool() {
             </UploadButton>
             <UploadButton
               accept="image/png,image/jpeg,image/webp"
+              inputLabel="Upload shopfront photo"
               onChange={uploadShopfront}
             >
               <ImageIcon size={16} />
@@ -1335,8 +1380,11 @@ export default function LightboxPreviewTool() {
           {selectedElement?.type === "text" && (
             <div className="space-y-3 rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
               <div>
-                <FieldLabel>Selected text</FieldLabel>
+                <FieldLabel htmlFor={selectedTextInputId}>
+                  Selected text
+                </FieldLabel>
                 <input
+                  id={selectedTextInputId}
                   type="text"
                   value={selectedElement.text}
                   onChange={(event) =>
@@ -1368,6 +1416,79 @@ export default function LightboxPreviewTool() {
             </div>
           )}
 
+          <details className="group rounded-lg bg-stone-50 p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-md text-sm font-bold text-stone-900 marker:hidden [&::-webkit-details-marker]:hidden">
+              <span className="inline-flex items-center gap-2">
+                <SlidersHorizontal size={16} />
+                Advanced settings
+              </span>
+              <ChevronDown
+                size={18}
+                className="shrink-0 transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+
+            <div className="mt-3 space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <ColorField
+                  label="Face"
+                  value={cabinet.faceColor}
+                  onChange={(faceColor) => updateCabinet({ faceColor })}
+                />
+                <ColorField
+                  label="Frame"
+                  value={cabinet.frameColor}
+                  onChange={(frameColor) => updateCabinet({ frameColor })}
+                />
+              </div>
+
+              <SelectField
+                label="Frame style"
+                options={frameStyles}
+                value={cabinet.frameStyle}
+                onChange={(frameStyle) => updateCabinet({ frameStyle })}
+              />
+
+              <fieldset
+                className="min-w-0"
+                aria-labelledby={lightingModeLabelId}
+              >
+                <FieldLegend id={lightingModeLabelId}>Lighting</FieldLegend>
+                <div className="grid grid-cols-2 gap-2 rounded-lg bg-stone-100 p-1">
+                  <button
+                    type="button"
+                    aria-pressed={cabinet.lightingMode === "day"}
+                    onClick={() => updateCabinet({ lightingMode: "day" })}
+                    className={classNames(
+                      "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
+                      cabinet.lightingMode === "day"
+                        ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
+                        : "text-stone-600 hover:text-stone-950",
+                    )}
+                  >
+                    <Sun size={16} />
+                    Day
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={cabinet.lightingMode === "night"}
+                    onClick={() => updateCabinet({ lightingMode: "night" })}
+                    className={classNames(
+                      "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-bold transition-[background-color,color,scale,box-shadow] active:scale-[0.96]",
+                      cabinet.lightingMode === "night"
+                        ? "bg-white text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
+                        : "text-stone-600 hover:text-stone-950",
+                    )}
+                  >
+                    <Moon size={16} />
+                    Night
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+          </details>
+
           <div className="flex flex-wrap gap-2">
             <ToolbarButton onClick={deleteSelectedElement}>
               <Trash2 size={16} />
@@ -1384,6 +1505,10 @@ export default function LightboxPreviewTool() {
               <Download size={16} />
               Download
             </ToolbarButton>
+            <ToolbarButton onClick={requestQuoteWithDesign} variant="primary">
+              <Send size={16} />
+              Request quote with this design
+            </ToolbarButton>
           </div>
 
           {error && (
@@ -1393,7 +1518,7 @@ export default function LightboxPreviewTool() {
           )}
         </aside>
 
-        <div className="min-w-0">
+        <div className="order-1 min-w-0 lg:order-2">
           <div
             className={classNames(
               "rounded-lg p-3 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_12px_32px_rgba(0,0,0,0.08)]",
@@ -1405,7 +1530,10 @@ export default function LightboxPreviewTool() {
             )}
           >
             <div className={mode === "face" ? "block" : "hidden"}>
-              <div ref={signWrap.ref} className="overflow-x-auto">
+              <div
+                ref={signWrap.ref}
+                className="flex w-full justify-center overflow-hidden rounded-md"
+              >
                 <Stage
                   ref={signStageRef}
                   width={signStageWidth}
@@ -1436,7 +1564,10 @@ export default function LightboxPreviewTool() {
             </div>
 
             <div className={mode === "shopfront" ? "block" : "hidden"}>
-              <div ref={mockupWrap.ref} className="overflow-x-auto">
+              <div
+                ref={mockupWrap.ref}
+                className="flex w-full justify-center overflow-hidden rounded-md"
+              >
                 <Stage
                   ref={mockupStageRef}
                   width={mockupStageWidth}

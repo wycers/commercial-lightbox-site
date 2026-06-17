@@ -4,108 +4,222 @@ import QuoteForm from "../components/QuoteForm";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { companyName, fuelPriceBoardUrl, siteName, siteUrl } from "../lib/site";
 
-const title = "Commercial Lightbox | Custom Lightbox Signs in WA";
+const title = "Custom Commercial Lightbox Signs for WA Businesses";
 const description =
-  "Indoor and outdoor advertising lightboxes in WA, with survey, design, fabrication, installation, and testing for commercial signage projects.";
+  "Custom commercial lightbox signs for WA businesses, with site survey, design coordination, fabrication, installation, testing, and aftercare.";
+
+const heroHighlights = [
+  ["WA focus", "Perth + regional WA site scoping"],
+  ["Project path", "Survey, design, fabricate, install"],
+  ["Sign types", "Indoor, shopfront, fascia, wall-mounted"],
+  ["Proof policy", "Verified details only when approved"],
+];
 
 const applications = [
   {
-    title: "Indoor food courts",
-    copy: "Menu, counter, and tenancy lightboxes with comfortable brightness, tidy indoor mounting, and easy-clean sign faces.",
+    title: "Shopfront lightbox signs",
+    copy: "Illuminated fascia, wall-mounted, and window-facing signs planned around viewing distance, structure, access, and night visibility.",
   },
   {
     title: "Retail interiors",
-    copy: "Reception, wall, and product-area lightboxes that make brand signage clear without overpowering the space.",
+    copy: "Reception, brand wall, and product-area lightboxes with clean finishes, comfortable brightness, and serviceable LED layouts.",
   },
   {
-    title: "Outdoor shopfronts",
-    copy: "Illuminated fascia signs and wall-mounted lightboxes built around weather exposure, access, structure, and night visibility.",
+    title: "Food courts and menus",
+    copy: "Menu, counter, and tenancy lightboxes that stay readable at close range without overpowering indoor seating or queue areas.",
   },
   {
-    title: "Service stations",
-    copy: "Outdoor illuminated signage and fuel price display deployment for forecourts, roadside visibility, and site testing.",
+    title: "Commercial tenancy signs",
+    copy: "Purpose-built illuminated signage for offices, clinics, gyms, showrooms, and mixed-use business sites across WA.",
   },
 ];
 
 const capabilityGroups = [
   {
     label: "Indoor",
-    title: "Food courts, counters, menus, and reception lightboxes.",
-    copy: "Indoor advertising lightboxes need controlled brightness, clean face materials, low-heat LED systems, and mounting that works with ceilings, counters, tenancy walls, and shopfit-out details.",
+    title: "Controlled light for close viewing and tidy fit-outs.",
+    copy: "Indoor commercial lightboxes need soft diffusion, easy-clean faces, low-heat LED systems, and mounting that respects counters, ceilings, tenancy walls, and shopfit-out details.",
     points: [
-      "Comfortable light levels for close viewing",
-      "Easy-clean acrylic or polycarbonate sign faces",
-      "Tidy indoor mounting and cable paths",
+      "Comfortable brightness for staff and customers",
+      "Acrylic or polycarbonate faces selected for cleaning and diffusion",
+      "Concealed fixing and cable paths where site conditions allow",
     ],
   },
   {
     label: "Outdoor",
-    title: "Shopfronts, service stations, and fuel retail displays.",
-    copy: "Outdoor projects need weather-aware cabinets, structural fixing, readable viewing distance, power/control coordination, and final testing on site before handover.",
+    title: "Weather-aware signage for shopfronts and exposed walls.",
+    copy: "Outdoor lightbox signs need cabinet depth, drainage, service access, fixing detail, readable viewing angles, and power coordination confirmed before fabrication.",
     points: [
-      "Weather-aware construction and service access",
-      "Visibility planned around road and pedestrian angles",
-      "Deployment, power coordination, and site testing",
+      "Materials chosen around UV, exposure, impact, and access",
+      "Viewing distance checked for pedestrians, traffic, and site approach",
+      "Installation and final testing included in the project path",
     ],
   },
 ];
 
-const siteExamples = [
+const trustAnchors = [
   {
-    location: "Maddington",
-    title: "Indoor food court advertising lightbox",
-    type: "Indoor",
-    copy: "A food court signage project where the lightbox needed to sit cleanly within the indoor retail environment and remain readable at close range.",
-    scope: "Site check, design coordination, fabrication, installation",
+    label: "Scope clarity",
+    title: "A quote tied to the actual site.",
+    copy: "Pricing is built from sign size, mounting, access, artwork condition, power coordination, and whether the sign is indoor or outdoor.",
   },
   {
-    location: "Maddington",
-    title: "Service station fuel price display",
-    type: "Outdoor",
-    copy: "A fuel retail display project focused on roadside readability, outdoor deployment, and testing for the service station environment.",
-    scope: "Site survey, display specification, deployment, testing",
+    label: "Material choices",
+    title: "The spec explains what is being built.",
+    copy: "Face material, cabinet finish, LED layout, service access, and installation assumptions are documented before production starts.",
+  },
+  {
+    label: "Verified proof",
+    title: "No fake credibility signals.",
+    copy: "ABN, certifications, customer names, project photos, reviews, phone numbers, and email addresses should only be shown after they are verified and approved.",
+  },
+  {
+    label: "Handover",
+    title: "Installed signs are checked before sign-off.",
+    copy: "The handover path includes illumination checks, face fit, fixing review, service access notes, and aftercare guidance.",
   },
 ];
 
-const processSteps = [
+const specRows = [
   [
-    "1",
-    "Survey",
-    "Measure the site and confirm mounting, exposure, power, access, and permit needs.",
+    "Common formats",
+    "Shopfront fascia, wall-mounted cabinets, food court menus, reception signs, and retail interior lightboxes.",
   ],
   [
-    "2",
-    "Design",
-    "Resolve artwork, light spread, face material, cabinet depth, and service access.",
+    "Face materials",
+    "Opal acrylic or polycarbonate selected around diffusion, cleaning, impact, UV exposure, and replacement access.",
   ],
   [
-    "3",
-    "Build",
-    "Fabricate the frame, LED system, diffuser, display hardware, and branded sign face.",
+    "Cabinet build",
+    "Powder-coated aluminium cabinets with service access planned around the mounting position and site constraints.",
   ],
   [
-    "4",
-    "Deploy & test",
-    "Install on site, coordinate power, test visibility and operation, then hand over.",
+    "Illumination",
+    "LED modules laid out for even light spread, with brightness matched to indoor comfort or outdoor visibility.",
   ],
+  [
+    "Artwork",
+    "Vector files are preferred; lower-resolution logos can be reviewed for redraw needs before manufacturing.",
+  ],
+  [
+    "Installation",
+    "Fixing method, access equipment, cable paths, switching, and any permit dependencies are confirmed during scope.",
+  ],
+];
+
+const timelineSteps = [
+  {
+    phase: "Initial scope",
+    timing: "1-2 business days",
+    copy: "Review sign type, rough size, location, photos, artwork, access, and timing needs.",
+  },
+  {
+    phase: "Survey and specification",
+    timing: "2-5 business days",
+    copy: "Measure the site, check mounting and power assumptions, then confirm materials and install requirements.",
+  },
+  {
+    phase: "Design approval",
+    timing: "3-7 business days",
+    copy: "Resolve artwork, layout, face details, cabinet depth, brightness expectations, and approval notes.",
+  },
+  {
+    phase: "Fabrication",
+    timing: "Typically 2-4 weeks",
+    copy: "Build the cabinet, LED system, diffuser, sign face, and any project-specific mounting details.",
+  },
+  {
+    phase: "Install and handover",
+    timing: "Often 1 site day",
+    copy: "Install, coordinate power where required, test illumination, and document aftercare before sign-off.",
+  },
+];
+
+const aftercarePoints = [
+  {
+    title: "Warranty stated in the quote",
+    copy: "Warranty length, inclusions, exclusions, and manufacturer-backed component terms should be written into the final quote instead of guessed on the homepage.",
+  },
+  {
+    title: "Serviceable parts",
+    copy: "Cabinets and LED layouts are planned so faces, modules, and access points can be serviced without rebuilding the whole sign.",
+  },
+  {
+    title: "Post-install support",
+    copy: "After handover, support can cover brightness checks, face replacement advice, LED servicing, and guidance for future rebrands.",
+  },
+];
+
+const caseCards = [
+  {
+    badge: "Example scope card",
+    setting: "Indoor retail tenancy",
+    title: "Food court counter lightbox",
+    challenge:
+      "Close-range menu signage needs even illumination, clean edges, and glare control in a busy indoor environment.",
+    approach:
+      "Specify a shallow cabinet, opal face, serviceable LED layout, and installation details that suit the tenancy wall.",
+    deliverables: [
+      "Site measure",
+      "Artwork sizing",
+      "Cabinet fabrication",
+      "Install and light test",
+    ],
+    proofNote:
+      "Replace with an approved client name, suburb, and owned project image only when those assets are verified.",
+  },
+  {
+    badge: "Example scope card",
+    setting: "Outdoor shopfront",
+    title: "Weather-aware fascia sign",
+    challenge:
+      "A street-facing sign must stay readable at night while accounting for wall structure, rain exposure, and service access.",
+    approach:
+      "Confirm fixing points, cabinet depth, drainage assumptions, face material, LED spacing, and night visibility before build.",
+    deliverables: [
+      "Survey notes",
+      "Material specification",
+      "Outdoor cabinet",
+      "Handover checks",
+    ],
+    proofNote:
+      "Replace placeholder details with approved project data rather than inventing customer proof.",
+  },
+  {
+    badge: "Example scope card",
+    setting: "Commercial interior",
+    title: "Reception brand wall lightbox",
+    challenge:
+      "A reception sign should feel premium in daylight and remain evenly illuminated without visible hotspots after hours.",
+    approach:
+      "Match face diffusion, LED spacing, cabinet finish, switching, and concealed cable paths to the fit-out conditions.",
+    deliverables: [
+      "Artwork review",
+      "Finish selection",
+      "Fabrication",
+      "Aftercare notes",
+    ],
+    proofNote:
+      "Use this structure for a real case study once the client, images, and permissions are confirmed.",
+  },
 ];
 
 const materialNotes = [
-  "Acrylic or polycarbonate faces selected for indoor cleaning, outdoor impact, UV exposure, and light diffusion.",
-  "Powder-coated aluminium cabinets with serviceable LED modules, tidy cable routing, and low-heat operation.",
-  "Weather-aware mounting details for WA shopfronts, service stations, coastal strips, and exposed roadsides.",
+  "Acrylic or polycarbonate faces are selected for indoor cleaning, outdoor impact, UV exposure, and light diffusion.",
+  "Powder-coated aluminium cabinets can be specified with serviceable LED modules, tidy cable routing, and low-heat operation.",
+  "Weather-aware mounting details help WA shopfronts, coastal strips, commercial walls, and exposed roadside sites stay maintainable.",
 ];
 
 const faqs = [
   {
-    question: "Do you make both indoor and outdoor advertising lightboxes?",
+    question: "Do you make both indoor and outdoor commercial lightbox signs?",
     answer:
-      "Yes. Indoor projects include food courts, counters, menus, reception areas, and retail interiors. Outdoor projects include shopfronts, wall-mounted lightboxes, service station signage, and fuel price displays.",
+      "Yes. Indoor projects include food courts, reception areas, counters, retail interiors, and commercial tenancies. Outdoor projects include shopfront fascia signs, wall-mounted cabinets, and exposed business signage.",
   },
   {
     question: "Can you work from an existing logo file?",
     answer:
-      "Yes. Vector artwork is ideal, but we can also advise what needs to be redrawn before manufacturing a clean illuminated sign face.",
+      "Yes. Vector artwork is ideal, but lower-resolution logos can be reviewed so any redraw work is clear before manufacturing a clean illuminated sign face.",
   },
   {
     question: "Do you handle installation?",
@@ -113,24 +227,34 @@ const faqs = [
       "Yes. The quote can include site survey, design coordination, fabrication, installation, power coordination, testing, and handover for Perth and regional WA sites.",
   },
   {
-    question: "Can the lightbox be outdoor rated?",
+    question: "How long does a custom lightbox usually take?",
     answer:
-      "Yes. Cabinet depth, seals, drainage, face material, and LED access are selected around the installation position.",
+      "A straightforward job commonly moves from scope to install over a few weeks after artwork, survey, access, and approvals are confirmed. The timeline section above shows a typical path, not a fixed promise.",
+  },
+  {
+    question: "What warranty or aftercare is included?",
+    answer:
+      "Warranty terms should be stated in the final quote because they depend on the cabinet, LED components, installation environment, and supplier terms. Aftercare can include handover notes, service guidance, and support for face or LED servicing.",
+  },
+  {
+    question: "Do you show customer names, ABN details, or project photos?",
+    answer:
+      "Only after verification and approval. This homepage uses safe example scope cards and does not invent ABNs, customer names, credentials, phone numbers, email addresses, or real project photography.",
   },
   {
     question: "What if I also need a fuel price board?",
     answer:
-      "Fuel price boards are handled as a specialist roadside LED display path, with FuelWatch-ready options for WA service stations.",
+      "Fuel price boards are handled as a specialist branch because they add roadside LED digit modules, operator controls, and FuelWatch-ready requirements beyond a standard lightbox sign.",
   },
 ];
 
 const serviceJsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "Custom commercial lightbox signage",
+  name: "Custom commercial lightbox signs for WA businesses",
   description,
   serviceType:
-    "Indoor and outdoor advertising lightbox design, fabrication, installation, and testing",
+    "Commercial lightbox sign design, fabrication, installation, testing, and aftercare",
   areaServed: {
     "@type": "AdministrativeArea",
     name: "Western Australia",
@@ -162,13 +286,35 @@ const serviceJsonLd = {
     <section
       class="relative isolate flex min-h-[88svh] items-center overflow-hidden bg-stone-950 px-4 py-24 text-white"
     >
-      <img
-        src="/images/commercial-lightbox-hero.png"
-        alt="Illuminated custom commercial lightbox sign on a modern shopfront"
-        fetchpriority="high"
-        decoding="async"
-        class="absolute inset-0 h-full w-full object-cover object-[58%_center]"
-      />
+      <picture class="absolute inset-0 block h-full w-full">
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/commercial-lightbox-hero-mobile.avif"
+          type="image/avif"
+        />
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/commercial-lightbox-hero-mobile.webp"
+          type="image/webp"
+        />
+        <source
+          srcset="/images/commercial-lightbox-hero-desktop.avif"
+          type="image/avif"
+        />
+        <source
+          srcset="/images/commercial-lightbox-hero-desktop.webp"
+          type="image/webp"
+        />
+        <img
+          src="/images/commercial-lightbox-hero.png"
+          alt="Rendered illuminated commercial lightbox sign concept for a modern shopfront"
+          width="1672"
+          height="941"
+          fetchpriority="high"
+          decoding="async"
+          class="h-full w-full object-cover object-[58%_center] outline outline-1 -outline-offset-1 outline-white/10"
+        />
+      </picture>
       <div
         class="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,10,9,0.96)_0%,rgba(12,10,9,0.82)_36%,rgba(12,10,9,0.35)_68%,rgba(12,10,9,0.08)_100%)]"
       >
@@ -194,7 +340,19 @@ const serviceJsonLd = {
               Applications
             </a>
             <a
-              href="#site-examples"
+              href="#specs"
+              class="hidden transition-[color] hover:text-white sm:inline"
+            >
+              Specs
+            </a>
+            <a
+              href="#timeline"
+              class="hidden transition-[color] hover:text-white sm:inline"
+            >
+              Timeline
+            </a>
+            <a
+              href="#case-cards"
               class="hidden transition-[color] hover:text-white sm:inline"
             >
               Examples
@@ -216,41 +374,47 @@ const serviceJsonLd = {
       </header>
 
       <div class="relative z-10 mx-auto w-full max-w-6xl pt-12">
-        <div class="max-w-2xl">
+        <div class="max-w-3xl">
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-200">
             Custom illuminated signage in WA
           </p>
           <h1
             class="mt-5 text-balance text-5xl font-semibold leading-[1.02] tracking-normal text-white sm:text-6xl lg:text-7xl"
           >
-            Commercial Lightbox
+            Custom commercial lightbox signs for WA businesses
           </h1>
-          <p class="mt-6 max-w-xl text-pretty text-lg leading-8 text-white/82">
-            Indoor and outdoor advertising lightboxes with survey, design,
-            fabrication, installation, and testing for food courts, shopfronts,
-            service stations, and commercial sites.
+          <p class="mt-6 max-w-2xl text-pretty text-lg leading-8 text-white/82">
+            Get indoor and outdoor lightbox signs scoped for your site, artwork,
+            mounting, visibility, and budget, with survey, design coordination,
+            fabrication, installation, testing, and aftercare.
           </p>
           <div class="mt-9 flex flex-wrap gap-3">
             <a
               href="#quote"
               class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.28)] transition-[background-color,scale,box-shadow] hover:bg-amber-400 active:scale-[0.96]"
             >
-              Get a custom quote
-            </a>
-            <a
-              href="/case-studies/fuel-price-boards"
-              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
-            >
-              View signage case study
+              Request a lightbox quote
             </a>
             <a
               href="/preview"
               class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale,box-shadow] hover:bg-white/15 active:scale-[0.96]"
             >
-              Try preview tool
+              Preview your sign
             </a>
           </div>
         </div>
+        <dl class="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            heroHighlights.map(([label, value]) => (
+              <div class="rounded-lg bg-white/[0.08] p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.14)]">
+                <dt class="text-xs font-bold uppercase tracking-[0.16em] text-amber-200">
+                  {label}
+                </dt>
+                <dd class="mt-2 text-sm leading-6 text-white/82">{value}</dd>
+              </div>
+            ))
+          }
+        </dl>
       </div>
     </section>
 
@@ -261,10 +425,10 @@ const serviceJsonLd = {
       <div class="mx-auto max-w-6xl">
         <SectionHeader
           kicker="Applications"
-          title="Indoor comfort and outdoor visibility need different details."
-          copy="Every lightbox starts with the place it needs to work: viewing distance, brightness, wall structure, brand artwork, power, weather, and maintenance access."
+          title="Commercial lightbox signs for the places customers actually see."
+          copy="The sign type follows the environment: viewing distance, brightness, wall structure, brand artwork, power, weather, maintenance access, and how people approach the business."
         />
-        <div class="mt-12 grid gap-5 md:grid-cols-4">
+        <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {
             applications.map((item) => (
               <article class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_42px_rgba(0,0,0,0.07)]">
@@ -274,14 +438,6 @@ const serviceJsonLd = {
                 <p class="mt-4 text-pretty text-sm leading-7 text-stone-600">
                   {item.copy}
                 </p>
-                {item.title === "Service stations" && (
-                  <a
-                    href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
-                    class="mt-5 inline-flex min-h-10 items-center text-sm font-bold text-teal-800 underline decoration-teal-700/35 underline-offset-4 transition-[color,text-decoration-color] hover:text-stone-950 hover:decoration-stone-950"
-                  >
-                    FuelWatch-ready LED fuel price boards
-                  </a>
-                )}
               </article>
             ))
           }
@@ -293,8 +449,8 @@ const serviceJsonLd = {
       <div class="mx-auto max-w-6xl">
         <SectionHeader
           kicker="Indoor + outdoor"
-          title="Advertising lightboxes for controlled interiors and exposed sites."
-          copy="The same one-stop service adapts to the environment: indoor projects need clean finishes and comfortable illumination, while outdoor projects need structure, weather detail, distance visibility, and site testing."
+          title="One service path, different site details."
+          copy="Indoor projects need clean finishes and comfortable illumination. Outdoor projects need structure, weather detail, distance visibility, and access for servicing."
         />
         <div class="mt-12 grid gap-5 lg:grid-cols-2">
           {
@@ -311,7 +467,7 @@ const serviceJsonLd = {
                 </p>
                 <ul class="mt-6 grid gap-3">
                   {group.points.map((point) => (
-                    <li class="rounded-lg bg-white px-4 py-3 text-sm font-semibold text-stone-700 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
+                    <li class="border-l-2 border-amber-400 pl-4 text-sm font-semibold leading-6 text-stone-700">
                       {point}
                     </li>
                   ))}
@@ -323,46 +479,177 @@ const serviceJsonLd = {
       </div>
     </section>
 
-    <section
-      id="site-examples"
-      class="bg-[#f3efe7] px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
-    >
-      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
-            Site examples
-          </p>
-          <h2
-            class="mt-3 text-balance text-3xl font-semibold text-stone-950 md:text-4xl"
-          >
-            Maddington projects show both sides of the capability.
-          </h2>
-          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
-            These examples are shared at suburb and project-type level only.
-            They show the range from indoor food court advertising lightboxes to
-            outdoor fuel retail display deployment.
-          </p>
+    <section class="bg-[#f3efe7] px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <SectionHeader
+          kicker="Trust anchors"
+          title="Credibility comes from clear scope, not invented proof."
+          copy="Use verified business details, approved project assets, and written quote terms when they are available. Until then, the homepage stays honest about what can be confirmed."
+        />
+        <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {
+            trustAnchors.map((anchor) => (
+              <article class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_16px_42px_rgba(0,0,0,0.08)]">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-teal-800">
+                  {anchor.label}
+                </p>
+                <h3 class="mt-3 text-lg font-semibold text-stone-950">
+                  {anchor.title}
+                </h3>
+                <p class="mt-4 text-pretty text-sm leading-7 text-stone-600">
+                  {anchor.copy}
+                </p>
+              </article>
+            ))
+          }
         </div>
+      </div>
+    </section>
+
+    <section id="specs" class="bg-white px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <SectionHeader
+          kicker="Specification"
+          title="The quote should make the build understandable."
+          copy="A commercial lightbox is not just a lit face. The useful spec names the format, face material, cabinet, LED layout, artwork state, installation assumptions, and handover checks."
+        />
+        <div class="overflow-hidden rounded-lg bg-stone-50 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_48px_rgba(0,0,0,0.08)]">
+          <table class="w-full border-collapse text-left text-sm">
+            <tbody>
+              {
+                specRows.map(([label, value]) => (
+                  <tr class="border-b border-stone-200 last:border-b-0">
+                    <th class="w-36 bg-white px-5 py-4 align-top font-semibold text-stone-950 sm:w-44">
+                      {label}
+                    </th>
+                    <td class="px-5 py-4 leading-7 text-stone-600">
+                      {value}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline" class="bg-stone-950 px-4 py-20 text-white">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+              Timeline
+            </p>
+            <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+              A typical path from enquiry to installed sign.
+            </h2>
+            <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
+              These timings are indicative. Final delivery depends on artwork,
+              site access, materials, approvals, installation travel, and
+              whether power or permits need extra coordination.
+            </p>
+          </div>
+          <div class="grid gap-4">
+            {
+              timelineSteps.map((step, index) => (
+                <article class="grid gap-4 rounded-lg bg-white/[0.06] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] sm:grid-cols-[8rem_1fr] sm:items-start">
+                  <div>
+                    <p class="font-mono text-sm font-semibold tabular-nums text-amber-300">
+                      {String(index + 1).padStart(2, "0")}
+                    </p>
+                    <p class="mt-2 text-sm font-bold text-white">
+                      {step.timing}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-semibold">{step.phase}</h3>
+                    <p class="mt-2 text-pretty text-sm leading-7 text-white/72">
+                      {step.copy}
+                    </p>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <SectionHeader
+          kicker="Warranty + aftercare"
+          title="Make the support terms explicit before fabrication."
+          copy="Warranty and service support should be tied to the actual components, environment, access, and supplier terms, then recorded in the quote and handover notes."
+        />
         <div class="grid gap-5">
           {
-            siteExamples.map((example) => (
+            aftercarePoints.map((point) => (
+              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                <h3 class="text-xl font-semibold text-stone-950">
+                  {point.title}
+                </h3>
+                <p class="mt-3 text-pretty leading-7 text-stone-600">
+                  {point.copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="case-cards"
+      class="bg-[#f3efe7] px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+    >
+      <div class="mx-auto max-w-6xl">
+        <SectionHeader
+          kicker="Case cards"
+          title="A stronger case-study structure without fake customer proof."
+          copy="These cards show the kind of detail a real case study should include. Replace them with approved names, suburbs, measurements, outcomes, and owned images when those are available."
+        />
+        <div class="mt-12 grid gap-5 lg:grid-cols-3">
+          {
+            caseCards.map((card) => (
               <article class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_16px_42px_rgba(0,0,0,0.08)]">
                 <div class="flex flex-wrap items-center gap-3">
                   <p class="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
-                    {example.location}
+                    {card.badge}
                   </p>
                   <p class="rounded-md bg-stone-100 px-3 py-1 text-xs font-bold text-stone-700">
-                    {example.type}
+                    {card.setting}
                   </p>
                 </div>
                 <h3 class="mt-4 text-xl font-semibold text-stone-950">
-                  {example.title}
+                  {card.title}
                 </h3>
-                <p class="mt-3 text-pretty leading-7 text-stone-600">
-                  {example.copy}
-                </p>
-                <p class="mt-5 rounded-lg bg-stone-50 px-4 py-3 text-sm font-semibold leading-6 text-stone-700 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
-                  Scope: {example.scope}
+                <div class="mt-5 grid gap-4 text-sm leading-7 text-stone-600">
+                  <p class="text-pretty">
+                    <span class="font-semibold text-stone-950">Challenge:</span>{" "}
+                    {card.challenge}
+                  </p>
+                  <p class="text-pretty">
+                    <span class="font-semibold text-stone-950">Approach:</span>{" "}
+                    {card.approach}
+                  </p>
+                </div>
+                <div class="mt-6">
+                  <p class="text-xs font-bold uppercase tracking-[0.16em] text-teal-800">
+                    Deliverables
+                  </p>
+                  <ul class="mt-3 grid gap-2 text-sm font-semibold text-stone-700">
+                    {card.deliverables.map((item) => (
+                      <li class="flex gap-2">
+                        <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p class="mt-6 border-t border-stone-200 pt-4 text-pretty text-xs leading-6 text-stone-500">
+                  {card.proofNote}
                 </p>
               </article>
             ))
@@ -372,46 +659,21 @@ const serviceJsonLd = {
     </section>
 
     <section class="bg-white px-4 py-20">
-      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-        <SectionHeader
-          kicker="Process"
-          title="A practical route from artwork to deployed signage."
-          copy="The job stays grounded in the details that affect the finished result: site measurement, legibility, brightness, cabinet depth, weather exposure, power coordination, and final testing."
-        />
-        <div class="grid gap-4 sm:grid-cols-2">
-          {
-            processSteps.map(([number, stepTitle, copy]) => (
-              <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
-                <p class="font-mono text-sm font-semibold tabular-nums text-amber-700">
-                  {number}
-                </p>
-                <h3 class="mt-4 text-xl font-semibold text-stone-950">
-                  {stepTitle}
-                </h3>
-                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
-                  {copy}
-                </p>
-              </article>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-stone-950 px-4 py-20 text-white">
       <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
             Materials
           </p>
-          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+          <h2
+            class="mt-3 text-balance text-3xl font-semibold text-stone-950 md:text-4xl"
+          >
             Bright at night, clean in daylight, serviceable after deployment.
           </h2>
         </div>
         <ul class="grid gap-4">
           {
             materialNotes.map((note) => (
-              <li class="rounded-lg bg-white/[0.06] p-5 text-pretty leading-7 text-white/78 shadow-[0_0_0_1px_rgba(255,255,255,0.1)]">
+              <li class="rounded-lg bg-stone-50 p-5 text-pretty leading-7 text-stone-600 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
                 {note}
               </li>
             ))
@@ -420,39 +682,48 @@ const serviceJsonLd = {
       </div>
     </section>
 
-    <section class="bg-[#f3efe7] px-4 py-20">
-      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    <section class="bg-stone-950 px-4 py-20 text-white">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
         <div>
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
-            Case study
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+            Specialist branch
           </p>
-          <h2
-            class="mt-3 text-balance text-3xl font-semibold text-stone-950 md:text-4xl"
-          >
-            From custom lightboxes to specialist fuel price displays.
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            Fuel price boards are related, but not the main lightbox path.
           </h2>
-          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
-            Fuel price signage is a focused branch of illuminated roadside
-            display work. For service stations, the dedicated FuelWatch-ready
-            product path gives owners a clearer way to compare board formats.
+          <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
+            Standard commercial lightboxes focus on cabinet, face, brand
+            artwork, illumination quality, and installation. Service station
+            fuel price boards add roadside LED digit modules, price controls,
+            and FuelWatch-ready requirements, so they sit in a specialist
+            branch.
           </p>
         </div>
         <div
-          class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_48px_rgba(0,0,0,0.1)]"
+          class="rounded-lg bg-white/[0.06] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_24px_70px_rgba(0,0,0,0.22)]"
         >
-          <h3 class="text-2xl font-semibold text-stone-950">
-            Fuel price board customer path
+          <h3 class="text-2xl font-semibold">
+            Need pricing display signage?
           </h3>
-          <p class="mt-4 text-pretty leading-7 text-stone-600">
-            See how the signage capability narrows into weather-rated,
-            high-brightness roadside LED displays for petrol station pricing.
+          <p class="mt-4 text-pretty leading-7 text-white/72">
+            Use the specialist path when the project is a petrol station price
+            display, digit board, or roadside LED pricing sign rather than a
+            standard illuminated brand lightbox.
           </p>
-          <a
-            href="/case-studies/fuel-price-boards"
-            class="mt-6 inline-flex min-h-11 items-center rounded-lg bg-stone-950 px-5 py-3 text-sm font-bold text-white shadow-[0_1px_2px_rgba(0,0,0,0.12)] transition-[background-color,scale] hover:bg-teal-800 active:scale-[0.96]"
-          >
-            Read the case study
-          </a>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a
+              href="/case-studies/fuel-price-boards"
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-5 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.2)] transition-[background-color,scale] hover:bg-amber-400 active:scale-[0.96]"
+            >
+              Read specialist explainer
+            </a>
+            <a
+              href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
+              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-5 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale] hover:bg-white/15 active:scale-[0.96]"
+            >
+              View fuel board range
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -462,7 +733,7 @@ const serviceJsonLd = {
         <SectionHeader
           kicker="Questions"
           title="Useful answers before you request pricing."
-          copy="Quotes vary with size, mounting, access, face material, installation travel, and any permit or artwork preparation needed."
+          copy="Quotes vary with size, mounting, access, face material, installation travel, artwork preparation, approvals, and any power coordination needed."
         />
         <div class="mt-12 grid gap-5 md:grid-cols-2">
           {
@@ -479,7 +750,7 @@ const serviceJsonLd = {
                     href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
                     class="mt-5 inline-flex min-h-10 items-center text-sm font-bold text-teal-800 underline decoration-teal-700/35 underline-offset-4 transition-[color,text-decoration-color] hover:text-stone-950 hover:decoration-stone-950"
                   >
-                    View the fuel price board range
+                    View the specialist fuel price board range
                   </a>
                 )}
               </article>
@@ -500,15 +771,15 @@ const serviceJsonLd = {
           </h2>
           <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
             Send the rough size, location, indoor or outdoor sign type, and any
-            timing needs. If you are not sure about dimensions yet, we can start
-            from the site position and installation conditions.
+            timing needs. If dimensions are not confirmed yet, the scope can
+            start from photos, site position, and installation conditions.
           </p>
           <dl class="mt-9 grid gap-4 text-sm text-white/75">
             {
               [
                 ["Response", "1 business day"],
                 ["Coverage", "Perth + regional WA"],
-                ["Path", "Survey, design, deploy"],
+                ["Path", "Survey, design, fabricate, install"],
               ].map(([label, value]) => (
                 <div class="border-l border-amber-400 pl-4">
                   <dt class="font-mono text-xs uppercase tracking-[0.16em] text-amber-300">
@@ -523,7 +794,7 @@ const serviceJsonLd = {
         <div
           class="rounded-lg bg-white p-6 text-stone-950 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_24px_70px_rgba(0,0,0,0.35)] sm:p-8"
         >
-          <QuoteForm client:load />
+          <QuoteForm client:visible />
         </div>
       </div>
     </section>

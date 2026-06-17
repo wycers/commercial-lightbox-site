@@ -603,62 +603,63 @@ const serviceJsonLd = {
           }
         </div>
 
+      </div>
+    </section>
+
+    <section
+      id="quote"
+      class="isolate scroll-mt-8 overflow-hidden bg-[radial-gradient(circle_at_15%_16%,rgba(242,163,58,0.2),transparent_30%),radial-gradient(circle_at_86%_18%,rgba(15,118,110,0.12),transparent_32%),linear-gradient(180deg,#ffffff_0%,#fbfaf7_24%,#f5efe5_100%)] px-4 py-20 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),inset_0_18px_42px_rgba(0,0,0,0.035)] md:scroll-mt-10 lg:py-24"
+    >
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div data-reveal>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Quote
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold text-stone-950 md:text-4xl">
+            Share the site details and we will scope the sign.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            Send the rough size, location, indoor or outdoor sign type, and any
+            timing needs. If dimensions are not confirmed, photos and site
+            position are enough to start.
+          </p>
+          <dl class="mt-9 grid gap-4 text-sm text-stone-700">
+            {
+              [
+                ["Response", "1 business day"],
+                ["Coverage", serviceArea],
+                ["Path", "Design, fabricate, install"],
+              ].map(([label, value]) => (
+                <div class="rounded-lg bg-white/55 px-4 py-3 shadow-[inset_3px_0_0_rgba(242,163,58,0.74),0_0_0_1px_rgba(0,0,0,0.045),0_12px_30px_rgba(0,0,0,0.045)] backdrop-blur">
+                  <dt class="font-mono text-xs uppercase tracking-[0.16em] text-teal-800">
+                    {label}
+                  </dt>
+                  <dd class="mt-1 font-semibold text-stone-950">{value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          {
+            contactLinks.length > 0 && (
+              <div class="mt-8 grid gap-3 text-sm font-semibold text-stone-700 sm:grid-cols-2">
+                {contactLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    class="inline-flex min-h-11 items-center rounded-lg bg-white/70 px-4 py-3 text-teal-800 shadow-[0_0_0_1px_rgba(0,0,0,0.055),0_12px_28px_rgba(15,118,110,0.08)] transition-[background-color,color,scale,box-shadow] hover:bg-white hover:text-stone-950 hover:shadow-[0_0_0_1px_rgba(0,0,0,0.07),0_16px_34px_rgba(15,118,110,0.12)] active:scale-[0.96]"
+                  >
+                    {link.label}: {link.value}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
         <div
-          id="quote"
-          class="mt-16 -mr-4 -ml-4 scroll-mt-8 bg-stone-950 px-4 py-20 text-white md:scroll-mt-10"
+          class="rounded-lg bg-white p-6 text-stone-950 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_18px_44px_rgba(0,0,0,0.08),0_34px_90px_rgba(15,118,110,0.12)] sm:p-8"
+          data-reveal
+          data-reveal-delay="1"
         >
-          <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
-            <div data-reveal>
-              <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
-                Quote
-              </p>
-              <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
-                Share the site details and we will scope the sign.
-              </h2>
-              <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
-                Send the rough size, location, indoor or outdoor sign type, and
-                any timing needs. If dimensions are not confirmed, photos and
-                site position are enough to start.
-              </p>
-              <dl class="mt-9 grid gap-4 text-sm text-white/75">
-                {
-                  [
-                    ["Response", "1 business day"],
-                    ["Coverage", serviceArea],
-                    ["Path", "Design, fabricate, install"],
-                  ].map(([label, value]) => (
-                    <div class="border-l border-amber-400 pl-4">
-                      <dt class="font-mono text-xs uppercase tracking-[0.16em] text-amber-300">
-                        {label}
-                      </dt>
-                      <dd class="mt-1 text-white">{value}</dd>
-                    </div>
-                  ))
-                }
-              </dl>
-              {
-                contactLinks.length > 0 && (
-                  <div class="mt-8 grid gap-3 text-sm font-semibold text-white/82 sm:grid-cols-2">
-                    {contactLinks.map((link) => (
-                      <a
-                        href={link.href}
-                        class="inline-flex min-h-11 items-center rounded-lg bg-white/[0.08] px-4 py-3 shadow-[0_0_0_1px_rgba(255,255,255,0.14)] transition-[background-color,scale] hover:bg-white/[0.13] hover:text-white active:scale-[0.96]"
-                      >
-                        {link.label}: {link.value}
-                      </a>
-                    ))}
-                  </div>
-                )
-              }
-            </div>
-            <div
-              class="rounded-lg bg-white p-6 text-stone-950 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_24px_70px_rgba(0,0,0,0.35)] sm:p-8"
-              data-reveal
-              data-reveal-delay="1"
-            >
-              <QuoteForm client:visible />
-            </div>
-          </div>
+          <QuoteForm client:visible />
         </div>
       </div>
     </section>

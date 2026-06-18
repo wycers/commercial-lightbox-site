@@ -8,18 +8,18 @@ import {
   siteUrl,
 } from "../../lib/site";
 
-const title = `Fuel Price Board Signage Case Study | ${siteName}`;
-const openGraphTitle = "Fuel Price Board Signage Case Study";
+const title = `Fuel Price Board Signage Explainer | ${siteName}`;
+const openGraphTitle = "Fuel Price Board Signage Explainer";
 const description =
-  "How custom illuminated signage capability extends into FuelWatch-ready LED fuel price boards for WA service stations.";
+  "An explainer for how custom illuminated signage capability extends into FuelWatch-ready LED fuel price boards for WA service stations.";
 const canonicalPath = "/case-studies/fuel-price-boards";
 
-const caseJsonLd = {
+const explainerJsonLd = {
   "@context": "https://schema.org",
   "@type": "CreativeWork",
-  name: "Fuel price board signage case study",
+  name: "Fuel price board signage explainer",
   description:
-    "A specialist customer path for weather-rated, FuelWatch-ready LED fuel price board signage.",
+    "A specialist customer path explainer for weather-rated, FuelWatch-ready LED fuel price board signage.",
   provider: {
     "@type": "LocalBusiness",
     name: companyName,
@@ -62,7 +62,7 @@ const capabilities = [
     <script
       is:inline
       type="application/ld+json"
-      set:html={JSON.stringify(caseJsonLd)}
+      set:html={JSON.stringify(explainerJsonLd)}
     />
     <section class="relative isolate overflow-hidden bg-stone-950 px-4 py-24 text-white">
       <picture class="absolute inset-0 block h-full w-full opacity-40">
@@ -106,7 +106,7 @@ const capabilities = [
           Back to Commercial Lightbox
         </a>
         <p class="mt-12 text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
-          Customer path
+          Explainer
         </p>
         <h1 class="mt-4 max-w-3xl text-balance text-4xl font-semibold leading-[1.05] md:text-6xl">
           Fuel price board signage for service stations.
@@ -114,7 +114,9 @@ const capabilities = [
         <p class="mt-6 max-w-2xl text-pretty text-lg leading-8 text-white/78">
           Some commercial signage projects need more than a static illuminated
           face. Petrol station operators need durable roadside LED displays,
-          readable pricing, and a clear path for FuelWatch-ready control.
+          readable pricing, and a clear path for FuelWatch-ready control. This
+          page explains the category rather than claiming a specific customer
+          installation.
         </p>
       </div>
     </section>

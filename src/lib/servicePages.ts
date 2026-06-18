@@ -21,6 +21,22 @@ export type ServicePageData = {
     title: string;
     copy: string;
   }>;
+  priceGuidance: Array<{
+    title: string;
+    copy: string;
+  }>;
+  materialNotes: Array<{
+    title: string;
+    copy: string;
+  }>;
+  approvalNotes: Array<{
+    title: string;
+    copy: string;
+  }>;
+  maintenanceNotes: Array<{
+    title: string;
+    copy: string;
+  }>;
   processSteps: Array<{
     title: string;
     copy: string;
@@ -47,6 +63,17 @@ const standardProcessSteps = [
   {
     title: "Build and install",
     copy: "Fabricate the cabinet and face, install on site, test illumination, and hand over support notes.",
+  },
+];
+
+const standardMaintenanceNotes = [
+  {
+    title: "Written scope",
+    copy: "Warranty, service access, cleaning guidance, and support assumptions should be confirmed in the written quote before fabrication.",
+  },
+  {
+    title: "Service access",
+    copy: "Cabinet faces, LED modules, power supplies, and fixings should remain reachable where the sign position allows it.",
   },
 ];
 
@@ -106,6 +133,37 @@ export const servicePages: ServicePageData[] = [
         copy: "Vector artwork is preferred. Low-resolution logos may need redraw before a clean illuminated face can be made.",
       },
     ],
+    priceGuidance: [
+      {
+        title: "Range before formal quote",
+        copy: "A first reply can give an indicative range once photos, rough width, height, suburb, and mounting position are known.",
+      },
+      {
+        title: "Final quote inputs",
+        copy: "The formal price depends on cabinet size, face material, access equipment, artwork readiness, power, and approval requirements.",
+      },
+    ],
+    materialNotes: [
+      {
+        title: "Cabinet and face",
+        copy: "Shopfront cabinets are scoped around aluminium housing, face material, frame finish, drainage, and future face access.",
+      },
+      {
+        title: "Night visibility",
+        copy: "LED layout, diffuser choice, colour contrast, and face opacity are matched to the frontage and viewing distance.",
+      },
+    ],
+    approvalNotes: [
+      {
+        title: "Tenancy checks",
+        copy: "Landlord, shopping centre, strata, heritage, or council conditions may need confirmation before production.",
+      },
+      {
+        title: "Install assumptions",
+        copy: "Wall condition, awning access, fixings, power path, and safe access equipment should be confirmed before the final scope.",
+      },
+    ],
+    maintenanceNotes: standardMaintenanceNotes,
     processSteps: standardProcessSteps,
     faqs: [
       {
@@ -189,6 +247,37 @@ export const servicePages: ServicePageData[] = [
         copy: "Switching, power location, and concealed routing need to be checked before fabrication.",
       },
     ],
+    priceGuidance: [
+      {
+        title: "Initial guidance",
+        copy: "A first reply can outline the likely price path after rough dimensions, fit-out location, artwork, and finish expectations are shared.",
+      },
+      {
+        title: "Fit-out dependencies",
+        copy: "The formal quote depends on cabinet finish, brightness control, cable route, installation surface, and any access constraints.",
+      },
+    ],
+    materialNotes: [
+      {
+        title: "Interior finish",
+        copy: "Cabinet colour, edge detail, face material, and fixings should be selected to sit cleanly with the surrounding fit-out.",
+      },
+      {
+        title: "Comfortable brightness",
+        copy: "Diffusion, LED spacing, and face opacity are chosen for close viewing rather than maximum brightness.",
+      },
+    ],
+    approvalNotes: [
+      {
+        title: "Fit-out coordination",
+        copy: "Power location, switching, cable concealment, wall backing, and installation timing should be checked with the fit-out team.",
+      },
+      {
+        title: "Site limits",
+        copy: "Access hours, tenancy rules, food-adjacent cleaning needs, and visitor safety may affect installation planning.",
+      },
+    ],
+    maintenanceNotes: standardMaintenanceNotes,
     processSteps: standardProcessSteps,
     faqs: [
       {
@@ -275,6 +364,37 @@ export const servicePages: ServicePageData[] = [
         copy: "Switching, cable paths, electrical coordination, landlord rules, and permits can affect timing.",
       },
     ],
+    priceGuidance: [
+      {
+        title: "Indicative range first",
+        copy: "A first reply can provide a practical range after photos, dimensions, exposure, wall material, and access needs are known.",
+      },
+      {
+        title: "Final quote inputs",
+        copy: "Weather exposure, face material, cabinet depth, fixings, travel, access equipment, power, and approvals shape the formal price.",
+      },
+    ],
+    materialNotes: [
+      {
+        title: "Weather-aware build",
+        copy: "Outdoor cabinets are scoped around aluminium housing, sealing, drainage, UV exposure, face material, and service access.",
+      },
+      {
+        title: "Power and brightness",
+        copy: "LED modules, power supplies, switching, diffuser choice, and sign position are matched to exposure and viewing distance.",
+      },
+    ],
+    approvalNotes: [
+      {
+        title: "Approvals",
+        copy: "Landlord, council, strata, shopping centre, or site-owner approval may be required before fabrication or install.",
+      },
+      {
+        title: "Electrical coordination",
+        copy: "Existing power, switching, cable paths, and any required electrical trade work should be confirmed before the final quote.",
+      },
+    ],
+    maintenanceNotes: standardMaintenanceNotes,
     processSteps: standardProcessSteps,
     faqs: [
       {
@@ -364,6 +484,37 @@ export const servicePages: ServicePageData[] = [
         copy: "Food-adjacent signs need suitable face materials, edges, and access for practical maintenance.",
       },
     ],
+    priceGuidance: [
+      {
+        title: "Scope before price",
+        copy: "A first reply can outline the likely path after menu size, viewing distance, artwork state, change frequency, and install location are shared.",
+      },
+      {
+        title: "Final quote inputs",
+        copy: "Face changeability, cabinet access, artwork preparation, cleaning needs, brightness control, and power location affect the formal quote.",
+      },
+    ],
+    materialNotes: [
+      {
+        title: "Readable face",
+        copy: "Menu lightboxes are scoped around diffuser choice, face material, LED spacing, and artwork contrast for close-range reading.",
+      },
+      {
+        title: "Changeable content",
+        copy: "If prices or menu items change often, the cabinet can be planned around replaceable faces and practical service access.",
+      },
+    ],
+    approvalNotes: [
+      {
+        title: "Tenancy fit",
+        copy: "Wall detail, fixing points, access hours, power, cleaning access, and tenancy rules should be checked before production.",
+      },
+      {
+        title: "Artwork timing",
+        copy: "Rough menu artwork can start the quote, but final production artwork and proofing should be confirmed before manufacture.",
+      },
+    ],
+    maintenanceNotes: standardMaintenanceNotes,
     processSteps: standardProcessSteps,
     faqs: [
       {

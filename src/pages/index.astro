@@ -86,6 +86,54 @@ const serviceCards = [
   },
 ];
 
+const exampleProjects = [
+  {
+    title: "Shopfront fascia lightbox",
+    image: placeholderImages.shopfront,
+    scope: "Illustrative example for street-facing tenancy signage",
+    details: [
+      "Future case fields: suburb or industry",
+      "Rough sign size and cabinet depth",
+      "Mounting, access, and power notes",
+    ],
+  },
+  {
+    title: "Indoor reception lightbox",
+    image: placeholderImages.indoor,
+    scope: "Illustrative example for close-viewing interior signage",
+    details: [
+      "Future case fields: fit-out finish",
+      "Face material and brightness notes",
+      "Cleaning and service access notes",
+    ],
+  },
+  {
+    title: "Cabinet and face detail",
+    image: placeholderImages.detail,
+    scope: "Illustrative example for material and maintenance scoping",
+    details: [
+      "Future case fields: face material",
+      "LED, diffuser, and service access notes",
+      "Warranty and support assumptions",
+    ],
+  },
+];
+
+const priceGuidance = [
+  {
+    title: "First reply gives direction",
+    copy: "When photos, rough dimensions, location, and sign type are supplied, the first reply can outline a practical pricing path or the next scope questions.",
+  },
+  {
+    title: "Formal quotes are site-specific",
+    copy: "Final pricing is confirmed after material, cabinet size, artwork, access, power, travel, approvals, and installation assumptions are clear.",
+  },
+  {
+    title: "No hidden generic size chart",
+    copy: "Two signs with the same face size can price differently when wall condition, weather exposure, service access, or electrical coordination changes.",
+  },
+];
+
 const quoteFactors = [
   {
     title: "Sign size and face",
@@ -102,6 +150,25 @@ const quoteFactors = [
   {
     title: "Timing and approvals",
     copy: "Artwork readiness, tenancy rules, landlord approvals, travel, and permit needs affect the final delivery path.",
+  },
+];
+
+const materialCareItems = [
+  {
+    title: "Cabinet and face",
+    copy: "Quotes should identify the cabinet approach, face material, finish, drainage or interior edge detail, and how the face can be accessed later.",
+  },
+  {
+    title: "LEDs and brightness",
+    copy: "LED layout, diffuser choice, power supply, colour contrast, and brightness are matched to viewing distance and whether the sign is indoor or outdoor.",
+  },
+  {
+    title: "Warranty and support",
+    copy: "Warranty terms, exclusions, and support assumptions should be written into the quote before fabrication, rather than implied after install.",
+  },
+  {
+    title: "Maintenance path",
+    copy: "Cleaning, future face replacement, LED service access, and power-supply access should be considered while the cabinet is being scoped.",
   },
 ];
 
@@ -123,16 +190,47 @@ const processSteps = [
   },
 ];
 
+const boundaryColumns = [
+  {
+    title: "Handled in the scope",
+    items: [
+      "Sign type, size, face, cabinet, and finish recommendations",
+      "Fabrication, installation planning, illumination testing, and handover notes",
+      "Written assumptions for access, artwork, support, and site conditions",
+    ],
+  },
+  {
+    title: "Confirmed before quote",
+    items: [
+      "Photos, rough dimensions, suburb, wall or fascia position, and timing",
+      "Artwork readiness, logo quality, power availability, and cable paths",
+      "Access equipment, travel, site hours, and installation restrictions",
+    ],
+  },
+  {
+    title: "May need others",
+    items: [
+      "Landlord, shopping centre, strata, heritage, or council approval",
+      "Qualified electrical trade confirmation where connection work is required",
+      "Customer approval of final artwork, production proof, and tenancy rules",
+    ],
+  },
+];
+
 const identityRows = [
   ["Business", businessName],
   ["Coverage", serviceArea],
+  ["Response", "Quote response within 1 business day"],
+  ["Quote path", "Design, fabricate, install"],
+  ...(contactPhone ? [["Phone", contactPhone]] : []),
+  ...(contactEmail ? [["Email", contactEmail]] : []),
   ...(businessAbn ? [["ABN", businessAbn]] : []),
 ];
 
 const trustItems = [
   {
-    title: "Quote assumptions are written down",
-    copy: "The quote should state size, materials, installation assumptions, artwork status, and support terms.",
+    title: "Quote assumptions should be visible",
+    copy: "The quote should state size, materials, installation assumptions, artwork status, and support terms before the job moves into fabrication.",
   },
   {
     title: "Site details drive the recommendation",
@@ -142,6 +240,14 @@ const trustItems = [
     title: "Installation and handover are included",
     copy: "Installed signs are checked for illumination, face fit, fixings, service access, and aftercare guidance.",
   },
+];
+
+const quotePrepItems = [
+  "Site or shopfront photos",
+  "Rough width and height",
+  "Logo, artwork, or brand files",
+  "Suburb, site type, and sign position",
+  "Power, access, timing, and approval notes",
 ];
 
 const faqs = [
@@ -278,7 +384,7 @@ const serviceJsonLd = {
               Services
             </a>
             <a
-              href="#quote-factors"
+              href="#price-guidance"
               class="hidden transition-[color] hover:text-white sm:inline"
             >
               Pricing
@@ -378,6 +484,97 @@ const serviceJsonLd = {
     </section>
 
     <section
+      id="examples"
+      class="bg-white px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+    >
+      <div class="mx-auto max-w-6xl">
+        <div data-reveal>
+          <SectionHeader
+            kicker="Example project scopes"
+            title="The kind of evidence future real case studies should show."
+            copy="These are illustrative examples using placeholder images. Replace them with owned project photos when real customer work can be shown publicly."
+          />
+        </div>
+        <div class="mt-12 grid gap-5 lg:grid-cols-3">
+          {
+            exampleProjects.map((item, index) => (
+              <article
+                class="overflow-hidden rounded-lg bg-stone-50 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_16px_42px_rgba(0,0,0,0.07)]"
+                data-reveal
+                data-reveal-delay={String(Math.min(index + 1, 4))}
+              >
+                <img
+                  src={item.image.src}
+                  alt={item.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                  width="1536"
+                  height="1024"
+                  class="aspect-[16/10] w-full object-cover outline outline-1 -outline-offset-1 outline-black/10"
+                />
+                <div class="p-6">
+                  <p class="text-xs font-bold uppercase tracking-[0.16em] text-amber-700">
+                    Illustrative example
+                  </p>
+                  <h3 class="mt-3 text-xl font-semibold text-stone-950">
+                    {item.title}
+                  </h3>
+                  <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                    {item.scope}
+                  </p>
+                  <ul class="mt-5 divide-y divide-stone-200 text-sm leading-6 text-stone-700">
+                    {item.details.map((detail) => (
+                      <li class="py-2 first:pt-0 last:pb-0">
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="price-guidance" class="bg-[#f3efe7] px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div data-reveal>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Price guidance
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            A useful pricing conversation starts with site details, not a
+            made-up size chart.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            We are not publishing unverified starting prices here. Instead, the
+            first reply should give a practical range or the exact scope
+            questions needed to prepare a written quote.
+          </p>
+        </div>
+        <div class="grid gap-4">
+          {
+            priceGuidance.map((item, index) => (
+              <article
+                class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_36px_rgba(0,0,0,0.06)]"
+                data-reveal
+                data-reveal-delay={String(Math.min(index + 1, 4))}
+              >
+                <h3 class="text-xl font-semibold text-stone-950">
+                  {item.title}
+                </h3>
+                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                  {item.copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section
       id="services"
       class="bg-stone-50 px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
     >
@@ -466,6 +663,36 @@ const serviceJsonLd = {
       </div>
     </section>
 
+    <section id="materials" class="bg-stone-50 px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <div data-reveal>
+          <SectionHeader
+            kicker="Materials and support"
+            title="The cabinet, face, lighting, warranty, and maintenance path should be written down."
+            copy="Specific warranty terms and exclusions belong in the written quote. This section explains the details customers should expect to see confirmed before fabrication."
+          />
+        </div>
+        <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {
+            materialCareItems.map((item, index) => (
+              <article
+                class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_36px_rgba(0,0,0,0.06)]"
+                data-reveal
+                data-reveal-delay={String(Math.min(index + 1, 4))}
+              >
+                <h3 class="text-lg font-semibold text-stone-950">
+                  {item.title}
+                </h3>
+                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                  {item.copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
     <section id="process" class="bg-stone-950 px-4 py-20 text-white">
       <div class="mx-auto max-w-6xl">
         <div class="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
@@ -511,13 +738,47 @@ const serviceJsonLd = {
       </div>
     </section>
 
+    <section id="boundaries" class="bg-white px-4 py-20">
+      <div class="mx-auto max-w-6xl">
+        <div data-reveal>
+          <SectionHeader
+            kicker="Approvals and install boundaries"
+            title="A clean project starts by knowing what is included, what must be checked, and who else may need to approve."
+            copy="Lightbox signage can involve tenancy rules, wall conditions, power, access equipment, and approval pathways. These items should be surfaced before the final quote."
+          />
+        </div>
+        <div class="mt-12 grid gap-5 lg:grid-cols-3">
+          {
+            boundaryColumns.map((column, index) => (
+              <article
+                class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_36px_rgba(0,0,0,0.06)]"
+                data-reveal
+                data-reveal-delay={String(Math.min(index + 1, 4))}
+              >
+                <h3 class="text-xl font-semibold text-stone-950">
+                  {column.title}
+                </h3>
+                <ul class="mt-5 divide-y divide-stone-200 text-sm leading-7 text-stone-600">
+                  {column.items.map((item) => (
+                    <li class="py-3 first:pt-0 last:pb-0">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
     <section id="trust" class="bg-[#f3efe7] px-4 py-20">
       <div class="mx-auto max-w-6xl">
         <div data-reveal>
           <SectionHeader
             kicker="Trust"
-            title="The details a buyer should be able to check."
-            copy="Before fabrication, the quote should make the scope, assumptions, support path, and business contact details clear."
+            title="Who you are dealing with, using the details configured for this site."
+            copy="Only verified contact and registration details are shown. Before fabrication, the quote should also make the scope, assumptions, support path, and approval responsibilities clear."
           />
         </div>
         <dl class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -664,6 +925,24 @@ const serviceJsonLd = {
               ))
             }
           </dl>
+          <div class="mt-8 rounded-lg bg-white/72 p-5 shadow-[inset_3px_0_0_rgba(15,118,110,0.42),0_0_0_1px_rgba(255,255,255,0.78),0_1px_2px_rgba(0,0,0,0.04),0_18px_42px_rgba(92,59,19,0.08)] backdrop-blur">
+            <h3 class="text-base font-semibold text-stone-950">
+              Fastest quote path
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Mention these in the message field. Photos and artwork can be
+              shared by email or during the follow-up reply for this phase.
+            </p>
+            <ul class="mt-4 divide-y divide-stone-200 text-sm leading-6 text-stone-700">
+              {
+                quotePrepItems.map((item) => (
+                  <li class="py-2 first:pt-0 last:pb-0">
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
           {
             contactLinks.length > 0 && (
               <div class="mt-8 grid gap-3 text-sm font-semibold text-stone-700 sm:grid-cols-2">

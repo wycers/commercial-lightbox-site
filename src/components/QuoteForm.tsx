@@ -426,7 +426,8 @@ export default function QuoteForm() {
         <p className="font-semibold text-stone-950">What happens next</p>
         <p className="mt-1 text-pretty">
           Share what you know now. We will reply within one business day with
-          the next scope questions, pricing assumptions, or survey steps.
+          the next scope questions, pricing assumptions, survey steps, and the
+          best way to send photos or artwork if they are needed.
         </p>
         {contactLinks.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -674,7 +675,7 @@ export default function QuoteForm() {
           value={fields.message}
           onChange={handleChange}
           className={inputClass}
-          placeholder="Tell us about the site, wall or pylon position, power access, and timing."
+          placeholder="Tell us about the site photos, rough size, logo/artwork status, sign position, power access, approvals, and timing."
         />
       </div>
 

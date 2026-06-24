@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import {
   absoluteUrl,
   businessProfile,
-  serviceArea,
   siteName,
   siteUrl,
 } from "../lib/site";
@@ -26,7 +25,10 @@ const jsonLd = {
       name: businessProfile.tradingName,
       legalName: businessProfile.legalName,
       url: siteUrl,
-      areaServed: serviceArea,
+      areaServed: {
+        "@type": "Country",
+        name: "Australia",
+      },
       ...(businessProfile.phone ? { telephone: businessProfile.phone } : {}),
       ...(businessProfile.email ? { email: businessProfile.email } : {}),
       ...(businessProfile.abn ? { identifier: businessProfile.abn } : {}),
@@ -42,8 +44,8 @@ const jsonLd = {
       serviceType: page.serviceType,
       image: absoluteUrl(page.image.src),
       areaServed: {
-        "@type": "AdministrativeArea",
-        name: "Western Australia",
+        "@type": "Country",
+        name: "Australia",
       },
       provider: {
         "@id": localBusinessId,

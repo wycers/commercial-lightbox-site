@@ -13,19 +13,23 @@ import {
   emailHref,
   fuelPriceBoardUrl,
   phoneHref,
-  serviceArea,
   siteName,
   siteUrl,
 } from "../lib/site";
 
-const title = "Commercial Lightbox Signs WA | Perth Lightbox Signage";
+const title = "Commercial Lightbox Signs Australia | Perth-Based Signage";
 const description =
-  "Custom commercial lightbox signs for Perth and regional WA businesses, including indoor, shopfront, menu, fascia, and outdoor lightboxes.";
+  "Perth-based commercial lightbox sign design and fabrication with WA-wide installation, Australia-wide delivery, interstate engineer support, and a 1-year warranty.";
+
+const australiaCoverage = "Australia-wide design, fabrication, and delivery";
+const waInstallCoverage = "WA installation by our own crew";
+const interstateDelivery = "Engineer-led interstate delivery";
+const warrantyCoverage = "1-year warranty";
 
 const heroHighlights = [
-  ["WA service", `${serviceArea} scoping`],
-  ["Path", "Design to install"],
-  ["Reply", "Within 1 business day"],
+  ["Base", "Perth-based design and fabrication"],
+  ["WA install", "Own crew across Western Australia"],
+  ["Australia-wide", "Engineer support with partner installers"],
 ];
 
 const contactLinks = [
@@ -99,7 +103,7 @@ const projectScopes = [
   {
     title: "Shopfront fascia scope",
     image: conceptImages.shopfront,
-    scope: "For cafes, clinics, retail tenancies, and street-facing services.",
+    scope: "For cafes, clinics, retail tenancies, and street-facing services across WA and interstate sites.",
   },
   {
     title: "Indoor reception scope",
@@ -109,18 +113,18 @@ const projectScopes = [
   {
     title: "Cabinet and service scope",
     image: conceptImages.detail,
-    scope: "For material choice, lighting layout, and future service access.",
+    scope: "For material choice, lighting layout, delivery path, warranty, and future service access.",
   },
 ];
 
 const priceGuidance = [
   {
     title: "Scope and inclusions",
-    copy: "Type, size, cabinet, face, fabrication, and install.",
+    copy: "Design, type, size, cabinet, face, fabrication, delivery, and install path.",
   },
   {
     title: "Variables and exclusions",
-    copy: "Access, electrical work, artwork redraw, approvals, travel, and wall conditions.",
+    copy: "Access, electrical work, artwork redraw, approvals, travel, partner install coordination, and wall conditions.",
   },
   {
     title: "Follow-up path",
@@ -143,7 +147,7 @@ const quoteFactors = [
   },
   {
     title: "Timing and approvals",
-    copy: "Artwork, tenancy rules, landlord approval, travel, and permits.",
+    copy: "Artwork, tenancy rules, landlord approval, engineer attendance, travel, and permits.",
   },
 ];
 
@@ -158,7 +162,7 @@ const materialCareItems = [
   },
   {
     title: "Warranty and support",
-    copy: "Terms, exclusions, response path, and handover notes.",
+    copy: "1-year warranty, terms, exclusions, response path, and handover notes.",
   },
   {
     title: "Maintenance path",
@@ -170,25 +174,28 @@ const processSteps = [
   {
     phase: "Enquiry",
     timing: "1 business day",
-    copy: "Send the basics. Photos and artwork can follow.",
+    copy: "Send the basics, including whether the site is in WA or interstate. Photos and artwork can follow.",
   },
   {
     phase: "Scope and quote",
     timing: "After site details",
-    copy: "Confirm material, access, power, approvals, and timing.",
+    copy: "Confirm design, material, access, power, approvals, timing, and the WA or interstate install path.",
   },
   {
     phase: "Build and install",
     timing: "Typically a few weeks",
-    copy: "Fabricate, install, test illumination, and hand over.",
+    copy: "Fabricate in Perth, install across WA with our crew, or send an engineer to work with partner installers in other Australian regions.",
   },
 ];
 
 const identityRows = [
   ["Business", businessName],
-  ["Coverage", serviceArea],
+  ["Base", "Perth"],
+  ["Coverage", australiaCoverage],
+  ["WA install", waInstallCoverage],
+  ["Other regions", interstateDelivery],
+  ["Warranty", warrantyCoverage],
   ["Response", "Quote response within 1 business day"],
-  ["Quote path", "Design, fabricate, install"],
   ...(contactPhone ? [["Phone", contactPhone]] : []),
   ...(contactEmail ? [["Email", contactEmail]] : []),
   ...(businessAbn ? [["ABN", businessAbn]] : []),
@@ -216,7 +223,17 @@ const faqs = [
   {
     question: "Do you handle installation?",
     answer:
-      "Yes. The path can include survey, design coordination, fabrication, install, testing, and handover.",
+      "Yes. We install across WA with our own crew. For other Australian regions, our engineer can attend site and work with partner installers to deliver the finished sign.",
+  },
+  {
+    question: "Do you only work in WA?",
+    answer:
+      "No. We are based in Perth, but we can provide design, fabrication, and delivery support Australia-wide.",
+  },
+  {
+    question: "Is there a warranty?",
+    answer:
+      "Yes. Completed signs include a 1-year warranty, with terms and support details confirmed in the written quote.",
   },
   {
     question: "How long does a custom lightbox usually take?",
@@ -241,7 +258,10 @@ const serviceJsonLd = {
       name: businessProfile.tradingName,
       legalName: businessProfile.legalName,
       url: siteUrl,
-      areaServed: serviceArea,
+      areaServed: {
+        "@type": "Country",
+        name: "Australia",
+      },
       image: absoluteUrl("/images/commercial-lightbox-hero.png"),
       ...(contactPhone ? { telephone: contactPhone } : {}),
       ...(contactEmail ? { email: contactEmail } : {}),
@@ -262,13 +282,13 @@ const serviceJsonLd = {
     {
       "@type": "Service",
       "@id": `${siteUrl}/#commercial-lightbox-service`,
-      name: "Custom commercial lightbox signs for WA businesses",
+      name: "Custom commercial lightbox signs for Australian businesses",
       description,
       serviceType:
         "Commercial lightbox sign design, fabrication, installation, testing, and aftercare",
       areaServed: {
-        "@type": "AdministrativeArea",
-        name: "Western Australia",
+        "@type": "Country",
+        name: "Australia",
       },
       provider: {
         "@id": localBusinessId,
@@ -401,16 +421,17 @@ const serviceJsonLd = {
       <div class="relative z-10 mx-auto w-full max-w-6xl pt-12">
         <div class="max-w-3xl" data-reveal>
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-200">
-            Custom illuminated signage in WA
+            Perth-based signage, Australia-wide
           </p>
           <h1
             class="mt-5 text-balance text-5xl font-semibold leading-[1.02] tracking-normal text-white sm:text-6xl lg:text-7xl"
           >
-            Custom lightbox signs for WA businesses
+            Custom lightbox signs for businesses across Australia
           </h1>
           <p class="mt-6 max-w-2xl text-pretty text-lg leading-8 text-white/82">
-            Indoor, shopfront, menu, fascia, and outdoor lightboxes scoped,
-            fabricated, and installed across WA.
+            Indoor, shopfront, menu, fascia, and outdoor lightboxes designed
+            and fabricated from Perth. We install across WA with our own crew
+            and support interstate projects on site with partner installers.
           </p>
           <div class="mt-9 flex flex-wrap gap-3">
             <a
@@ -493,7 +514,7 @@ const serviceJsonLd = {
           <SectionHeader
             kicker="What we make"
             title="Lightbox formats for commercial sites."
-            copy="Choose the closest fit. We can combine shopfront, indoor, menu, and outdoor requirements in one quote."
+            copy="Choose the closest fit. We can combine design, fabrication, delivery, and installation requirements in one quote."
           />
         </div>
         <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -541,7 +562,7 @@ const serviceJsonLd = {
           <SectionHeader
             kicker="Common project scopes"
             title="Typical starting points."
-            copy="Concept images only. Approved project photography can replace them later."
+            copy="Concept images only. We can scope WA installs with our own crew and interstate delivery with engineer-led partner installers."
           />
         </div>
         <div class="mt-12 grid gap-5 lg:grid-cols-3">
@@ -589,7 +610,8 @@ const serviceJsonLd = {
             Clear inclusions, no hidden assumptions.
           </h2>
           <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
-            The quote should separate confirmed scope from site-dependent items.
+            The quote should separate confirmed scope, delivery path, install
+            assumptions, and warranty terms from site-dependent items.
           </p>
         </div>
         <div class="grid gap-4">
@@ -660,7 +682,7 @@ const serviceJsonLd = {
           <SectionHeader
             kicker="Materials and support"
             title="Built details worth specifying."
-            copy="Cabinet, face, lighting, warranty, and maintenance access belong in the quote."
+            copy="Cabinet, face, lighting, the 1-year warranty, and maintenance access belong in the quote."
           />
         </div>
         <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -695,7 +717,8 @@ const serviceJsonLd = {
               A direct path to install.
             </h2>
             <p class="mt-5 text-pretty text-lg leading-8 text-white/72">
-              Artwork, access, approvals, travel, and power shape timing.
+              Artwork, access, approvals, travel, engineer attendance, and
+              power shape timing.
             </p>
           </div>
           <div class="grid gap-4">
@@ -813,15 +836,16 @@ const serviceJsonLd = {
             Send the basics.
           </h2>
           <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
-            Rough size, location, sign type, and timing. Photos and artwork can
-            follow.
+            Rough size, location, sign type, and timing. Tell us whether the
+            site is in WA or interstate, and photos or artwork can follow.
           </p>
           <dl class="mt-9 grid gap-4 text-sm text-stone-700">
             {
               [
                 ["Response", "1 business day"],
-                ["Coverage", serviceArea],
-                ["Path", "Design, fabricate, install"],
+                ["Coverage", australiaCoverage],
+                ["WA install", waInstallCoverage],
+                ["Warranty", warrantyCoverage],
               ].map(([label, value]) => (
                 <div class="rounded-lg bg-white/72 px-4 py-3 shadow-[inset_3px_0_0_rgba(242,163,58,0.62),0_0_0_1px_rgba(255,255,255,0.78),0_1px_2px_rgba(0,0,0,0.04),0_18px_42px_rgba(92,59,19,0.08)] backdrop-blur">
                   <dt class="font-mono text-xs uppercase tracking-[0.16em] text-teal-800">

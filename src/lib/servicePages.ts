@@ -55,22 +55,22 @@ export type ServicePageData = {
 const standardProcessSteps = [
   {
     title: "Share the site",
-    copy: "Send photos, rough dimensions, location, artwork, indoor or outdoor use, and timing needs.",
+    copy: "Send photos, rough dimensions, location, artwork, indoor or outdoor use, and timing needs. Include whether the site is in WA or interstate.",
   },
   {
     title: "Confirm the scope",
-    copy: "Review materials, visibility, mounting, access, power, approvals, and any survey requirements.",
+    copy: "Review design, materials, visibility, mounting, access, power, approvals, engineer attendance, and any survey requirements.",
   },
   {
     title: "Build and install",
-    copy: "Fabricate the cabinet and face, install on site, test illumination, and hand over support notes.",
+    copy: "Fabricate the cabinet and face in Perth. Our own crew covers WA installs; outside WA, our engineer can attend site and coordinate with partner installers.",
   },
 ];
 
 const standardMaintenanceNotes = [
   {
     title: "Written scope",
-    copy: "Warranty, service access, cleaning guidance, and support assumptions should be confirmed in the written quote before fabrication.",
+    copy: "Completed signs include a 1-year warranty. Warranty terms, service access, cleaning guidance, and support assumptions should be confirmed in the written quote before fabrication.",
   },
   {
     title: "Service access",
@@ -81,14 +81,15 @@ const standardMaintenanceNotes = [
 export const servicePages: ServicePageData[] = [
   {
     slug: "shopfront-lightbox-signs-perth",
-    title: "Shopfront Lightbox Signs Perth | Commercial Lightbox",
+    title:
+      "Shopfront Lightbox Signs Perth & Australia-Wide | Commercial Lightbox",
     description:
-      "Shopfront lightbox signs for Perth and WA businesses, including fascia, wall-mounted, and window-facing illuminated signage.",
+      "Perth-based shopfront lightbox sign design and fabrication with WA-wide installation and Australia-wide delivery support.",
     canonicalPath: "/shopfront-lightbox-signs-perth",
     eyebrow: "Shopfront signage",
-    h1: "Shopfront lightbox signs for Perth businesses",
+    h1: "Shopfront lightbox signs for Australian businesses",
     intro:
-      "Street-facing lightboxes need to work from the footpath, the road approach, and the shopfront itself. Scope the cabinet, face, mounting, artwork, access, and night visibility before fabrication.",
+      "Street-facing lightboxes need to work from the footpath, the road approach, and the shopfront itself. Based in Perth, we scope the cabinet, face, mounting, artwork, access, and delivery path before fabrication.",
     serviceType:
       "Shopfront lightbox sign design, fabrication, and installation",
     quoteCtaLabel: "Get a shopfront lightbox quote",
@@ -186,7 +187,7 @@ export const servicePages: ServicePageData[] = [
       {
         question: "Do you install the finished shopfront sign?",
         answer:
-          "Installation can be included with fixing, access, power coordination, illumination testing, and handover notes.",
+          "Yes. Our own crew installs across WA. For other Australian regions, our engineer can attend site and coordinate with partner installers.",
       },
     ],
     relatedLinks: [
@@ -197,9 +198,10 @@ export const servicePages: ServicePageData[] = [
   },
   {
     slug: "indoor-lightbox-signs",
-    title: "Indoor Lightbox Signs | Retail and Reception Signage WA",
+    title:
+      "Indoor Lightbox Signs | Australia-Wide Retail and Reception Signage",
     description:
-      "Indoor lightbox signs for receptions, retail interiors, brand walls, showrooms, and commercial fit-outs in WA.",
+      "Indoor lightbox signs for receptions, retail interiors, brand walls, showrooms, and commercial fit-outs across Australia.",
     canonicalPath: "/indoor-lightbox-signs",
     eyebrow: "Indoor signage",
     h1: "Indoor lightbox signs for retail and reception spaces",
@@ -315,12 +317,12 @@ export const servicePages: ServicePageData[] = [
   },
   {
     slug: "outdoor-lightbox-signs",
-    title: "Outdoor Lightbox Signs WA | Weather-Aware Signage",
+    title: "Outdoor Lightbox Signs Australia | Weather-Aware Signage",
     description:
-      "Outdoor lightbox signs for WA shopfronts, commercial walls, fascia zones, and exposed business signage.",
+      "Outdoor lightbox signs for Australian shopfronts, commercial walls, fascia zones, and exposed business signage.",
     canonicalPath: "/outdoor-lightbox-signs",
     eyebrow: "Outdoor signage",
-    h1: "Outdoor lightbox signs for WA commercial sites",
+    h1: "Outdoor lightbox signs for Australian commercial sites",
     intro:
       "Outdoor signs need more than a bright face. Exposure, fixing, cabinet depth, drainage, UV, service access, and power coordination should all be resolved before the sign is built.",
     serviceType: "Outdoor lightbox sign design, fabrication, and installation",
@@ -346,8 +348,8 @@ export const servicePages: ServicePageData[] = [
         copy: "Sign cabinets sized around tenancy bands, pedestrian visibility, and approach distance.",
       },
       {
-        title: "Regional WA sites",
-        copy: "Projects scoped around travel, access, exposure, and site-specific installation constraints.",
+        title: "WA and interstate sites",
+        copy: "Projects scoped around travel, engineer attendance, access, exposure, partner installers, and site-specific constraints.",
       },
     ],
     quoteFactors: [
@@ -412,9 +414,9 @@ export const servicePages: ServicePageData[] = [
           "Often, but the wall condition, backing, fixing method, cable path, and access requirements need to be checked.",
       },
       {
-        question: "Are outdoor lightboxes suitable for regional WA?",
+        question: "Can you support regional or interstate projects?",
         answer:
-          "Yes. Regional projects need travel, access, site photos, install conditions, and timing included in the quote scope.",
+          "Yes. WA installs can be handled by our own crew. For other Australian regions, our engineer can attend site and coordinate with partner installers.",
       },
       {
         question: "What information helps the fastest?",
@@ -436,9 +438,9 @@ export const servicePages: ServicePageData[] = [
   },
   {
     slug: "menu-lightbox-signs",
-    title: "Menu Lightbox Signs | Food Court and Counter Signage WA",
+    title: "Menu Lightbox Signs | Australia-Wide Counter Signage",
     description:
-      "Menu lightbox signs for food courts, counters, retail menus, and close-viewing illuminated displays in WA.",
+      "Menu lightbox signs for food courts, counters, retail menus, and close-viewing illuminated displays across Australia.",
     canonicalPath: "/menu-lightbox-signs",
     eyebrow: "Menu signage",
     h1: "Menu lightbox signs for food courts and counters",

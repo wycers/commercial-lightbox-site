@@ -1,6 +1,6 @@
 # Commercial Lightbox
 
-Astro landing site for custom commercial lightbox signage in Western Australia.
+Astro landing site for Perth-based custom commercial lightbox signage with Australia-wide design, fabrication, and delivery support.
 
 ## Environment
 
@@ -12,7 +12,7 @@ TELEGRAM_CHAT_ID=your_chat_id
 PUBLIC_SITE_URL=https://your-a-site.example
 PUBLIC_B_SITE_URL=https://your-fuel-price-board-site.example
 PUBLIC_BUSINESS_NAME="Your business name"
-PUBLIC_SERVICE_AREA="Perth + regional WA"
+PUBLIC_SERVICE_AREA="Australia-wide"
 PUBLIC_CONTACT_PHONE="+61 ..."
 PUBLIC_CONTACT_EMAIL=quotes@example.com
 PUBLIC_BUSINESS_ABN="..."

@@ -25,7 +25,7 @@ export const businessName =
   readEnv("PUBLIC_BUSINESS_NAME", "NEXT_PUBLIC_BUSINESS_NAME") || companyName;
 export const serviceArea =
   readEnv("PUBLIC_SERVICE_AREA", "NEXT_PUBLIC_SERVICE_AREA") ||
-  "Perth + regional WA";
+  "Australia-wide";
 export const contactPhone =
   readEnv("PUBLIC_CONTACT_PHONE", "NEXT_PUBLIC_CONTACT_PHONE") || "";
 export const contactEmail =

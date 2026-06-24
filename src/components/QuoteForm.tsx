@@ -401,15 +401,10 @@ export default function QuoteForm() {
         className="rounded-lg bg-teal-50 p-6 text-center shadow-[0_0_0_1px_rgba(15,118,110,0.18),0_12px_32px_rgba(15,118,110,0.12)]"
       >
         <span className="block text-lg font-semibold text-teal-900">
-          Thank you. We will be in touch within one business day.
+          Thank you. We will reply within one business day.
         </span>
         <span className="mt-2 block text-sm leading-6 text-teal-800">
-          We will use your details only to respond to this quote request and
-          clarify the site scope.
-        </span>
-        <span className="mt-2 block text-sm leading-6 text-teal-800">
-          If site photos, logo files, or artwork are useful, you can send them
-          during the follow-up reply.
+          Photos or artwork can follow if they help the scope.
         </span>
       </output>
     );
@@ -429,9 +424,7 @@ export default function QuoteForm() {
       <div className="rounded-lg bg-stone-50 p-4 text-sm leading-6 text-stone-600 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]">
         <p className="font-semibold text-stone-950">What happens next</p>
         <p className="mt-1 text-pretty">
-          Share what you know now. We will reply within one business day with
-          the next scope questions, pricing assumptions, survey steps, and the
-          best way to send photos or artwork if they are needed.
+          Share what you know now. We will reply with the cleanest next step.
         </p>
         {contactLinks.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -585,7 +578,7 @@ export default function QuoteForm() {
           Contact details <span className="text-red-700">*</span>
         </legend>
         <p id="contact-help" className="text-sm text-stone-600">
-          Provide an email address or a phone number. Both are welcome.
+          Email or phone is enough.
         </p>
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
@@ -679,7 +672,7 @@ export default function QuoteForm() {
           value={fields.message}
           onChange={handleChange}
           className={inputClass}
-          placeholder="Mention the rough size, sign position, power access, approvals, timing, and whether site photos or artwork are ready to send in the follow-up."
+          placeholder="Size, sign position, power, approvals, timing, files ready to send."
         />
       </div>
 

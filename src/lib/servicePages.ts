@@ -7,6 +7,7 @@ export type ServicePageData = {
   h1: string;
   intro: string;
   serviceType: string;
+  quoteCtaLabel: string;
   image: {
     src: string;
     alt: string;
@@ -90,9 +91,10 @@ export const servicePages: ServicePageData[] = [
       "Street-facing lightboxes need to work from the footpath, the road approach, and the shopfront itself. Scope the cabinet, face, mounting, artwork, access, and night visibility before fabrication.",
     serviceType:
       "Shopfront lightbox sign design, fabrication, and installation",
+    quoteCtaLabel: "Get a shopfront lightbox quote",
     image: {
-      src: "/images/commercial-lightbox-shopfront-placeholder.png",
-      alt: "Illuminated shopfront lightbox sign concept on a modern commercial frontage",
+      src: "/images/commercial-lightbox-scope-shopfront-cafe.png",
+      alt: "AI-generated concept image of an illuminated shopfront lightbox sign on a modern cafe frontage",
     },
     fitTitle: "Where shopfront lightboxes fit",
     fitIntro:
@@ -204,9 +206,10 @@ export const servicePages: ServicePageData[] = [
     intro:
       "Indoor lightboxes need controlled brightness, clean edges, quiet cable paths, and materials that suit close viewing. The result should look tidy in daylight and stay evenly lit after hours.",
     serviceType: "Indoor lightbox sign design, fabrication, and installation",
+    quoteCtaLabel: "Get an indoor lightbox quote",
     image: {
-      src: "/images/commercial-lightbox-indoor-placeholder.png",
-      alt: "Indoor commercial lightbox sign concept in a reception setting",
+      src: "/images/commercial-lightbox-scope-indoor-reception.png",
+      alt: "AI-generated concept image of an indoor reception lightbox sign in a commercial fit-out",
     },
     fitTitle: "Where indoor lightboxes work well",
     fitIntro:
@@ -321,9 +324,10 @@ export const servicePages: ServicePageData[] = [
     intro:
       "Outdoor signs need more than a bright face. Exposure, fixing, cabinet depth, drainage, UV, service access, and power coordination should all be resolved before the sign is built.",
     serviceType: "Outdoor lightbox sign design, fabrication, and installation",
+    quoteCtaLabel: "Get an outdoor lightbox quote",
     image: {
-      src: "/images/commercial-lightbox-shopfront-placeholder.png",
-      alt: "Outdoor illuminated commercial lightbox sign concept on a shopfront wall",
+      src: "/images/commercial-lightbox-scope-outdoor-fascia.png",
+      alt: "AI-generated concept image of an outdoor fascia lightbox sign on a commercial frontage",
     },
     fitTitle: "Where outdoor lightboxes fit",
     fitIntro:
@@ -426,7 +430,7 @@ export const servicePages: ServicePageData[] = [
       { label: "Indoor lightbox signs", href: "/indoor-lightbox-signs" },
       {
         label: "Fuel price board signage",
-        href: "/case-studies/fuel-price-boards",
+        href: "/guides/fuel-price-boards",
       },
     ],
   },
@@ -441,9 +445,10 @@ export const servicePages: ServicePageData[] = [
     intro:
       "Menu lightboxes need clear reading distance, controlled brightness, clean face changes, and tidy cabinet details. The goal is legibility without glare for customers waiting nearby.",
     serviceType: "Menu lightbox sign design, fabrication, and installation",
+    quoteCtaLabel: "Get a menu lightbox quote",
     image: {
-      src: "/images/commercial-lightbox-indoor-placeholder.png",
-      alt: "Indoor menu lightbox sign concept in a commercial interior",
+      src: "/images/commercial-lightbox-scope-menu-board.png",
+      alt: "AI-generated concept image of illuminated menu lightbox panels above a takeaway counter",
     },
     fitTitle: "Where menu lightboxes fit",
     fitIntro:

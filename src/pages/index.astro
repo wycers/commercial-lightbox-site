@@ -4,9 +4,10 @@ import QuoteForm from "../components/QuoteForm";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { Send } from "lucide-react";
 import {
+  absoluteUrl,
   businessAbn,
   businessName,
-  companyName,
+  businessProfile,
   contactEmail,
   contactPhone,
   emailHref,
@@ -44,18 +45,26 @@ const contactLinks = [
     : null,
 ].filter(Boolean) as Array<{ label: string; value: string; href: string }>;
 
-const placeholderImages = {
+const conceptImages = {
   shopfront: {
-    src: "/images/commercial-lightbox-shopfront-placeholder.png",
-    alt: "Illuminated shopfront lightbox sign concept on a modern commercial frontage",
+    src: "/images/commercial-lightbox-scope-shopfront-cafe.png",
+    alt: "AI-generated concept image of an illuminated shopfront lightbox sign on a modern cafe frontage",
   },
   indoor: {
-    src: "/images/commercial-lightbox-indoor-placeholder.png",
-    alt: "Indoor commercial lightbox sign concept in a reception setting",
+    src: "/images/commercial-lightbox-scope-indoor-reception.png",
+    alt: "AI-generated concept image of an indoor reception lightbox sign in a commercial reception fit-out",
+  },
+  outdoor: {
+    src: "/images/commercial-lightbox-scope-outdoor-fascia.png",
+    alt: "AI-generated concept image of an outdoor fascia lightbox sign on a commercial frontage",
+  },
+  menu: {
+    src: "/images/commercial-lightbox-scope-menu-board.png",
+    alt: "AI-generated concept image of illuminated menu lightbox panels above a takeaway counter",
   },
   detail: {
-    src: "/images/commercial-lightbox-detail-placeholder.png",
-    alt: "Commercial lightbox cabinet detail showing diffuser, LEDs, and aluminium housing",
+    src: "/images/commercial-lightbox-cabinet-detail.png",
+    alt: "AI-generated concept detail image of a lightbox cabinet with diffuser face, LEDs, and aluminium housing",
   },
 };
 
@@ -63,74 +72,74 @@ const serviceCards = [
   {
     title: "Shopfront lightbox signs",
     href: "/shopfront-lightbox-signs-perth",
-    image: placeholderImages.shopfront,
+    image: conceptImages.shopfront,
     copy: "Fascia, wall-mounted, and window-facing signs planned for street visibility, structure, weather, and access.",
   },
   {
     title: "Indoor lightbox signs",
     href: "/indoor-lightbox-signs",
-    image: placeholderImages.indoor,
+    image: conceptImages.indoor,
     copy: "Reception, brand wall, showroom, and retail interior lightboxes with clean finishes and comfortable brightness.",
   },
   {
     title: "Outdoor lightbox signs",
     href: "/outdoor-lightbox-signs",
-    image: placeholderImages.shopfront,
+    image: conceptImages.outdoor,
     copy: "Weather-aware illuminated cabinets for exposed shopfronts, commercial walls, and mixed-use sites.",
   },
   {
     title: "Menu lightbox signs",
     href: "/menu-lightbox-signs",
-    image: placeholderImages.indoor,
+    image: conceptImages.menu,
     copy: "Food court, counter, and menu lightboxes that stay readable up close without overpowering queues or seating.",
   },
 ];
 
-const exampleProjects = [
+const projectScopes = [
   {
-    title: "Shopfront fascia lightbox",
-    image: placeholderImages.shopfront,
-    scope: "Illustrative example for street-facing tenancy signage",
+    title: "Shopfront fascia scope",
+    image: conceptImages.shopfront,
+    scope: "A common starting point for cafes, clinics, retail tenancies, and street-facing service businesses.",
     details: [
-      "Future case fields: suburb or industry",
-      "Rough sign size and cabinet depth",
-      "Mounting, access, and power notes",
+      "Useful inputs: frontage photo, rough width, fascia position",
+      "Quote checks: cabinet depth, fixings, access, power path",
+      "Outcome to define: daytime clarity and night visibility",
     ],
   },
   {
-    title: "Indoor reception lightbox",
-    image: placeholderImages.indoor,
-    scope: "Illustrative example for close-viewing interior signage",
+    title: "Indoor reception scope",
+    image: conceptImages.indoor,
+    scope: "A typical enquiry for lobbies, clinics, offices, showrooms, and customer-facing fit-outs.",
     details: [
-      "Future case fields: fit-out finish",
-      "Face material and brightness notes",
-      "Cleaning and service access notes",
+      "Useful inputs: wall photo, logo file, fit-out finish",
+      "Quote checks: brightness, face material, edge detail",
+      "Outcome to define: clean finish without close-range glare",
     ],
   },
   {
-    title: "Cabinet and face detail",
-    image: placeholderImages.detail,
-    scope: "Illustrative example for material and maintenance scoping",
+    title: "Cabinet and service scope",
+    image: conceptImages.detail,
+    scope: "A practical scope path for material choices, lighting layout, and future maintenance access.",
     details: [
-      "Future case fields: face material",
-      "LED, diffuser, and service access notes",
-      "Warranty and support assumptions",
+      "Useful inputs: sign size, indoor/outdoor use, access limits",
+      "Quote checks: LEDs, diffuser, cabinet finish, service access",
+      "Outcome to define: written assumptions and support path",
     ],
   },
 ];
 
 const priceGuidance = [
   {
-    title: "First reply gives direction",
-    copy: "When photos, rough dimensions, location, and sign type are supplied, the first reply can outline a practical pricing path or the next scope questions.",
+    title: "Scope and inclusions",
+    copy: "The written quote should list the sign type, approximate size, cabinet approach, face material, fabrication scope, and install assumptions.",
   },
   {
-    title: "Formal quotes are site-specific",
-    copy: "Final pricing is confirmed after material, cabinet size, artwork, access, power, travel, approvals, and installation assumptions are clear.",
+    title: "Variables and exclusions",
+    copy: "Access equipment, electrical trade work, artwork redraw, approvals, regional travel, and unusual wall conditions should be named before fabrication.",
   },
   {
-    title: "No hidden generic size chart",
-    copy: "Two signs with the same face size can price differently when wall condition, weather exposure, service access, or electrical coordination changes.",
+    title: "Follow-up path",
+    copy: "If photos or artwork are easier to send later, the first reply can confirm the best next step by email or phone without forcing a full brief upfront.",
   },
 ];
 
@@ -176,7 +185,7 @@ const processSteps = [
   {
     phase: "Enquiry",
     timing: "1 business day",
-    copy: "Send the sign type, rough size, site location, photos, artwork, and timing needs.",
+    copy: "Share the sign type, rough size, site location, and timing needs. Photos and artwork can follow by email if needed.",
   },
   {
     phase: "Scope and quote",
@@ -278,27 +287,52 @@ const faqs = [
   },
 ];
 
+const localBusinessId = `${siteUrl}/#business`;
+
 const serviceJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Custom commercial lightbox signs for WA businesses",
-  description,
-  serviceType:
-    "Commercial lightbox sign design, fabrication, installation, testing, and aftercare",
-  areaServed: {
-    "@type": "AdministrativeArea",
-    name: "Western Australia",
-  },
-  provider: {
-    "@type": "LocalBusiness",
-    name: businessName || companyName,
-    url: siteUrl,
-    areaServed: serviceArea,
-    ...(contactPhone ? { telephone: contactPhone } : {}),
-    ...(contactEmail ? { email: contactEmail } : {}),
-    ...(businessAbn ? { identifier: businessAbn } : {}),
-  },
-  url: siteUrl,
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": localBusinessId,
+      name: businessProfile.tradingName,
+      legalName: businessProfile.legalName,
+      url: siteUrl,
+      areaServed: serviceArea,
+      image: absoluteUrl("/images/commercial-lightbox-hero.png"),
+      ...(contactPhone ? { telephone: contactPhone } : {}),
+      ...(contactEmail ? { email: contactEmail } : {}),
+      ...(businessAbn ? { identifier: businessAbn } : {}),
+      ...(businessProfile.sameAs?.length
+        ? { sameAs: businessProfile.sameAs }
+        : {}),
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      name: siteName,
+      url: siteUrl,
+      publisher: {
+        "@id": localBusinessId,
+      },
+    },
+    {
+      "@type": "Service",
+      "@id": `${siteUrl}/#commercial-lightbox-service`,
+      name: "Custom commercial lightbox signs for WA businesses",
+      description,
+      serviceType:
+        "Commercial lightbox sign design, fabrication, installation, testing, and aftercare",
+      areaServed: {
+        "@type": "AdministrativeArea",
+        name: "Western Australia",
+      },
+      provider: {
+        "@id": localBusinessId,
+      },
+      url: siteUrl,
+    },
+  ],
 };
 ---
 
@@ -387,7 +421,7 @@ const serviceJsonLd = {
               href="#price-guidance"
               class="hidden transition-[color] hover:text-white sm:inline"
             >
-              Pricing
+              Quote
             </a>
             <a
               href="#process"
@@ -484,94 +518,27 @@ const serviceJsonLd = {
     </section>
 
     <section
-      id="examples"
-      class="bg-white px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+      id="local-trust"
+      class="bg-white px-4 py-10 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset,0_1px_0_rgba(0,0,0,0.06)_inset]"
     >
-      <div class="mx-auto max-w-6xl">
-        <div data-reveal>
-          <SectionHeader
-            kicker="Example project scopes"
-            title="The kind of evidence future real case studies should show."
-            copy="These are illustrative examples using placeholder images. Replace them with owned project photos when real customer work can be shown publicly."
-          />
-        </div>
-        <div class="mt-12 grid gap-5 lg:grid-cols-3">
-          {
-            exampleProjects.map((item, index) => (
-              <article
-                class="overflow-hidden rounded-lg bg-stone-50 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_16px_42px_rgba(0,0,0,0.07)]"
-                data-reveal
-                data-reveal-delay={String(Math.min(index + 1, 4))}
-              >
-                <img
-                  src={item.image.src}
-                  alt={item.image.alt}
-                  loading="lazy"
-                  decoding="async"
-                  width="1536"
-                  height="1024"
-                  class="aspect-[16/10] w-full object-cover outline outline-1 -outline-offset-1 outline-black/10"
-                />
-                <div class="p-6">
-                  <p class="text-xs font-bold uppercase tracking-[0.16em] text-amber-700">
-                    Illustrative example
-                  </p>
-                  <h3 class="mt-3 text-xl font-semibold text-stone-950">
-                    {item.title}
-                  </h3>
-                  <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
-                    {item.scope}
-                  </p>
-                  <ul class="mt-5 divide-y divide-stone-200 text-sm leading-6 text-stone-700">
-                    {item.details.map((detail) => (
-                      <li class="py-2 first:pt-0 last:pb-0">
-                        {detail}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
-    <section id="price-guidance" class="bg-[#f3efe7] px-4 py-20">
-      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
-        <div data-reveal>
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
-            Price guidance
-          </p>
-          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
-            A useful pricing conversation starts with site details, not a
-            made-up size chart.
-          </h2>
-          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
-            We are not publishing unverified starting prices here. Instead, the
-            first reply should give a practical range or the exact scope
-            questions needed to prepare a written quote.
-          </p>
-        </div>
-        <div class="grid gap-4">
-          {
-            priceGuidance.map((item, index) => (
-              <article
-                class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_36px_rgba(0,0,0,0.06)]"
-                data-reveal
-                data-reveal-delay={String(Math.min(index + 1, 4))}
-              >
-                <h3 class="text-xl font-semibold text-stone-950">
-                  {item.title}
-                </h3>
-                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
-                  {item.copy}
-                </p>
-              </article>
-            ))
-          }
-        </div>
-      </div>
+      <dl class="mx-auto grid max-w-6xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          identityRows.map(([label, value], index) => (
+            <div
+              class="rounded-lg bg-stone-50 p-4 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]"
+              data-reveal
+              data-reveal-delay={String(Math.min(index + 1, 4))}
+            >
+              <dt class="text-xs font-bold uppercase tracking-[0.16em] text-teal-800">
+                {label}
+              </dt>
+              <dd class="mt-2 text-sm font-semibold text-stone-950">
+                {value}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
     </section>
 
     <section
@@ -622,6 +589,96 @@ const serviceJsonLd = {
       </div>
     </section>
 
+    <section
+      id="examples"
+      class="bg-white px-4 py-20 shadow-[0_-1px_0_rgba(0,0,0,0.06)_inset]"
+    >
+      <div class="mx-auto max-w-6xl">
+        <div data-reveal>
+          <SectionHeader
+            kicker="Common project scopes"
+            title="Typical lightbox conversations before a formal quote."
+            copy="These concept images show common scope patterns, not completed customer work. Real project photos can replace them when approved photography is available."
+          />
+        </div>
+        <div class="mt-12 grid gap-5 lg:grid-cols-3">
+          {
+            projectScopes.map((item, index) => (
+              <article
+                class="overflow-hidden rounded-lg bg-stone-50 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_16px_42px_rgba(0,0,0,0.07)]"
+                data-reveal
+                data-reveal-delay={String(Math.min(index + 1, 4))}
+              >
+                <img
+                  src={item.image.src}
+                  alt={item.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                  width="1536"
+                  height="1024"
+                  class="aspect-[16/10] w-full object-cover outline outline-1 -outline-offset-1 outline-black/10"
+                />
+                <div class="p-6">
+                  <p class="text-xs font-bold uppercase tracking-[0.16em] text-amber-700">
+                    Concept scope
+                  </p>
+                  <h3 class="mt-3 text-xl font-semibold text-stone-950">
+                    {item.title}
+                  </h3>
+                  <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                    {item.scope}
+                  </p>
+                  <ul class="mt-5 divide-y divide-stone-200 text-sm leading-6 text-stone-700">
+                    {item.details.map((detail) => (
+                      <li class="py-2 first:pt-0 last:pb-0">
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="price-guidance" class="bg-[#f3efe7] px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+        <div data-reveal>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Quote inclusions
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            A useful lightbox quote should make the assumptions visible.
+          </h2>
+          <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
+            Before fabrication, the quote should explain what is included, what
+            still depends on the site, and which details may need another trade,
+            approval, or follow-up.
+          </p>
+        </div>
+        <div class="grid gap-4">
+          {
+            priceGuidance.map((item, index) => (
+              <article
+                class="rounded-lg bg-white p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_14px_36px_rgba(0,0,0,0.06)]"
+                data-reveal
+                data-reveal-delay={String(Math.min(index + 1, 4))}
+              >
+                <h3 class="text-xl font-semibold text-stone-950">
+                  {item.title}
+                </h3>
+                <p class="mt-3 text-pretty text-sm leading-7 text-stone-600">
+                  {item.copy}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
     <section id="quote-factors" class="bg-white px-4 py-20">
       <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
         <div class="grid gap-8" data-reveal>
@@ -632,8 +689,8 @@ const serviceJsonLd = {
           />
           <picture class="block overflow-hidden rounded-lg bg-stone-100 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_14px_38px_rgba(0,0,0,0.09)]">
             <img
-              src={placeholderImages.detail.src}
-              alt={placeholderImages.detail.alt}
+              src={conceptImages.detail.src}
+              alt={conceptImages.detail.alt}
               loading="lazy"
               decoding="async"
               width="1536"
@@ -846,7 +903,7 @@ const serviceJsonLd = {
                 {faq.question === "What if I also need a fuel price board?" && (
                   <div class="mt-5 flex flex-wrap gap-4 text-sm font-bold">
                     <a
-                      href="/case-studies/fuel-price-boards"
+                      href="/guides/fuel-price-boards"
                       class="inline-flex min-h-10 items-center text-teal-800 underline decoration-teal-700/35 underline-offset-4 transition-[color,text-decoration-color] hover:text-stone-950 hover:decoration-stone-950"
                     >
                       Read the fuel board explainer
@@ -905,9 +962,9 @@ const serviceJsonLd = {
             Share the site details and we will scope the sign.
           </h2>
           <p class="mt-5 text-pretty text-lg leading-8 text-stone-600">
-            Send the rough size, location, indoor or outdoor sign type, and any
-            timing needs. If dimensions are not confirmed, photos and site
-            position are enough to start.
+            Use the form for the rough size, location, indoor or outdoor sign
+            type, and timing needs. Site photos, logo files, and artwork can
+            follow by email or phone during the first reply.
           </p>
           <dl class="mt-9 grid gap-4 text-sm text-stone-700">
             {

@@ -1,0 +1,195 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  absoluteUrl,
+  businessProfile,
+  fuelPriceBoardUrl,
+  siteName,
+  siteUrl,
+} from "../../lib/site";
+
+const title = `Fuel Price Board Signage Explainer | ${siteName}`;
+const openGraphTitle = "Fuel Price Board Signage Explainer";
+const description =
+  "An explainer for how custom illuminated signage capability extends into FuelWatch-ready LED fuel price boards for WA service stations.";
+const canonicalPath = "/guides/fuel-price-boards";
+
+const explainerJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: "Fuel price board signage explainer",
+  description:
+    "A specialist customer path explainer for weather-rated, FuelWatch-ready LED fuel price board signage.",
+  provider: {
+    "@type": "LocalBusiness",
+    name: businessProfile.tradingName,
+    legalName: businessProfile.legalName,
+    url: siteUrl,
+    ...(businessProfile.phone ? { telephone: businessProfile.phone } : {}),
+    ...(businessProfile.email ? { email: businessProfile.email } : {}),
+    ...(businessProfile.abn ? { identifier: businessProfile.abn } : {}),
+  },
+  url: absoluteUrl(canonicalPath),
+};
+
+const reasons = [
+  "Lightbox work focuses on cabinet, face, brand artwork, and illumination quality.",
+  "Fuel price boards add roadside legibility, digit modules, weather-rated electronics, and operator controls.",
+  "For WA stations, the dedicated product path can include FuelWatch-ready LED fuel price boards and site-specific board formats.",
+];
+
+const capabilities = [
+  [
+    "Visibility",
+    "LED digit height and contrast are chosen for approach distance and road position.",
+  ],
+  [
+    "Durability",
+    "Cabinet, sealing, and service access are specified for exposed forecourt conditions.",
+  ],
+  [
+    "Control",
+    "Operators need straightforward price updates, with FuelWatch-ready automation where applicable.",
+  ],
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  openGraphTitle={openGraphTitle}
+  openGraphDescription={description}
+  openGraphUrl={canonicalPath}
+>
+  <main class="bg-stone-50 text-stone-950">
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(explainerJsonLd)}
+    />
+    <section class="relative isolate overflow-hidden bg-stone-950 px-4 py-24 text-white">
+      <picture class="absolute inset-0 block h-full w-full opacity-40">
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/commercial-lightbox-hero-mobile.avif"
+          type="image/avif"
+        />
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/commercial-lightbox-hero-mobile.webp"
+          type="image/webp"
+        />
+        <source
+          srcset="/images/commercial-lightbox-hero-desktop.avif"
+          type="image/avif"
+        />
+        <source
+          srcset="/images/commercial-lightbox-hero-desktop.webp"
+          type="image/webp"
+        />
+        <img
+          src="/images/commercial-lightbox-hero.png"
+          alt=""
+          width="1672"
+          height="941"
+          fetchpriority="high"
+          decoding="async"
+          class="h-full w-full object-cover object-[62%_center]"
+        />
+      </picture>
+      <div
+        class="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,10,9,0.96)_0%,rgba(12,10,9,0.76)_56%,rgba(12,10,9,0.44)_100%)]"
+      >
+      </div>
+      <div class="relative z-10 mx-auto max-w-6xl">
+        <a
+          href="/"
+          class="inline-flex min-h-10 items-center text-sm font-bold text-amber-200 underline decoration-amber-200/40 underline-offset-4 transition-[color,text-decoration-color] hover:text-white hover:decoration-white"
+        >
+          Back to Commercial Lightbox
+        </a>
+        <p class="mt-12 text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+          Explainer
+        </p>
+        <h1 class="mt-4 max-w-3xl text-balance text-4xl font-semibold leading-[1.05] md:text-6xl">
+          Fuel price board signage for service stations.
+        </h1>
+        <p class="mt-6 max-w-2xl text-pretty text-lg leading-8 text-white/78">
+          Some commercial signage projects need more than a static illuminated
+          face. Petrol station operators need durable roadside LED displays,
+          readable pricing, and a clear path for FuelWatch-ready control. This
+          page explains the category rather than claiming a specific customer
+          installation.
+        </p>
+      </div>
+    </section>
+
+    <section class="px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-800">
+            Why it is separate
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            The same sign discipline, narrowed for fuel retail.
+          </h2>
+        </div>
+        <div class="grid gap-5">
+          {
+            reasons.map((item) => (
+              <p class="rounded-lg bg-white p-6 text-pretty leading-8 text-stone-600 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+                {item}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-4 py-20">
+      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-3">
+        {
+          capabilities.map(([capabilityTitle, copy]) => (
+            <article class="rounded-lg bg-stone-50 p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_32px_rgba(0,0,0,0.05)]">
+              <h2 class="text-xl font-semibold">{capabilityTitle}</h2>
+              <p class="mt-4 text-pretty leading-7 text-stone-600">{copy}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-stone-950 px-4 py-20 text-white">
+      <div class="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+            Next step
+          </p>
+          <h2 class="mt-3 text-balance text-3xl font-semibold md:text-4xl">
+            Need a standard lightbox or a fuel display?
+          </h2>
+          <p class="mt-5 max-w-2xl text-pretty text-lg leading-8 text-white/72">
+            Use Commercial Lightbox for custom illuminated shopfront signage.
+            For service station pricing, compare the specialist fuel price
+            board range.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/#quote"
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.26)] transition-[background-color,scale] hover:bg-amber-400 active:scale-[0.96]"
+          >
+            Request a lightbox quote
+          </a>
+          <a
+            href={`${fuelPriceBoardUrl}/products/fuel-price-board`}
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-white/10 px-6 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] transition-[background-color,scale] hover:bg-white/15 active:scale-[0.96]"
+          >
+            View fuel price board range
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

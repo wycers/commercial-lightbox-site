@@ -5,34 +5,37 @@ import { absoluteUrl } from "../lib/site";
 const routes = [
   {
     path: "/",
+    lastModified: "2026-06-24",
     changeFrequency: "monthly",
     priority: "1.0",
   },
   ...servicePages.map((page) => ({
     path: page.canonicalPath,
+    lastModified: "2026-06-24",
     changeFrequency: "monthly",
     priority: "0.8",
   })),
   {
-    path: "/case-studies/fuel-price-boards",
+    path: "/guides/fuel-price-boards",
+    lastModified: "2026-06-24",
     changeFrequency: "monthly",
     priority: "0.8",
   },
   {
     path: "/preview",
+    lastModified: "2026-06-24",
     changeFrequency: "monthly",
     priority: "0.7",
   },
 ];
 
 function renderSitemap() {
-  const lastModified = new Date().toISOString();
   const entries = routes
     .map(
       (route) => `
   <url>
     <loc>${absoluteUrl(route.path)}</loc>
-    <lastmod>${lastModified}</lastmod>
+    <lastmod>${route.lastModified}</lastmod>
     <changefreq>${route.changeFrequency}</changefreq>
     <priority>${route.priority}</priority>
   </url>`,

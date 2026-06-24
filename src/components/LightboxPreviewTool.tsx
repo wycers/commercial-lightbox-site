@@ -93,7 +93,6 @@ type SignTransform = {
 const LOGICAL_SIGN_WIDTH = 1000;
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 const MAX_EXPORT_EDGE = 1800;
-const MAX_QUOTE_PREVIEW_EDGE = 720;
 const TRANSFORMER_ANCHOR_SIZE = 14;
 const QUOTE_DRAFT_STORAGE_KEY = "lightboxPreviewQuoteDraft";
 const IMAGE_MIME_TYPES = new Set([
@@ -1294,11 +1293,6 @@ export default function LightboxPreviewTool() {
 
     try {
       const dimensionsLabel = `${dimensions.width} x ${dimensions.height} mm`;
-      const previewImageDataUrl = exportStageDataUrl(mode, {
-        maxEdge: MAX_QUOTE_PREVIEW_EDGE,
-        mimeType: "image/jpeg",
-        quality: 0.78,
-      });
       const summary = [
         "Preview tool design notes:",
         `Size: ${dimensionsLabel}`,
@@ -1314,7 +1308,6 @@ export default function LightboxPreviewTool() {
         QUOTE_DRAFT_STORAGE_KEY,
         JSON.stringify({
           dimensions: dimensionsLabel,
-          previewImageDataUrl,
           previewSummary: summary,
           designSummary: summary,
           dimensionsMm: {

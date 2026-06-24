@@ -33,13 +33,34 @@ export const contactEmail =
 export const businessAbn =
   readEnv("PUBLIC_BUSINESS_ABN", "NEXT_PUBLIC_BUSINESS_ABN") || "";
 
-export const siteUrl = trimTrailingSlash(
-  readEnv("PUBLIC_SITE_URL", "NEXT_PUBLIC_SITE_URL") || DEFAULT_SITE_URL,
-);
+const configuredSiteUrl = readEnv("PUBLIC_SITE_URL", "NEXT_PUBLIC_SITE_URL");
+
+if (!configuredSiteUrl && readEnv("VERCEL_ENV") === "production") {
+  throw new Error("PUBLIC_SITE_URL is required for production deployments.");
+}
+
+export const siteUrl = trimTrailingSlash(configuredSiteUrl || DEFAULT_SITE_URL);
 
 export const fuelPriceBoardUrl = trimTrailingSlash(
   readEnv("PUBLIC_B_SITE_URL", "NEXT_PUBLIC_B_SITE_URL") || DEFAULT_B_SITE_URL,
 );
+
+export const businessProfile = {
+  tradingName: businessName,
+  legalName:
+    readEnv("PUBLIC_LEGAL_BUSINESS_NAME", "NEXT_PUBLIC_LEGAL_BUSINESS_NAME") ||
+    businessName,
+  abn: businessAbn,
+  phone: contactPhone,
+  email: contactEmail,
+  serviceArea,
+  serviceAreas: [serviceArea],
+  url: siteUrl,
+  sameAs: readEnv("PUBLIC_BUSINESS_SAME_AS", "NEXT_PUBLIC_BUSINESS_SAME_AS")
+    ?.split(",")
+    .map((item) => item.trim())
+    .filter(Boolean),
+};
 
 export function absoluteUrl(path = "/") {
   if (/^https?:\/\//.test(path)) return trimTrailingSlash(path);

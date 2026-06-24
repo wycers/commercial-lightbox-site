@@ -407,6 +407,10 @@ export default function QuoteForm() {
           We will use your details only to respond to this quote request and
           clarify the site scope.
         </span>
+        <span className="mt-2 block text-sm leading-6 text-teal-800">
+          If site photos, logo files, or artwork are useful, you can send them
+          during the follow-up reply.
+        </span>
       </output>
     );
   }
@@ -675,7 +679,7 @@ export default function QuoteForm() {
           value={fields.message}
           onChange={handleChange}
           className={inputClass}
-          placeholder="Tell us about the site photos, rough size, logo/artwork status, sign position, power access, approvals, and timing."
+          placeholder="Mention the rough size, sign position, power access, approvals, timing, and whether site photos or artwork are ready to send in the follow-up."
         />
       </div>
 

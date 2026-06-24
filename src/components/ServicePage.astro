@@ -1,11 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {
-  businessAbn,
-  businessName,
-  companyName,
-  contactEmail,
-  contactPhone,
+  absoluteUrl,
+  businessProfile,
   serviceArea,
   siteName,
   siteUrl,
@@ -18,26 +15,59 @@ type Props = {
 
 const { page } = Astro.props;
 
+const localBusinessId = `${siteUrl}/#business`;
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Service",
-  name: page.h1,
-  description: page.description,
-  serviceType: page.serviceType,
-  areaServed: {
-    "@type": "AdministrativeArea",
-    name: "Western Australia",
-  },
-  provider: {
-    "@type": "LocalBusiness",
-    name: businessName || companyName,
-    url: siteUrl,
-    areaServed: serviceArea,
-    ...(contactPhone ? { telephone: contactPhone } : {}),
-    ...(contactEmail ? { email: contactEmail } : {}),
-    ...(businessAbn ? { identifier: businessAbn } : {}),
-  },
-  url: `${siteUrl}${page.canonicalPath}`,
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": localBusinessId,
+      name: businessProfile.tradingName,
+      legalName: businessProfile.legalName,
+      url: siteUrl,
+      areaServed: serviceArea,
+      ...(businessProfile.phone ? { telephone: businessProfile.phone } : {}),
+      ...(businessProfile.email ? { email: businessProfile.email } : {}),
+      ...(businessProfile.abn ? { identifier: businessProfile.abn } : {}),
+      ...(businessProfile.sameAs?.length
+        ? { sameAs: businessProfile.sameAs }
+        : {}),
+    },
+    {
+      "@type": "Service",
+      "@id": `${siteUrl}${page.canonicalPath}#service`,
+      name: page.h1,
+      description: page.description,
+      serviceType: page.serviceType,
+      image: absoluteUrl(page.image.src),
+      areaServed: {
+        "@type": "AdministrativeArea",
+        name: "Western Australia",
+      },
+      provider: {
+        "@id": localBusinessId,
+      },
+      url: `${siteUrl}${page.canonicalPath}`,
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: siteUrl,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: page.h1,
+          item: `${siteUrl}${page.canonicalPath}`,
+        },
+      ],
+    },
+  ],
 };
 ---
 
@@ -103,7 +133,7 @@ const jsonLd = {
             href="/#quote"
             class="inline-flex min-h-10 items-center rounded-lg bg-white px-4 py-2 text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-[background-color,scale] hover:bg-amber-100 active:scale-[0.96]"
           >
-            Request quote
+            {page.quoteCtaLabel}
           </a>
         </nav>
       </header>
@@ -125,7 +155,7 @@ const jsonLd = {
             href="/#quote"
             class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.28)] transition-[background-color,scale,box-shadow] hover:bg-amber-400 active:scale-[0.96]"
           >
-            Request a quote
+            {page.quoteCtaLabel}
           </a>
           <a
             href="#quote-factors"
@@ -373,10 +403,10 @@ const jsonLd = {
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <a
-              href="/#quote"
-              class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.24)] transition-[background-color,scale] hover:bg-amber-400 active:scale-[0.96]"
-            >
-              Request a quote
+            href="/#quote"
+            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-6 py-3 text-sm font-bold text-stone-950 shadow-[0_1px_2px_rgba(0,0,0,0.12),0_16px_36px_rgba(242,163,58,0.24)] transition-[background-color,scale] hover:bg-amber-400 active:scale-[0.96]"
+          >
+              {page.quoteCtaLabel}
             </a>
             <a
               href="/preview"
